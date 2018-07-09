@@ -26,6 +26,9 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 	 *	this is very important for padding if we need it
 	 *	
 	 *	make a base 64 decode too
+	 *
+	 *	add ciper error messages and b64, add these as functions :)
+	 *
 	 */
 
 	bit_len = findb_len(len);
