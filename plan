@@ -1,0 +1,5 @@
+
+		=====base64=====
+
+	- check for 1, then 4, then 3, then 2
+	- figure out how to set 4 bytes at a time
