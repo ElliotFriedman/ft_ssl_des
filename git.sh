@@ -6,7 +6,7 @@ echo "
 
 
 
-\e[1;34mDONE!\e[0m
+DONE!
 
 
 
