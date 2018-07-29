@@ -8,3 +8,11 @@ pad_len: 1
 
 
 
+string: "hello\n"
+str_len: 6
+
+output: aGVsbG8K
+out_len: 8
+pad_len: 0
+
+every 3 bytes turns to 4 bytes
