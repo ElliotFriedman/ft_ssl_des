@@ -6,25 +6,26 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/07/09 14:42:09 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/07/09 13:58:29 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "openssl.h"
 
+				   //0123456789012345678901234567890123456789012345678901234567890123
 char    g_ref[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 int	findb_len(int len)
 {
 	int	t_bits;
 
-	t_bits = len * 8;
-	while (t_bits % 6 != 0)
-		t_bits++;
-	return (t_bits / 6);
+	t_bits = len * 6;
+	while (t_bits % 8 != 0)
+		t_bits--;
+	return (t_bits / 8);
 }
 
-unsigned char	*base64_encode(unsigned char *str, int len)
+unsigned char	*base64_decode(unsigned char *str, int len)
 {
 	int		nlen;
 	int		bit_len;
@@ -32,6 +33,7 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 	size_t	i;
 	size_t	b00l;
 	unsigned char	*n;
+
 	/*
 	 *
 	 *		Make a boolean to see if we need = sign or not
@@ -42,16 +44,9 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 	 *	add ciper error messages and b64, add these as functions :)
 	 *
 	 */
-	//	only    given   this   these are bytes we have to add
-	// 0000 1000 | 1000 0000 | 0000 0000
-
-	//
-
-	b00l = (len % 3);
-	
+	b00l = (len * 8) % 6;
 	bit_len = findb_len(len);
-	
-	n = ft_memalloc(bit_len + 1);
+	n = ft_memalloc(bit_len);
 	i = 0;
 	m = 0;
 	while (i < bit_len)
@@ -77,11 +72,9 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 		m += 3;
 		i += 4;
 	}
-	i -= b00l - 1;
 	while (b00l)
 	{
-		ft_printf("appending =\n");
-		//i -= 1;
+		i -= 1;
 		n[i] = '=';
 		i++;
 		b00l--;

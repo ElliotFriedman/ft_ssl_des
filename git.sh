@@ -1,5 +1,5 @@
 git add .
-git commit -m "i love shell scripts"
+git commit -m "${1}"
 git push origin master
 echo "
 
