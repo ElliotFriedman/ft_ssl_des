@@ -6,14 +6,14 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/07/28 22:50:36 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/07/28 22:57:30 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "openssl.h"
 
 const char	g_ref[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-int			g_idx[127];// = {['A'] = 0, ['B'] = 1, ['C'] = 2, ['D'] = 3, ['E'] = 4, ['F'] = 5};
+int			g_idx[127];
 int			g_pad;
 
 int	findb_len(int len)
@@ -53,6 +53,12 @@ void			init_idx(void)
 
 }
 
+//here we are going from 4 bytes to 3 bytes.
+//
+//Relationship between these bytes
+//
+//len * 3 / 4 
+
 unsigned char	*base64_decode(unsigned char *str, int len)
 {
 	int		bit_len;
@@ -60,15 +66,13 @@ unsigned char	*base64_decode(unsigned char *str, int len)
 	size_t	i;
 	unsigned char	*n;
 
+	init_idx();
 	g_pad = ((len * 8) % 3);
-	bit_len = findb_len(len);
+	bit_len = len * 3 / 4;
 	n = ft_memalloc(bit_len + 1);
 	i = 0;
 	m = 0;
 	//ft_printf("bit_len %d\n", bit_len);
-	//
-	//turn 4bytes to 
-	//
 	while ((int)i < bit_len)
 	{
 		n[i] = g_ref[(str[m] & 252) >> 2];
