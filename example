@@ -1,0 +1,10 @@
+
+string: "hello"
+str_len: 5
+
+output: aGVsbG8=
+out_len: 8
+pad_len: 1
+
+
+
