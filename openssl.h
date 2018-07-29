@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 23:57:23 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/07/28 22:19:10 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct			s_opt
 	int					q;
 	int					r;
 	int					s;
+	int					d;
 }						t_opt;
 
 typedef struct			s_val
@@ -107,6 +108,7 @@ void					sha256hash(t_hash *hs, t_opt *nopt);
 void					hash(t_hash *h, t_opt *new);
 void					sha256start(char **argv, int argc);
 void					md5start(char **argv, int argc);
+void					base64start(char **argv, int argc);
 void					sha256(char	**argv, int argc);
 void					epad(t_hash *h);
 void					handle_out1(t_sha *s, t_hash *h, t_opt *n);

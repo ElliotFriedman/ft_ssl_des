@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 22:30:33 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/07/28 22:19:29 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ int		opt(char *argv, t_opt *new, int *on)
 		new->r = 1;
 	if (ft_strchr(argv, (int)'s') && ++fin)
 		new->s = 1;
-	if ((new->s || new->r || new->q || new->p) && fin)
+	if (ft_strchr(argv, (int)'D') && ++fin)
+		new->d = 1;
+	if ((new->d || new->s || new->r || new->q || new->p) && fin)
 	{
 		new->on = 1;
 		*on = 1;
@@ -39,6 +41,7 @@ int		get_opt(int argc, char **argv, t_opt *new, int i)
 	int			on;
 
 	on = 1;
+	new->d = 0;
 	if (i < argc)
 	{
 		while (i < argc && on && open(argv[i], O_RDONLY) == -1)

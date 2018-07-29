@@ -6,13 +6,13 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 15:48:33 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 23:33:14 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/07/28 21:36:44 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "openssl.h"
 
-const int g_total = 2;
+const int g_total = 3;
 
 void	init_command(t_type **arr, size_t index, char *str, void *command)
 {
@@ -33,6 +33,7 @@ t_type	**create(t_type **s)
 	}
 	init_command(s, 0, "md5", md5start);
 	init_command(s, 1, "sha256", sha256start);
+	init_command(s, 2, "base64", base64start);
 	return (s);
 }
 

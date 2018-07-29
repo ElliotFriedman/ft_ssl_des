@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/07/28 21:18:09 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/07/28 22:27:17 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	findb_len(int len)
 
 unsigned char	*base64_encode(unsigned char *str, int len)
 {
-	int		nlen;
 	int		bit_len;
 	int		m;
 	size_t	i;
@@ -39,8 +38,8 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 	n = ft_memalloc(bit_len + 1);
 	i = 0;
 	m = 0;
-	ft_printf("bit_len %d\n", bit_len);
-	while (i < bit_len)
+	//ft_printf("bit_len %d\n", bit_len);
+	while ((int)i < bit_len)
 	{
 		n[i] = g_ref[(str[m] & 252) >> 2];
 		n[i + 1] = g_ref[(  ((str[m] & 3) << 4) |  ((str[m + 1] & 240) >> 4))];
@@ -49,11 +48,11 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 		m += 3;
 		i += 4;
 	}
-	ft_printf("n before padding %s\n", n);
+	//ft_printf("n before padding %s\n", n);
 	i -= g_pad;
 	while (g_pad)
 	{
-		ft_printf("appending =\n");
+		//ft_printf("appending =\n");
 		n[i] = '=';
 		i++;
 		g_pad--;
@@ -61,6 +60,25 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 	return (n);
 }
 
+void			base64start(char **argv, int argc)
+{
+	size_t			i;
+	t_opt			opt;
+	unsigned char	*h;
+
+	i = 1;
+	h = 0;
+	while ((int)++i < argc)
+		get_opt(argc, argv, &opt, i);
+	//if (argc > 2 && opt.d)
+	//	base64_decode(argv[i - 1]);
+	//else
+		h = base64_encode((unsigned char *)argv[argc - 1], ft_strlen(argv[argc - 1]));
+		ft_printf("%s\n", h);
+		free(h);
+}
+
+/*
 int main(int argc, char **argv)
 {
 	if (argc == 2)
@@ -71,3 +89,4 @@ int main(int argc, char **argv)
 	}
 	return (0);
 }
+*/
