@@ -6,7 +6,7 @@
 #    By: efriedma <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/01 16:05:56 by efriedma          #+#    #+#              #
-#    Updated: 2018/07/08 14:07:07 by efriedma         ###   ########.fr        #
+#    Updated: 2018/07/28 21:33:57 by efriedma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,13 +32,16 @@ OBJ = $(SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	gcc *.o md5/*.o sha256/*.o helper/*.o ft_printf/libftprintf.a -o ft_ssl
-	#make -C ft_printf
+	$(MAKE) -C ft_printf
+	gcc $(OBJ) ft_printf/libftprintf.a -o ft_ssl
+
 
 clean:
-	rm *.o && rm md5/*.o && rm sha256/*.o && rm helper/*.o
+	@rm $(OBJ)
+	$(MAKE) -C ft_printf clean
 
 fclean: clean
 	rm $(NAME)
+	$(MAKE) -C ft_printf fclean
 
 re: fclean $(NAME)
