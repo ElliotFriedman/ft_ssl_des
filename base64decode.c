@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/07/28 22:57:30 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/07/29 23:30:14 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,6 @@
 const char	g_ref[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 int			g_idx[127];
 int			g_pad;
-
-int	findb_len(int len)
-{
-	int	t_bits;
-
-	t_bits = len * 8;
-	while (t_bits % 6 != 0)
-		t_bits++;
-	return (t_bits / 6);
-}
 
 void			init_idx(void)
 {
@@ -61,35 +51,60 @@ void			init_idx(void)
 
 unsigned char	*base64_decode(unsigned char *str, int len)
 {
-	int		bit_len;
 	int		m;
 	size_t	i;
 	unsigned char	*n;
 
 	init_idx();
-	g_pad = ((len * 8) % 3);
-	bit_len = len * 3 / 4;
 	n = ft_memalloc(bit_len + 1);
 	i = 0;
 	m = 0;
 	//ft_printf("bit_len %d\n", bit_len);
-	while ((int)i < bit_len)
+	while ((int)i < len)
 	{
-		n[i] = g_ref[(str[m] & 252) >> 2];
-		n[i + 1] = g_ref[(  ((str[m] & 3) << 4) |  ((str[m + 1] & 240) >> 4))];
-		n[i + 2] = g_ref[(  ((str[m + 1] & 15) << 2)   |   (((str[m + 2] & 192) >> 6))   )];
-		n[i + 3] = g_ref[(     str[m + 2] & 63  )];
-		m += 3;
+		//turn all characters into their corresponding number
+		str[i] = g_idx[str[i]];
+		i++;
+	}
+	//
+	//	Currently in memory:
+	//							110000 [00] | 001011 00 | 110000 00 | 001011 00
+	//
+	//							1100 0000 | 1011 00 | 110000 00 | 001011 00
+	//	What we want in memory:
+	//							1100 0000 | 1011 1100 | 0000 1011
+	//
+	//	Need to turn every 4 characters into three characters
+	//
+	while ((int)i < len)
+	{
+		//
+		//turn 		1001 11[00] | 1101 0100
+		//
+		//into		1001 1111 | 0101 0000
+		//
+		//first     1001 1111
+		str[i] = RN(str[i + 1], 6) | str[i];
+
+		//then chop last two bits off the second value
+		//
+		//second val	0101 0000
+		//
+		str[i + 1] = LN(str[i + 1], 2);
+
+		//
+		//
+		//
+		str[i + 1] = RN(str[i + 2], 4) | str[i + 1];
+		
+
+		str[i + 2] = RN(str[i + 3], 6) | str[i + 2];
+		str[i + 2] = LN(str[i + 2], ) | str[i + 2];
+
+		str[i + 3] = 0;
+		//4 is the minimum length
 		i += 4;
 	}
-	//ft_printf("n before padding %s\n", n);
-	i -= g_pad;
-	while (g_pad)
-	{
-		//ft_printf("appending =\n");
-		n[i] = '=';
-		i++;
-		g_pad--;
-	}
+
 	return (n);
 }
