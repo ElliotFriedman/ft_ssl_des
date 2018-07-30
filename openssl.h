@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/07/28 22:19:10 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/07/30 00:52:55 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <stdlib.h>
 
 # define RR(a, shift) ((a >> shift) | (a << (32 - shift)))
+# define RN(a, shift) (a >> shift)
+# define LN(a, shift) (a << shift)
 
 typedef struct			s_hash
 {
