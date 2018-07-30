@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/07/30 00:52:55 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/07/30 15:27:51 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # define RR(a, shift) ((a >> shift) | (a << (32 - shift)))
 # define RN(a, shift) (a >> shift)
 # define LN(a, shift) (a << shift)
+
+const char				g_ref[64];
 
 typedef struct			s_hash
 {
@@ -110,6 +112,7 @@ void					sha256hash(t_hash *hs, t_opt *nopt);
 void					hash(t_hash *h, t_opt *new);
 void					sha256start(char **argv, int argc);
 void					md5start(char **argv, int argc);
+unsigned char			*base64_decode(unsigned char *str, int len);
 void					base64start(char **argv, int argc);
 void					sha256(char	**argv, int argc);
 void					epad(t_hash *h);

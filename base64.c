@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/07/28 22:27:17 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/07/30 16:23:00 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 	n = ft_memalloc(bit_len + 1);
 	i = 0;
 	m = 0;
-	//ft_printf("bit_len %d\n", bit_len);
 	while ((int)i < bit_len)
 	{
 		n[i] = g_ref[(str[m] & 252) >> 2];
@@ -48,11 +47,9 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 		m += 3;
 		i += 4;
 	}
-	//ft_printf("n before padding %s\n", n);
 	i -= g_pad;
 	while (g_pad)
 	{
-		//ft_printf("appending =\n");
 		n[i] = '=';
 		i++;
 		g_pad--;
@@ -63,30 +60,17 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 void			base64start(char **argv, int argc)
 {
 	size_t			i;
-	t_opt			opt;
+	static t_opt	opt;
 	unsigned char	*h;
 
 	i = 1;
 	h = 0;
 	while ((int)++i < argc)
 		get_opt(argc, argv, &opt, i);
-	//if (argc > 2 && opt.d)
-	//	base64_decode(argv[i - 1]);
-	//else
+	if (argc > 2 && opt.d)
+		h = base64_decode((unsigned char *)argv[i - 1], ft_strlen(argv[i - 1]));
+	else
 		h = base64_encode((unsigned char *)argv[argc - 1], ft_strlen(argv[argc - 1]));
-		ft_printf("%s\n", h);
-		free(h);
+	ft_printf("%s", h);
+	free(h);
 }
-
-/*
-int main(int argc, char **argv)
-{
-	if (argc == 2)
-	{
-		unsigned char *n = base64_encode((unsigned char *)argv[1], ft_strlen((char*)argv[1]));
-		ft_printf("%s\n", n);
-		free(n);
-	}
-	return (0);
-}
-*/

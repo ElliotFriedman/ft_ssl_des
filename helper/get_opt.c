@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/07/28 22:19:29 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/07/30 16:13:14 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ int		get_opt(int argc, char **argv, t_opt *new, int i)
 	int			on;
 
 	on = 1;
-	new->d = 0;
 	if (i < argc)
 	{
 		while (i < argc && on && open(argv[i], O_RDONLY) == -1)
