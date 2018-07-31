@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/07/30 16:23:00 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/07/30 20:59:49 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,11 @@ void			base64start(char **argv, int argc)
 	size_t			i;
 	static t_opt	opt;
 	unsigned char	*h;
+
+	//Handle options -d decode
+	//				 -e encode
+	//				 -i input file
+	//				 -o output file
 
 	i = 1;
 	h = 0;
