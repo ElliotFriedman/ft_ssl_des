@@ -1,0 +1,27 @@
+
+	get user pass. They can provide in argv or through getpassphrase
+		
+		||
+		\/
+
+	create salt from urandom
+
+		||
+		\/
+
+	concatenate password and salt
+
+		||
+		\/
+
+	hash concatenated password and salt
+
+		||
+		\/
+
+	first 8 bytes of hash is the key to encrypt with
+
+		||
+		\/
+
+	last 8 bytes of hash is the IV
