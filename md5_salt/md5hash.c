@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 19:18:29 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 23:41:16 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/01 15:33:50 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,29 +35,20 @@ const int g_s[64] = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17,
 	23, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15,
 	21};
 
-void	handle_out(t_val new, t_hash *h, t_opt *opt)
+unsigned long long	*handle_out(t_val new)
 {
-	unsigned char	*msg;
+	unsigned long long	*ret;
 
-	if ((opt->on && !opt->s && !opt->q && !opt->r && opt->p && !h->pipe)
-			|| (h->fd && !opt->q && !opt->r && !opt->p))
-		ft_printf("MD5 (%s) = ", h->name);
-	else if (opt->on && opt->s && !opt->q && !opt->r && !h->pipe)
-		ft_printf("MD5 (\"%s\") = ", h->name);
-	msg = (unsigned char*)&new.a0;
-	ft_printf("%02x%02x%02x%02x", msg[0], msg[1], msg[2], msg[3]);
-	msg = (unsigned char*)&new.b0;
-	ft_printf("%02x%02x%02x%02x", msg[0], msg[1], msg[2], msg[3]);
-	msg = (unsigned char*)&new.c0;
-	ft_printf("%02x%02x%02x%02x", msg[0], msg[1], msg[2], msg[3]);
-	msg = (unsigned char*)&new.d0;
-	ft_printf("%02x%02x%02x%02x", msg[0], msg[1], msg[2], msg[3]);
-	if (opt->on && opt->s && opt->r && !opt->q && !h->pipe)
-		ft_printf(" \"%s\"", h->name);
-	else if (!opt->q && !opt->s && opt->r && !h->pipe)
-		ft_printf(" %s", h->name);
-	ft_putstr("\n");
-	h->fd = 0;
+	//turn the output into an array of 2 unsigned long longs
+	//this will be our salt
+	ret = ft_memalloc(16);
+	ret[0] = new.a0;
+	ret[0] <<= 32;
+	ret[0] += new.b0;
+	ret[1] = new.c0;
+	ret[1] <<= 32;
+	ret[1] += new.d0;
+	return (ret);
 }
 
 void	initv(t_val *new)
@@ -106,7 +97,7 @@ void	whilec(t_iter *z, t_hash *h, size_t ctr)
 	z->bb = z->bb + ((z->ff << g_s[z->i]) | (z->ff >> (32 - g_s[z->i])));
 }
 
-void	hash(t_hash *h, t_opt *opt)
+unsigned long long	*hash(t_hash *h, t_opt *opt)
 {
 	t_val			new;
 	t_iter			zed;
@@ -129,5 +120,5 @@ void	hash(t_hash *h, t_opt *opt)
 		new.d0 += zed.dd;
 		d += 64;
 	}
-	handle_out(new, h, opt);
+	return (handle_out(new));
 }
