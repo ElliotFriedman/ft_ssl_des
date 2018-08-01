@@ -1,0 +1,30 @@
+
+
+Read in all data to stack memory
+Then pad bytes till we get to number divisible by 8;
+
+Create an initialization vector
+
+Create a password
+	
+From password create the key.
+Key should be first 16 bytes of md5 of password turned to 8bytes of base 10
+
+Pass->md5->32 bytes in hex->take first 16 bytes->turn base 16 to base 10->store in a long->now we have our key.
+
+iv same step as pass but we take the last 16 bytes from md5 of pass
+
+
+
+
+Encrypt 8 bytes at a time with password created earlier.
+
+
+
+Make sure compiler does not skip overwriting memory before it is freed so that the implementation is secure. e.g.:
+
+	free with __attribute__ ((weak)) void
+	__hookbzero
+	https://gcc.gnu.org/onlinedocs/gcc-4.7.0/gcc/Function-Attributes.html
+
+
