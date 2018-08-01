@@ -6,7 +6,7 @@
 #    By: efriedma <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/01 16:05:56 by efriedma          #+#    #+#              #
-#    Updated: 2018/07/30 14:32:19 by efriedma         ###   ########.fr        #
+#    Updated: 2018/07/31 18:01:13 by efriedma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,9 @@ SRCS = main.c \
 	   md5/md5.c \
        md5/md5hash.c \
 	   md5/md5n.c \
+	   md5_salt/md5.c \
+	   md5_salt/md5hash.c \
+	   md5_salt/md5n.c \
        helper/get_opt.c \
        sha256/sha256hash.c \
        sha256/sha256.c \
