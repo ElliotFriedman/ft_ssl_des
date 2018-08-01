@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/24 17:23:21 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 22:29:40 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/01 15:43:04 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,14 @@ char	*ft_strdup(const char *str)
 	i = 0;
 	if (cpy)
 	{
+		ft_strcpy(cpy, str);
+		/*
 		while (i < a)
 		{
 			cpy[i] = str[i];
 			i++;
 		}
+		*/
 	}
 	return (cpy);
 }

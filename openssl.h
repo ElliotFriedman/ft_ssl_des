@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/07/30 15:27:51 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/01 15:46:17 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ typedef struct			s_sha
 	unsigned int		h7;
 }						t_sha;
 
+unsigned long long		*hash_pass(t_hash *h);
 int						rstdin(t_hash *h);
 int						get_opt(int argc, char **argv, t_opt *new, int i);
 void					md5hash(char *str);

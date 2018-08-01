@@ -6,28 +6,20 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/01 15:33:53 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/01 15:49:11 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
-unsigned long long	*shash(t_hash *h)
+unsigned long long	*passhash(char *str, t_hash *h)
 {
-	if (h->data)
-		h->bytes = ft_strlen(h->data);
+	h->data = str;
+	h->bytes = ft_strlen(h->data);
 	h->ini = h->bytes;
 	epad(h);
 	h->arr = (unsigned int *)h->data;
-	return (hash(h, new));
-}
-
-
-int					zeroh(t_opt *h, t_hash *hash)
-{
-	hash->pipe = 0;
-	h->s = 0;
-	return (1);
+	return (hash_pass(h));
 }
 
 unsigned long long	*create_salt(char *str)
@@ -40,7 +32,8 @@ unsigned long long	*create_salt(char *str)
 	unsigned long long	*hold;
 
 	init_a(&h, &s, &file);
-	hold = shash(h, 
+	//strdup so that when we free in epad we don't free stack mem
+	hold = passhash(ft_strdup(str), h);
 	fstruct(s, h);
-	return (
+	return (hold);
 }
