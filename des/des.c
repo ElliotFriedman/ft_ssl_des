@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/01 18:04:49 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/01 18:14:47 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,19 @@
 int			_rand0(void)
 {
 	unsigned int	a;
-	int				fd;
 	FILE			*e;	
 
 	a = 0;
-	ft_printf("\n\nhere in rand\n\n");
 	if ((e = fopen("/dev/random", "r")))
 	{
 	//	
-		ft_printf("open success fd: %d, char %u\n", fd, a);
-		while ((a & 255) < 32)
+		a = (unsigned int)getc(e);
+		while ((a & 127) < 32 && a != 48)
 		{
-			ft_printf("Stuck here\n");
 			a += (unsigned int)getc(e);
 		}
+		ft_printf("open success, char %u\n",a);
 	}
-	ft_printf("fd: %d\n", fd);
 	return ((int)a);
 }
 
@@ -40,14 +37,11 @@ void		create_salt(char *salt)
 	int		i;
 
 	i = 0;
-	ft_printf("Hi\n");
 	while (i < 8)
 	{
-		ft_printf("Here forever\n");
-		salt[i] = (char)_rand0();
+		salt[i] = (char)_rand0() & 127;
 		i++;
 	}
-	ft_printf("exiting create_salt\n");
 	salt[8] = 0;
 }
 
