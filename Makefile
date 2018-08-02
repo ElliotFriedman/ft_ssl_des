@@ -10,11 +10,12 @@
 #                                                                              #
 # **************************************************************************** #
 
-CFLAGS = -Werror -Wall -Wextra -I ft_printf/libft -I ft_printf/includes
+CFLAGS = -Wall -Wextra -I ft_printf/libft -I ft_printf/includes
 
 NAME = ft_ssl
 
 SRCS = main.c \
+	des/des.c \
 	   base64.c \
 	   base64decode.c \
        helper/pad.c \

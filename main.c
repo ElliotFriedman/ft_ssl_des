@@ -12,7 +12,7 @@
 
 #include "openssl.h"
 
-const int g_total = 3;
+const int g_total = 4;
 
 void	init_command(t_type **arr, size_t index, char *str, void *command)
 {
@@ -34,6 +34,7 @@ t_type	**create(t_type **s)
 	init_command(s, 0, "md5", md5start);
 	init_command(s, 1, "sha256", sha256start);
 	init_command(s, 2, "base64", base64start);
+	init_command(s, 3, "des", des);
 	return (s);
 }
 

@@ -20,6 +20,8 @@
 # include <unistd.h>
 # include <limits.h>
 # include <stdlib.h>
+# include <pwd.h>
+# include <unistd.h>
 
 # define RR(a, shift) ((a >> shift) | (a << (32 - shift)))
 # define RN(a, shift) (a >> shift)
@@ -105,6 +107,7 @@ typedef struct			s_sha
 	unsigned int		h7;
 }						t_sha;
 
+unsigned long long		*create_key(char *str);
 unsigned long long		*hash_pass(t_hash *h);
 int						rstdin(t_hash *h);
 int						get_opt(int argc, char **argv, t_opt *new, int i);
@@ -112,6 +115,7 @@ void					md5hash(char *str);
 void					sha256hash(t_hash *hs, t_opt *nopt);
 void					hash(t_hash *h, t_opt *new);
 void					sha256start(char **argv, int argc);
+void					des(char **argv, int argc);
 void					md5start(char **argv, int argc);
 unsigned char			*base64_decode(unsigned char *str, int len);
 void					base64start(char **argv, int argc);

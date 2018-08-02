@@ -22,7 +22,7 @@ unsigned long long	*passhash(char *str, t_hash *h)
 	return (hash_pass(h));
 }
 
-unsigned long long	*create_salt(char *str)
+unsigned long long	*create_key(char *str)
 {
 	t_hash				*h;
 	//dont delete this so that we can use old ported functions

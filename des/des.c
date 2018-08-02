@@ -17,11 +17,10 @@ FILE			*e;
 int			_rand0(void)
 {
 	unsigned int	a;
-	
+
 	a = 0;
-	if ((e = fopen("/dev/random", "r")))
+	if ((e = fopen("/dev/urandom", "r")))
 	{
-	//	
 		a = (unsigned int)getc(e);
 		while ((a & 127) < 32)
 		{
@@ -31,7 +30,7 @@ int			_rand0(void)
 	return ((int)a);
 }
 
-void		create_salt(char *salt)
+void		create_salt_8bytes(char *salt)
 {
 	//use /dev/random
 	int		i;
@@ -45,13 +44,43 @@ void		create_salt(char *salt)
 	salt[8] = 0;
 }
 
-int		main(void)
+void		swap_4bytes(int *data)
+{
+	int	a;
+	
+	a = data[0];
+
+	data[0] = data[1];
+	data[1] = a;
+}
+
+void		print_bytes(void *data, int len)
+{
+	size_t	i = 0;
+	unsigned char	*print;
+
+	print = (char *)data;
+	swap_4bytes((int*)data);
+	while (i < len)
+	{
+		//ft_printf("%d\n", print[i]);
+		ft_printf("%02X", print[i]);
+		//ft_printf("i: %d\n", i);
+		i++;
+	}
+	ft_putstr("\n");
+}
+
+
+void		des(char **argv, int argc)
 {
 	unsigned long long	*tmp;
-	unsigned long long	key[2];
+	unsigned long long	*key;
 	char 				*pass;
-	char				salt[9];
+	char				salt[9];// = malloc(9);
 	int		i = 0;
+
+	pass = getpass("Enter your password:");
 	//parse for all options to decide how to handle
 
 	//have user enter their password
@@ -61,17 +90,26 @@ int		main(void)
 	//salt is created
 	//
 	//salt is concatenated on pass
-	while (i < 30)
-	{
-		create_salt(salt);
-		ft_printf("Random salt: %s\n", salt);
-		ft_bzero(salt, 9);
-		fclose(e);
-		i++;
-	}
-	
-//	tmp = create_salt(pass);
-//	key[0] = tmp[0];
-//	key[1] = tmp[1];
-//	ft_memdel((void**)&tmp);
+	//while (i < 30)
+	//{
+
+	create_salt_8bytes(salt);
+	ft_printf("Random salt: %s\n", salt);
+	fclose(e);
+	ft_printf("Salt: %02X%02X%02X%02X%02X%02X%02X%02X\n", salt[0], salt[1], salt[2], salt[3], salt[4], salt[5],salt[6], salt[7]);
+	//	i++;
+	//}
+
+	//for some reason getpass allocates on the stack so you can't free. Hmmm
+	//pass = ft_strjoin(pass, salt);
+	ft_printf("pass: %s\n", pass);
+	tmp = create_key(pass);
+	key = tmp;
+	ft_putstr("key=");
+	print_bytes((void*)tmp, 8);
+	tmp++;
+	ft_putstr("iv =");
+	print_bytes((void*)tmp, 8);
+
+	//free(salt);
 }
