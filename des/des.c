@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/02 14:15:39 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/02 14:40:36 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,22 @@ void		print_bytes(void *data, int len)
 	ft_putstr("\n");
 }
 
+
+uint64_t		subkey(unsigned long long key)
+{
+	uint64_t	ret;
+	size_t		i;
+
+	ret = 0;
+	i = 0;
+	while (i < 56)
+	{
+	
+
+
+	}
+
+}
 
 void		des(char **argv, int argc)
 {
