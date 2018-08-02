@@ -41,3 +41,8 @@ openssl enc -des -pass pass:MYPASSWORD -P -S 2F6760E3D7713CBA
 #(Behave like a modifiedd openssl des -pass not like openssl des -p or -P) (A verbose explanation is given in the next section)
 # -s, the salt in hex is the next argument. (Behave like openssl des -S)
 # -v, initialization vector in hex is the next argument. (Behave like openssl des -iv not openssl des -v)
+
+
+#Make a function to grab all arguments
+#		-Store args as global variables
+#		-g_vars == 10x easier than structs
