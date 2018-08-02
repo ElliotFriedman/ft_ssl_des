@@ -6,27 +6,27 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/01 18:14:47 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/01 18:19:52 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
+FILE			*e;	
+
 int			_rand0(void)
 {
 	unsigned int	a;
-	FILE			*e;	
-
+	
 	a = 0;
 	if ((e = fopen("/dev/random", "r")))
 	{
 	//	
 		a = (unsigned int)getc(e);
-		while ((a & 127) < 32 && a != 48)
+		while ((a & 127) < 32)
 		{
 			a += (unsigned int)getc(e);
 		}
-		ft_printf("open success, char %u\n",a);
 	}
 	return ((int)a);
 }
@@ -51,6 +51,7 @@ int		main(void)
 	unsigned long long	key[2];
 	char 				*pass;
 	char				salt[9];
+	int		i = 0;
 	//parse for all options to decide how to handle
 
 	//have user enter their password
@@ -60,10 +61,14 @@ int		main(void)
 	//salt is created
 	//
 	//salt is concatenated on pass
-	create_salt(salt);
-	
-	ft_printf("Random salt: %s\n", salt);
-
+	while (i < 30)
+	{
+		create_salt(salt);
+		ft_printf("Random salt: %s\n", salt);
+		ft_bzero(salt, 9);
+		fclose(e);
+		i++;
+	}
 	
 //	tmp = create_salt(pass);
 //	key[0] = tmp[0];
