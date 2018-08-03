@@ -1,27 +1,38 @@
 
-	get user pass. They can provide in argv or through getpassphrase
+	
+	Create pass, salt, key & IV
 		
 		||
 		\/
 
-	create salt from urandom
+	Determine mode. ECB or CBC
 
 		||
 		\/
 
-	concatenate password and salt
+	Pass in 8 bytes at a time
 
 		||
 		\/
 
-	hash concatenated password and salt
+	Turn key into 2 halves
 
 		||
 		\/
 
-	first 8 bytes of hash is the key to encrypt with
+	Make 32 subkeys which are 48 bits long, derived from halved key
+
+		||
+		\/	
+	
+	32 Subkeys are derived from bitwise rotate operations
 
 		||
 		\/
 
-	last 8 bytes of hash is the IV
+	From subkeys derive 15 new subkeys labeled Kn, from k2 to k16, 48 bits in length
+
+		||
+		\/
+
+	Now we start to encode

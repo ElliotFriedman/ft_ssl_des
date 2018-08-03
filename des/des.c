@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/02 15:22:27 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/02 21:47:16 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ int			g_grab[56] = {57, 49, 41, 33, 25, 17, 9,
 						7, 62, 54, 46, 38, 30, 22,
 						14, 6, 61, 53, 45, 37, 29,
 						21, 13, 5, 28, 20, 12, 4};
+
+int			g_rotate[16] = {1, 1, 2, 2,
+							2, 2, 2, 2,
+							1, 2, 2, 2,
+							2, 2, 2, 1};
 
 int			_rand0(FILE *e)
 {
@@ -54,7 +59,7 @@ void		swap_4bytes(int *data)
 	data[1] = a;
 }
 
-void		pint_bytes(void *data, int len)
+void		print_bytes(void *data, int len)
 {
 	size_t	i = 0;
 	unsigned char	*print;
@@ -69,6 +74,28 @@ void		pint_bytes(void *data, int len)
 	ft_putstr("\n");
 }
 
+unsigned int	*permute_subkey(unsigned long long key)
+{
+	unsigned int	**ret;
+
+	ret = ft_memalloc(sizeof(unsigned long long *) * 32);
+	i = 0;
+	while (i < 32)
+	{
+		ret[i] = ft_memalloc(8);
+		i++;
+	}
+}
+
+unsigned int	*split_subkey(unsigned long long key)
+{
+	unsigned int	*ret;
+
+	ret = ft_memalloc(2);
+	ret[0] = key >> 32;
+	ret[1] = key & 4294967295;
+	return (ret);
+}
 
 uint64_t		subkey(unsigned long long key)
 {
@@ -76,11 +103,11 @@ uint64_t		subkey(unsigned long long key)
 	size_t		i;
 	size_t		tmp;
 
-	ret = 0;
 	i = 0;
+	ret = 0;
 	while (i < 56)
 	{
-		tmp = key >> g_grab[i];
+		tmp = key << g_grab[i];
 		ret |= tmp;
 		ret <<= 1;
 		i++;

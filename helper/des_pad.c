@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/02 18:02:38 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/02 19:33:48 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/02 19:41:04 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,17 @@ char	*des_pad(char *encrypt, size_t len)
 	char	set[1];
 
 	dif = len % 8;
-	ft_printf("dif: %d\n", dif);
+//	ft_printf("dif: %d\n", dif);
 	set[0] = 8 - dif;
 	if (dif == 0)
 		set[0] = 8;
 	dif = set[0];
-	ft_printf("adding %d bytes\n", dif);
+//	ft_printf("adding %d bytes\n", dif);
 	while (dif)
 	{
-		ft_printf("Dif in while loop %d, Len: %d\n", dif, len + 1);
+//		ft_printf("Dif in while loop %d, Len: %d\n", dif, len + 1);
 		len++;
 		encrypt = add_byte(encrypt, len);
-
 		ft_memset(&encrypt[len - 1], (int)set[0], 1);
 		print_bytes(encrypt, len);
 		dif--;
@@ -72,11 +71,10 @@ void	print_bytes(char *str, int len)
 
 int main(void)
 {
-	char *a = malloc(8);
-	ft_strcpy(a, "Pad me12");
+	char *a = ft_memalloc(12);
+	ft_strcpy(a, "Pad me12 b1");
 	print_bytes(a, ft_strlen(a));
 	a = des_pad(a, ft_strlen(a));
-	print_bytes(a, 19);
-
+	print_bytes(a, 16);
 	return 1;
 }

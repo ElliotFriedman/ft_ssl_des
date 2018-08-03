@@ -1,6 +1,7 @@
 #password 
 
-openssl enc -des -pass pass:MYPASSWORD -P -S 2F6760E3D7713CBA
+openssl enc -des -pass pass:hi -P -nosalt
+#openssl enc -des -pass pass:MYPASSWORD -P -S 2F6760E3D7713CBA
 
 # -A                 Process base64 data on one line (requires -a)
 # -a                 Perform base64 encoding/decoding (alias -base64)
