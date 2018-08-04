@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/03 21:17:08 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/03 21:25:28 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 	size_t				i;
 	unsigned long long	aside;
 	unsigned long long	bside;
+	//this will store the next L(i) value
+	unsigned long long	aside_next;
 
 	i = 0;
 	aside = 0;
@@ -87,6 +89,8 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 	//do a round of 16, and return the result
 	while (i < 16)
 	{
+		//grab current bside value as it will change in this loop
+		aside_next = bside;
 		//run expansion permutation on bside
 		bside = expansion_permutation(bside);
 	
@@ -97,6 +101,8 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 		//sub_key[1] = LROT(sub_key[1], g_rotate[i]);
 		
 
+		//after you have done all logic in iteration x, reassign aside to bside b4 modification
+		aside = aside_next;	
 	}
 }
 
