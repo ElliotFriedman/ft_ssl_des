@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/03 19:43:29 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/03 20:04:17 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,29 @@ int			g_rotate[16] = {1, 1, 2, 2,
 	1, 2, 2, 2,
 	2, 2, 2, 1};
 
+unsigned long long	init_subkey(unsigned long long key)
+{
+	//This is to extract the 56 bit key from 64 bits
+	unsigned long long	ret;
+	size_t				i;
+	size_t				tmp;
+
+	i = 0;
+	ret = 0;
+	while (i < 56)
+	{
+		//shift over x bytes, then grab that byte
+		tmp = (key >> g_grab[i]) & 1;
+		//while (tmp && tmp / 2)
+		//	tmp >> 1;
+		//add that byte to ret
+		ret |= tmp << g_grab[i];
+		//ret <<= 1;
+		i++;
+	}
+	return (ret);
+}
+
 int			_rand0(FILE *e)
 {
 	unsigned int	a;
@@ -100,9 +123,8 @@ void		print_bytes(unsigned long long *data, int len)
 	use = *data;
 
 	print = (unsigned char *)&use;
-	
+	//swap bytes of stack var
 	swap_4bytes((int*)&use);
-	
 	while (i < len)
 	{
 		ft_printf("%02X", print[i]);
@@ -136,11 +158,12 @@ unsigned int		*split_subkey(unsigned long long key)
 	return (ret);
 }
 
-unsigned long long	subkey(unsigned long long key)
+unsigned long long	sub_block(unsigned long long key)
 {
-	uint64_t	ret;
-	size_t		i;
-	size_t		tmp;
+	//This is to permute the 64 bit block of text that is passed in
+	unsigned long long	ret;
+	size_t				i;
+	size_t				tmp;
 
 	i = 0;
 	ret = 0;
@@ -182,14 +205,12 @@ void				des(char **argv, int argc)
 {
 	unsigned long long	*tmp;
 	unsigned long long	*key;
-	//	char 				*pass;
 	int					i = 0;
 
-	tmp = ft_memalloc(sizeof(unsigned long long *));
 	tmp = create_key(get_pass_salt());
 	key = tmp;
 	ft_putstr("key=");
-	//print bytes without reversing byte order
+	//print bytes without reversing byte order in memory
 	print_bytes(tmp, 8);
 	ft_printf("key in binary: %064b\n", key[0]);
 	tmp++;
