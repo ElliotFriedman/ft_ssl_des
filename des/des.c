@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/03 18:27:40 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/03 19:43:29 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void		print_bytes(unsigned long long *data, int len)
    }
    }
    */
-unsigned int	*split_subkey(unsigned long long key)
+unsigned int		*split_subkey(unsigned long long key)
 {
 	unsigned int	*ret;
 
@@ -136,7 +136,7 @@ unsigned int	*split_subkey(unsigned long long key)
 	return (ret);
 }
 
-uint64_t		subkey(unsigned long long key)
+unsigned long long	subkey(unsigned long long key)
 {
 	uint64_t	ret;
 	size_t		i;
@@ -154,7 +154,7 @@ uint64_t		subkey(unsigned long long key)
 	return (ret);
 }
 
-char		*get_pass_salt(void)
+char				*get_pass_salt(void)
 {
 	FILE	*e;
 	char	salt[9];
@@ -178,21 +178,23 @@ char		*get_pass_salt(void)
 
 //Do key byte orders need to changed to big endian?
 
-void		des(char **argv, int argc)
+void				des(char **argv, int argc)
 {
 	unsigned long long	*tmp;
 	unsigned long long	*key;
 	//	char 				*pass;
 	int					i = 0;
 
+	tmp = ft_memalloc(sizeof(unsigned long long *));
 	tmp = create_key(get_pass_salt());
 	key = tmp;
 	ft_putstr("key=");
 	//print bytes without reversing byte order
 	print_bytes(tmp, 8);
-	//ft_printf("key in binary: %064b\n", key);
+	ft_printf("key in binary: %064b\n", key[0]);
 	tmp++;
 	ft_putstr("iv =");
 	print_bytes(tmp, 8);
+	ft_printf("iv in binary: %064b\n", key[1]);
 	//do subkey after byte order has been changed to big endian
 }
