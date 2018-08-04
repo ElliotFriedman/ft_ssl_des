@@ -1,0 +1,31 @@
+
+
+				Generate key based on hash of pass
+							
+							||
+							\/
+
+				Key is permuted from 64 to 56 bits
+
+							||
+							\/
+
+				Enter encryption function w/Stack Variable of key
+
+							||
+							\/
+			
+				While Loop:
+						
+							split key into 2 28 bit halves
+
+							Then rotate each subkey X times
+
+							Then compress them according to Compression Permutation
+
+							Pass Compressed key to XOR with output of Expansion permutation
+
+							Mash two split keys back together to form 56 bit key
+
+							repeat loop 16X
+

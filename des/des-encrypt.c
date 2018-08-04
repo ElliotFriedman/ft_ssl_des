@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/03 21:25:28 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/03 21:42:57 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 		
 
 		//after you have done all logic in iteration x, reassign aside to bside b4 modification
+		bside = aside ^ bside;
 		aside = aside_next;	
 	}
 }
