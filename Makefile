@@ -6,9 +6,11 @@
 #    By: efriedma <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/01 16:05:56 by efriedma          #+#    #+#              #
-#    Updated: 2018/08/01 15:48:17 by efriedma         ###   ########.fr        #
+#    Updated: 2018/08/03 18:08:24 by efriedma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+#-g -fsanitize=address 
 
 CFLAGS = -Wall -Wextra -I ft_printf/libft -I ft_printf/includes
 

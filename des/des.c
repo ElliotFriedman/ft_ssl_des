@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/03 17:01:14 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/03 18:15:30 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int			g_grab[56] = {57, 49, 41, 33, 25, 17, 9,
 	14, 6, 61, 53, 45, 37, 29,
 	21, 13, 5, 28, 20, 12, 4};
 
+//This is the initial Permutation done on plaintext
+
 int			g_permute[64] = {58, 50, 42, 34, 26, 18, 10,
 	2, 60, 52, 44, 36, 28, 20,
 	12, 4, 62, 54, 46, 38, 30,
@@ -49,6 +51,7 @@ int			g_permute[64] = {58, 50, 42, 34, 26, 18, 10,
 	53, 45, 37, 29, 21, 13, 5,
 	63, 55, 47, 39, 31, 23, 15, 7};
 
+//rotate subkey x bits left at each round
 
 int			g_rotate[16] = {1, 1, 2, 2,
 	2, 2, 2, 2,
@@ -88,13 +91,18 @@ void		swap_4bytes(int *data)
 	data[1] = a;
 }
 
-void		print_bytes(void *data, int len)
+void		print_bytes(unsigned long long *data, int len)
 {
 	size_t	i = 0;
-	unsigned char	*print;
+	unsigned long long	use;
+	unsigned char		*print;
 
-	print = (char *)data;
-	swap_4bytes((int*)data);
+	use = *data;
+
+	print = (unsigned char *)&use;
+	
+	swap_4bytes((int*)&use);
+	
 	while (i < len)
 	{
 		ft_printf("%02X", print[i]);
@@ -177,11 +185,12 @@ void		des(char **argv, int argc)
 
 	tmp = create_key(get_pass_salt());
 	key = tmp;
-	ft_putstr("key = ");
-	print_bytes((void*)tmp, 8);
+	ft_putstr("key=");
+	//print bytes without reversing byte order
+	print_bytes(tmp, 8);
 	ft_printf("key in binary: %064b\n", key);
 	tmp++;
 	ft_putstr("iv =");
-	print_bytes((void*)tmp, 8);
+	print_bytes(tmp, 8);
 	//do subkey after byte order has been changed to big endian
 }
