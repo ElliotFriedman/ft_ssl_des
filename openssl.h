@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/01 15:46:17 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/03 18:42:22 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,5 +141,12 @@ int						s256hash(char *hash1, t_hash *h, t_opt *s);
 void					err(void);
 void					swap(t_hash *h);
 void					ffstruct(t_opt *opt, t_hash *h);
+
+/*
+ *	DES
+ */
+
+char					*des_pad(char *encrypt, size_t len);
+void					rev_8byte(char *data, size_t len);
 
 #endif

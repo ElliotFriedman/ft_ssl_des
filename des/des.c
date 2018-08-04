@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/03 18:15:30 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/03 18:27:40 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,8 @@ char		*get_pass_salt(void)
 	//return (ft_strjoin(pass, 0));//salt));
 }
 
+//Do key byte orders need to changed to big endian?
+
 void		des(char **argv, int argc)
 {
 	unsigned long long	*tmp;
@@ -188,7 +190,7 @@ void		des(char **argv, int argc)
 	ft_putstr("key=");
 	//print bytes without reversing byte order
 	print_bytes(tmp, 8);
-	ft_printf("key in binary: %064b\n", key);
+	//ft_printf("key in binary: %064b\n", key);
 	tmp++;
 	ft_putstr("iv =");
 	print_bytes(tmp, 8);
