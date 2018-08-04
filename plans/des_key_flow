@@ -10,7 +10,7 @@
 							||
 							\/
 
-				Enter encryption function w/Stack Variable of key
+				Enter encryption function w/Stack Variable of key & 64 bit block of text/ciphertext
 
 							||
 							\/
@@ -21,11 +21,19 @@
 
 							Then rotate each subkey X times
 
-							Then compress them according to Compression Permutation
+							Then add them back together to get a 56 bit key
+
+							Then use Compression Permutation on 56 bit key to make a 48 bit key
 
 							Pass Compressed key to XOR with output of Expansion permutation
 
-							Mash two split keys back together to form 56 bit key
-
 							repeat loop 16X
+
+				How to Decrypt:
+					
+							Use same loop
+
+							Precompute all 16 keys
+
+							Use subkeys in reverse order
 

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/04 13:31:13 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/04 15:36:02 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 //Debug protocol
 
 //Recheck all globals for errors when algorithm breaks
+//Then check that least significant byte(s) are empty
 //Then check endianness
 //Then check logic errors
 //Then check memory issues
@@ -66,7 +67,7 @@ int		g_sbox[32][16] = {{14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7},
 	{2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11}};
 
 //compression permutation
-int		g_cpermutation[48]={14, 17, 11, 24, 1, 5, 3, 28, 15, 6, 21, 10,
+int		g_cpermutation[48] = {14, 17, 11, 24, 1, 5, 3, 28, 15, 6, 21, 10,
 	23, 19, 12, 4, 26, 8, 16, 7, 27, 20, 13, 2,
 	41, 52, 31, 37, 47, 55, 30, 40, 51, 45, 33, 48,
 	44, 49, 39, 56, 34, 53, 46, 42, 50, 36, 29, 32};
@@ -79,6 +80,8 @@ int		g_expandpermutation[48] = {32, 1, 2, 3, 4, 5, 4, 5, 6, 7, 8, 9,
 
 int		g_rotate[16];
 
+unsigned long long lmax = 0xFFFFFFFFFFFFFFFF;
+
 size_t	c_num(size_t num)
 {
 	if (num % 8 == 0)
@@ -90,14 +93,15 @@ size_t	c_num(size_t num)
 
 void	create_subkey(unsigned long long key, size_t *sub_key)
 {
-	//32 is the midway point. then the last 8 bytes are empty
-	//we don't want to grab empty bites
-	sub_key[0] = (size_t)(key >> 40);
-	sub_key[1] = (size_t)(key >> 8);
+	//Only grab 28 most significant bits.
+	//We can currently only grab significant bits but not the first most significant bit
+	sub_key[0] = (size_t)(key & 0xFFFFFFF000000000);
+	//Grab last 32 bits. 28 of which can be currently valid bits
+	sub_key[1] = (size_t)((key >> 8) & 0x0FFFFFFF);
 }
 
 //this function takes 32 bits from bside and turns it 48 bits
-unsigned long long	expansion_permutation(unsigned long long bside)
+unsigned long long	expansion_permutation(unsigned long long bside, unsigned long long c_key)
 {
 	size_t				i;
 	unsigned long long	ret;
@@ -106,12 +110,50 @@ unsigned long long	expansion_permutation(unsigned long long bside)
 	ret = 0;
 	while (i < 48)
 	{
-		ret |= bside >> g_expandpermutation[i] & 1;
+		//make sure shift evaluates first. 
+		//Unsure of bitwise operator precedence
+		ret |= (bside >> g_expandpermutation[i]) & 1;
 		ret <<= 1;
 		i++;
 	}
-	return (ret);
+	//leave last 2 bytes empty
+	return (ret << 16);
 }
+
+unsigned long long	concat_subkeys(size_t *subkeys)
+{
+	unsigned long long	ret;
+
+	ret = subkeys[1];
+	//only first 28 bits of subkeys are used 
+	ret <<= 28;
+	ret += subkeys[0];
+	//least significant byte should be empty
+	//ret <<= 8;
+	return (ret << 8);
+}
+
+//compression permutation
+unsigned long long	comp_perm(unsigned long long 56bit)
+{
+	unsigned long long	48bit;
+	size_t				i;
+
+	i = 0;
+	48bit = 0;
+	//get bits in the proper order to be used.
+	//usually least sig byte is empty
+	//we will change that by shifting
+	56bit >>= 8;
+	while (i < 8)
+	{
+		//grab only the last bit
+		48bit |= (g_cpermutation[i] >> 56bit) & 1;
+		i++;
+	}
+	return (48bit);
+}
+
 
 char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 {
@@ -120,9 +162,6 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 	unsigned long long	bside;
 	//this will store the next L(i) value
 	unsigned long long	aside_next;
-	
-
-
 
 	i = 0;
 	aside = 0;
@@ -138,13 +177,16 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 		//grab current bside value as it will change in this loop
 		aside_next = bside;
 		//run expansion permutation on bside
-		bside = expansion_permutation(bside);
-
+		//
+		//									then compress	(concatenate subkeys)
+		bside = expansion_permutation(bside, comp_perm(concat_subkeys(sub_key)));
 
 		//rotate subkeys each round
 		//This is wrong needs to be Compressed,
-		//sub_key[0] = LROT(sub_key[0], g_rotate[i]);
-		//sub_key[1] = LROT(sub_key[1], g_rotate[i]);
+		sub_key[0] = LROT(sub_key[0], g_rotate[i]);
+		sub_key[1] = LROT(sub_key[1], g_rotate[i]);
+		key = add_subkey(sub_key);
+		expansion_permutation(concat_subkeys(sub_key));
 
 
 		//after you have done all logic in iteration x, reassign aside to bside b4 modification
@@ -187,8 +229,10 @@ char	*des-encrypt(unsigned long long key, char *encrypt, size_t len)
 		ft_strncpy(&print[i], tmp, 8);
 		//zero and delete this malloc'd memory
 		ft_memdel((void**)&tmp);
-		two_key[0]
-			i += 8;
+		
+		// 	?????
+		//two_key[0];
+		i += 8;
 	}
 	//reverse byte order again
 	rev_8byte(encrypt, len);
