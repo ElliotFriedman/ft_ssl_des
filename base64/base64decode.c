@@ -6,11 +6,11 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/07/30 16:20:03 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/04 13:10:26 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "openssl.h"
+#include "../openssl.h"
 
 int				find_chr(char c)
 {

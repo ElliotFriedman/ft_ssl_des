@@ -6,7 +6,7 @@
 #    By: efriedma <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/01 16:05:56 by efriedma          #+#    #+#              #
-#    Updated: 2018/08/03 18:08:24 by efriedma         ###   ########.fr        #
+#    Updated: 2018/08/04 13:09:59 by efriedma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,9 +17,9 @@ CFLAGS = -Wall -Wextra -I ft_printf/libft -I ft_printf/includes
 NAME = ft_ssl
 
 SRCS = main.c \
-	des/des.c \
-	   base64.c \
-	   base64decode.c \
+	   des/des.c \
+	   base64/base64.c \
+	   base64/base64decode.c \
        helper/pad.c \
        helper/readfile.c \
 	   helper/sha256help.c \

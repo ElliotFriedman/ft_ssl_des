@@ -6,11 +6,11 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/07/30 20:59:49 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/04 13:11:02 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "openssl.h"
+#include "../openssl.h"
 
 const char	g_ref[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 int			g_pad;
@@ -76,6 +76,6 @@ void			base64start(char **argv, int argc)
 		h = base64_decode((unsigned char *)argv[i - 1], ft_strlen(argv[i - 1]));
 	else
 		h = base64_encode((unsigned char *)argv[argc - 1], ft_strlen(argv[argc - 1]));
-	ft_printf("%s", h);
+	ft_printf("%s\n", h);
 	free(h);
 }
