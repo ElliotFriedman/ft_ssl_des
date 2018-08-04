@@ -10,29 +10,44 @@
 		||
 		\/
 
-	Pass in 8 bytes at a time
+	Pass in 8 bytes at a time to encryption function
 
 		||
 		\/
 
-	Turn key into 2 halves
-
-		||
-		\/
-
-	Make 32 subkeys which are 48 bits long, derived from halved key
-
-		||
-		\/	
 	
-	32 Subkeys are derived from bitwise rotate operations
+	Turn data & key into 2 halves
 
 		||
 		\/
 
-	From subkeys derive 15 new subkeys labeled Kn, from k2 to k16, 48 bits in length
+	Loop:
+	
+		Make a copy of second half of data before you start operations on it
 
-		||
-		\/
+			||
+			\/
 
-	Now we start to encode
+		Perform expansion operation on on second side of half of data
+
+			||
+			\/	
+	
+		Rotate Subkeys by x depending on what value your iterator is in while loop
+
+			||
+			\/
+
+		Set first half of data copy to the copy of second half of data
+
+			||
+			\/
+	
+		Set second half of data copy to first half of data copy XOR'd 
+		with all operations performed on second half of data copy in loop
+	
+	repeat 16x
+
+	then turn to an array of 8 chars on heap and return to the calling function
+
+
