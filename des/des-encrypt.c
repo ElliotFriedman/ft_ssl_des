@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/03 20:58:41 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/03 21:16:13 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,20 @@ void	create_subkey(unsigned long long key, size_t *sub_key)
 	sub_key[1] = (size_t)(key >> 8);
 }
 
-void	expansion_permutation(unsigned long long *bside)
+unsigned long long	expansion_permutation(unsigned long long bside)
 {
-	size_t	i;
+	size_t				i;
+	unsigned long long	ret;
 
 	i = 0;
-
-
-
-
+	ret = 0;
+	while (i < 48)
+	{
+		ret |= bside >> g_expandpermutation[i] & 1;
+		ret <<= 1;
+		i++;
+	}
+	return (ret);
 }
 
 char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
@@ -76,13 +81,13 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 	//break data into 2 4 byte blocks
 	ft_strncpy((char*)aside, data, 4);
 	ft_strncpy((char*)bside, data, 4);
-	//shift b right 32 times so that bytes are in order
+	//shift b right 32 times so that bytes are in order to be manipulated in exp_permute
 	bside >>= 32;
 	//do a round of 16, and return the result
 	while (i < 16)
 	{
 		//run expansion permutation on bside
-		
+		bside = expansion_permutation(bside);
 	
 
 		//rotate subkeys each round
