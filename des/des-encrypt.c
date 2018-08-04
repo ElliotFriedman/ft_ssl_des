@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/03 21:16:13 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/03 21:17:08 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	create_subkey(unsigned long long key, size_t *sub_key)
 	sub_key[1] = (size_t)(key >> 8);
 }
 
+//this function takes 32 bits from bside and turns it 48 bits
 unsigned long long	expansion_permutation(unsigned long long bside)
 {
 	size_t				i;
