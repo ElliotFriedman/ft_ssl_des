@@ -6,13 +6,13 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/03 16:58:26 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/03 17:01:14 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
-//boolean for key provided
+// boolean for key provided
 int			g_key = 1;
 //boolean for whether or not we need to salt
 //doubles as a salt value if they specify salt. we convert their string to a ull and store here
