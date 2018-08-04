@@ -6,13 +6,25 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/03 20:27:50 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/03 20:44:34 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
 # define LROT(x, rotate) (x << rotate) | (x >> (32 - rotate))
+
+//Debug protocol
+
+//Recheck all globals for errors when algorithm breaks
+//Then check endianness
+//Then check logic errors
+//Then check memory issues
+
+int		g_cpermutation[48]={14, 17, 11, 24, 1, 5, 3, 28, 15, 6, 21, 10,
+							23, 19, 12, 4, 26, 8, 16, 7, 27, 20, 13, 2,
+							41, 52, 31, 37, 47, 55, 30, 40, 51, 45, 33, 48,
+							44, 49, 39, 56, 34, 53, 46, 42, 50, 36, 29, 32};
 
 int		g_rotate[16];
 
@@ -38,15 +50,20 @@ void	create_subkey(unsigned long long key, size_t *sub_key)
 char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 {
 	size_t	i;
+	int		aside;
+	int		bside;
 
 	i = 0;
-
+	//break data into 2 4 byte blocks
+	ft_strncpy((char*)aside, data, 4);
+	ft_strncpy((char*)bside, data, 4);
 	//do a round of 16, and return the result
 	while (i < 16)
 	{
 		//rotate subkeys each round
-		sub_key[0] = LROT(sub_key[0], g_rotate[i]);
-		sub_key[1] = LROT(sub_key[1], g_rotate[i]);
+		//This is wrong needs to be Compressed,
+		//sub_key[0] = LROT(sub_key[0], g_rotate[i]);
+		//sub_key[1] = LROT(sub_key[1], g_rotate[i]);
 		
 
 	}
