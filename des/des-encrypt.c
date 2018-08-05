@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/04 15:36:02 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/04 15:47:36 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,13 +91,20 @@ size_t	c_num(size_t num)
 	return (num);
 }
 
+//subkey[0] will be the most significant bytes
+//subkey[1] will be the least significant bytes
+
 void	create_subkey(unsigned long long key, size_t *sub_key)
 {
-	//Only grab 28 most significant bits.
+	//Only grab 28 least significant bits.
 	//We can currently only grab significant bits but not the first most significant bit
-	sub_key[0] = (size_t)(key & 0xFFFFFFF000000000);
-	//Grab last 32 bits. 28 of which can be currently valid bits
-	sub_key[1] = (size_t)((key >> 8) & 0x0FFFFFFF);
+	sub_key[1] = (size_t)(key & 0xFFFFFFF00);
+	//Grab last 28 most significant bits. Now shift them over 32 times so that they are perfectly inside a size_t
+	//the least significant 4 bits will be zero'd
+	sub_key[0] = (size_t)((key & 0xFFFFFFF000000000ul) >> 32);
+
+	if (sub_key[1] & )
+
 }
 
 //this function takes 32 bits from bside and turns it 48 bits

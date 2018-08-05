@@ -4,3 +4,27 @@
 Got the first 28 bytes
 01111111 11111111 11111111 11110000 00000000 00000000 00000000 00000000
 FFFFFFFFFFFFFFFF
+
+Got first 28 bytes
+11111111 11111111 11111111 1111 0000 0000
+
+
+1111 1111 1111 1111 1111    1111 1111   1111 0000
+
+
+11111111 11111111 11111111 11111111 00000000
+
+11111111 11111111 11111111 00000000
+
+Grabbed 28 real bytes. Ignored the last 8 fake bytes
+
+Hex: 0xFFFFFFF00
+
+
+Dec: 68,719,476,480
+
+11111111 11111111 11111111 11110000 0000
+
+68 billion can't be stored in an integer
+Now shift right by 4 bytes to throw off the 4 bytes you dont want because they are empty
+and won't fit in a uint that only has 4 bytes

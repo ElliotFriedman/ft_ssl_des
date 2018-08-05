@@ -11,8 +11,8 @@ int main()
 	printf("\n");
 	printf("%llX\n", ULONG_MAX);
 	ft_printf("%064b\n", ULLONG_MAX);
-	ft_printf("%064b\n", 9223372036854775807 & 0xFFFFFFF00);
-	ft_printf("%064b\n", 9223372036854775807 & -(0xFFFFFFF000000000ul));
+	ft_printf("%064b\n", /*9223372036854775807*/  0xFFFFFFF00);
+	ft_printf("%064b\n", /*18446744073709551615*/  (0xFFFFFFF000000000ul));
 
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/15 18:59:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/08 18:48:46 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/04 15:40:44 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int		print_binary(t_data *cur, va_list list)
 	ft_strncpy(cur->mod, "ll", 2);
 	nbr = uint_flags(cur, list);
 	buf = 0;
-	print = ft_itoabase(nbr, 2);
+	print = ft_uitoabase(nbr, 2);
 	if (cur->precision > (int)ft_strlen(print))
 		print = make_pre(cur, print);
 	if (cur->pad > (int)ft_strlen(print))

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 19:18:29 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/01 15:50:33 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/04 17:09:45 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,16 @@ unsigned long long	*handle_pass(t_val new)
 
 	//turn the output into an array of 2 unsigned long longs
 	//this will be our salt
-	ret = ft_memalloc(16);
-	ret[0] = new.a0;
+	ret = ft_memalloc(sizeof(unsigned long long) * 2);
+	//00000000 00000000 00000000 00000000 | 11111111 11111111 11111111 11111111
+	ret[0] = new.b0;
 	ret[0] <<= 32;
-	ret[0] += new.b0;
-	ret[1] = new.c0;
+	//11111111 11111111 11111111 11111111 | 00000000 00000000 00000000 00000000
+	ret[0] += new.a0;
+	//11111111 11111111 11111111 11111111 | 11111111 11111111 11111111 11111111
+	ret[1] = new.d0;
 	ret[1] <<= 32;
-	ret[1] += new.d0;
+	ret[1] += new.c0;
 	return (ret);
 }
 

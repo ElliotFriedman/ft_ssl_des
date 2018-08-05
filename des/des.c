@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/03 20:45:33 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/04 17:10:04 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void		print_bytes(unsigned long long *data, int len)
 
 	print = (unsigned char *)&use;
 	//swap bytes of stack var
-	swap_4bytes((int*)&use);
+//	swap_4bytes((int*)&use);
 	while (i < len)
 	{
 		ft_printf("%02X", print[i]);
