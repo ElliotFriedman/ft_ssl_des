@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/04 17:23:44 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/06 14:23:29 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,13 @@ void	create_subkey(unsigned long long key, size_t *sub_key)
 	//the least significant 4 bits will be zero'd
 	sub_key[0] = (size_t)((key & 0xFFFFFFF000000000ul) >> 32);
 
-	if (sub_key[1] & )
+	if (sub_key[1] & 1)
+		ft_printf("Error in create_subkey. Ivalid bit ordering\n");
 
 }
 
 //this function takes 32 bits from bside and turns it 48 bits
-unsigned long long	expansion_permutation(unsigned long long bside, unsigned long long c_key)
+unsigned long long	expansion_permutation(unsigned long long bside)
 {
 	size_t				i;
 	unsigned long long	ret;
@@ -141,24 +142,24 @@ unsigned long long	concat_subkeys(size_t *subkeys)
 }
 
 //compression permutation
-unsigned long long	comp_perm(unsigned long long 56bit)
+unsigned long long	comp_perm(unsigned long long i56bit)
 {
-	unsigned long long	48bit;
+	unsigned long long	i48bit;
 	size_t				i;
 
 	i = 0;
-	48bit = 0;
+	i48bit = 0;
 	//get bits in the proper order to be used.
 	//usually least sig byte is empty
 	//we will change that by shifting
-	56bit >>= 8;
+	i56bit >>= 8;
 	while (i < 8)
 	{
 		//grab only the last bit
-		48bit |= (g_cpermutation[i] >> 56bit) & 1;
+		i48bit |= (g_cpermutation[i] >> i56bit) & 1;
 		i++;
 	}
-	return (48bit);
+	return (i48bit);
 }
 
 
@@ -186,23 +187,24 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 		//run expansion permutation on bside
 		//
 		//									then compress	(concatenate subkeys)
-		bside = expansion_permutation(bside, comp_perm(concat_subkeys(sub_key)));
+		bside = expansion_permutation(bside);
 
 		//rotate subkeys each round
 		//This is wrong needs to be Compressed,
 		sub_key[0] = LROT(sub_key[0], g_rotate[i]);
 		sub_key[1] = LROT(sub_key[1], g_rotate[i]);
-		key = add_subkey(sub_key);
+		key = concat_subkeys(sub_key);
 		expansion_permutation(concat_subkeys(sub_key));
 
 
 		//after you have done all logic in iteration x, reassign aside to bside b4 modification
 		bside = aside ^ bside;
-		aside = aside_next;	
+		aside = aside_next;
+		i++;	
 	}
 }
 
-char	*des-encrypt(unsigned long long key, char *encrypt, size_t len)
+char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 {
 	//this is where will store all encrypted bytes
 	char	print[c_num(len) + 1];
@@ -214,7 +216,7 @@ char	*des-encrypt(unsigned long long key, char *encrypt, size_t len)
 	i = 0;
 	//null terminate this ish
 	print[c_num(len)] = 0;
-
+//
 
 	//permute original key from 64 bits to 56 bits
 	//least sig byte should be 0

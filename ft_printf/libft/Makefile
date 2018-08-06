@@ -101,9 +101,9 @@ $(NAME): $(OBJ)
 	@ranlib $(NAME)
 
 clean:
-	@$(TRASH) $(OBJ)
+	$(TRASH) $(OBJ)
 
 fclean: clean
-	@$(TRASH) $(NAME)
+	$(TRASH) $(NAME)
 
 re: fclean all

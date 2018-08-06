@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/02 18:02:38 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/03 18:40:56 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/06 14:22:59 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void		rev_8byte(char *data, size_t len)
 	}
 }
 
-char		*add_byte(char *data, size_t bytes)
+char		*_add_byte(char *data, size_t bytes)
 {
 	char	*snew;
 	char	*tmp;
@@ -89,25 +89,13 @@ char	*des_pad(char *encrypt, size_t len)
 	{
 //		ft_printf("Dif in while loop %d, Len: %d\n", dif, len + 1);
 		len++;
-		encrypt = add_byte(encrypt, len);
+		encrypt = _add_byte(encrypt, len);
 		ft_memset(&encrypt[len - 1], (int)set[0], 1);
 //		print_bytes(encrypt, len);
 		dif--;
 	}
 	ft_printf("total len %d\n", len);
 	return (encrypt);
-}
-
-void	print_bytes(char *str, int len)
-{
-	size_t	i = 0;
-	
-	while (i < len)
-	{
-		ft_printf("%02x ", str[i]);
-		i++;
-	}
-	ft_putstr("\n");
 }
 
 /*

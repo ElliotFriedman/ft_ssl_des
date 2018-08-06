@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/05 21:41:26 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/06 13:32:16 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,9 +177,9 @@ char				*get_pass_salt(void)
 //	ft_printf("Random salt: %s\n", salt);
 //	ft_printf("Password: %s\n", pass);
 	fclose(e);
-//	return (ft_strdup(pass));
+	return (ft_strdup(pass));
 	//uncomment this for later iterations
-	return (ft_strjoin(pass, salt));
+//	return (ft_strjoin(pass, salt));
 }
 
 //Do key byte orders need to changed to big endian?
@@ -188,6 +188,7 @@ void				des(char **argv, int argc)
 {
 	unsigned long long	*tmp;
 	unsigned long long	*key;
+	static t_hash		h;
 	int					i = 0;
 
 	tmp = create_key(get_pass_salt());
@@ -199,6 +200,12 @@ void				des(char **argv, int argc)
 	tmp++;
 	ft_putstr("iv =");
 	print_bytes(tmp, 8);
+	//try to read the last arg in to encrypt it
+	print_bytes(key, 8);
+	if (!ft_fread(argv[argc - 1], &h))
+		ft_printf("%s\n", des_encrypt(key[0], argv[argc - 1], ft_strlen(argv[argc - 1])));
+	else
+		des_encrypt(key[0], h.data, ft_strlen(h.data));
 	//ft_printf("iv in binary: %064b\n", key[1]);
 	//do subkey after byte order has been changed to big endian
 }
