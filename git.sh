@@ -1,3 +1,4 @@
+rm .DS_Store
 make fclean
 make clean
 git add .

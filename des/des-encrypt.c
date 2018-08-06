@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/06 14:23:29 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/06 16:27:29 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,25 @@ unsigned long long	comp_perm(unsigned long long i56bit)
 	return (i48bit);
 }
 
+char	*l_bytes(unsigned long long aside, unsigned long long bside)
+{
+	char	*ret;
+	char	*cpy;
+
+	cpy = 0;
+	ret = ft_memalloc(8);
+	cpy = (char *)&aside;
+	ret[0] = cpy[0];
+	ret[1] = cpy[1];
+	ret[2] = cpy[2];
+	ret[3] = cpy[3];
+	cpy = (char *)&bside;
+	ret[4] = cpy[1];
+	ret[5] = cpy[1];
+	ret[6] = cpy[1];
+	ret[7] = cpy[1];
+	return (ret);
+}
 
 char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 {
@@ -174,14 +193,16 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 	i = 0;
 	aside = 0;
 	bside = 0;
+//	 ft_printf("Before memcpy iteration \n");
 	//break data into 2 4 byte blocks
-	ft_strncpy((char*)aside, data, 4);
-	ft_strncpy((char*)bside, data, 4);
+	ft_strncpy((char*)&aside, data, 4);
+	ft_strncpy((char*)&bside, data, 4);
 	//shift b right 32 times so that bytes are in order to be manipulated in exp_permute
 	bside >>= 32;
 	//do a round of 16, and return the result
 	while (i < 16)
 	{
+		 //ft_printf("In while loop iteration %d\n", i);
 		//grab current bside value as it will change in this loop
 		aside_next = bside;
 		//run expansion permutation on bside
@@ -202,21 +223,22 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 		aside = aside_next;
 		i++;	
 	}
+	return (l_bytes(aside, bside));
 }
 
 char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 {
 	//this is where will store all encrypted bytes
-	char	print[c_num(len) + 1];
+	char	*print;
 	//only 28 bits of this should be utilized
 	size_t	two_key[2];
 	char	*tmp;
 	size_t	i;
 
 	i = 0;
+	print = ft_memalloc(len + 1);
 	//null terminate this ish
 	print[c_num(len)] = 0;
-//
 
 	//permute original key from 64 bits to 56 bits
 	//least sig byte should be 0
@@ -232,8 +254,10 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 	//loop to encrypt all bytes, 8 bytes at a time
 	while (i < len)
 	{
+		//ft_printf("In while loop iteration %d\n", i);
 		//encrypted des will return malloc'd 8 chars
 		tmp = encrypted_des(&encrypt[i], key, two_key);
+		ft_putstr(tmp);
 		//copy these chars to their proper place in print
 		ft_strncpy(&print[i], tmp, 8);
 		//zero and delete this malloc'd memory
@@ -251,4 +275,5 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 	//
 	//	If decrypting:
 	//		Make sure to verify the padded bytes are correct when decrypting
+	return (print);
 }
