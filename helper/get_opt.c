@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/05 23:12:00 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/05 23:17:00 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,16 @@ int		get_opt(int argc, char **argv, t_opt *new, int i)
 	int			fd;
 
 	fd = 0;
-		while (i < argc )/*&& on*/// && open(argv[i], O_RDONLY) == -1)
+	while (i < argc )/*&& on*/// && open(argv[i], O_RDONLY) == -1)
+	{
+		if (argv[i][0] == '-' && (open(argv[i], O_RDONLY) == -1) && opt(argv[i], new, i))
+			return (1);
+		else if (!g_fd && new->o && ((fd = (open(argv[i], O_RDONLY)) > 2)))
 		{
-			if (argv[i][0] == '-' && (open(argv[i], O_RDONLY) == -1) && opt(argv[i], new, i))
-				return (1);
-			else if (!g_fd && new->o && ((fd = (open(argv[i], O_RDONLY)) > 2)))
-			{
-				ft_printf("found file descriptor %d with name %s found at index %d\n", fd, argv[i],i);
-				g_fd = fd;
-			}
-			i++;
+			ft_printf("found file descriptor %d with name %s found at index %d\n", fd, argv[i],i);
+			g_fd = fd;
 		}
+		i++;
+	}
 	return (0);
 }
