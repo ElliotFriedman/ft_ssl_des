@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/04 13:11:02 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/05 23:06:37 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 const char	g_ref[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 int			g_pad;
+int			g_fd;
 
 int	findb_len(int len)
 {
@@ -71,11 +72,21 @@ void			base64start(char **argv, int argc)
 	i = 1;
 	h = 0;
 	while ((int)++i < argc)
+	{
 		get_opt(argc, argv, &opt, i);
+		ft_printf("g_fd: %d, opt->o %d\n", g_fd, opt.o);
+	}
 	if (argc > 2 && opt.d)
 		h = base64_decode((unsigned char *)argv[i - 1], ft_strlen(argv[i - 1]));
 	else
 		h = base64_encode((unsigned char *)argv[argc - 1], ft_strlen(argv[argc - 1]));
-	ft_printf("%s\n", h);
+	if (g_fd)
+	{
+		ft_printf("Writing to file descriptor %d\n", g_fd);
+		dprintf(g_fd, "%s\n", h);
+		close(g_fd);
+	}
+	else
+		ft_printf("%s\n", h);
 	free(h);
 }

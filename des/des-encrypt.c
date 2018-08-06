@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/04 15:47:36 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/04 17:23:44 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	create_subkey(unsigned long long key, size_t *sub_key)
 {
 	//Only grab 28 least significant bits.
 	//We can currently only grab significant bits but not the first most significant bit
-	sub_key[1] = (size_t)(key & 0xFFFFFFF00);
+	sub_key[1] = (size_t)(key & 0xFFFFFFF00) >> 4;
 	//Grab last 28 most significant bits. Now shift them over 32 times so that they are perfectly inside a size_t
 	//the least significant 4 bits will be zero'd
 	sub_key[0] = (size_t)((key & 0xFFFFFFF000000000ul) >> 32);

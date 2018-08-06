@@ -6,13 +6,14 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/03 20:10:01 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/05 23:08:33 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef OPENSSL_H
 # define OPENSSL_H
 # include "ft_printf/includes/ft_printf.h"
+# include "ft_dprintf/includes/ft_printf.h"
 # include "ft_printf/libft/libft.h"
 # include <fcntl.h>
 # include <sys/types.h>
@@ -28,6 +29,7 @@
 # define LN(a, shift) (a << shift)
 
 const char				g_ref[64];
+int						g_fd;
 
 typedef struct			s_hash
 {
@@ -57,6 +59,9 @@ typedef struct			s_opt
 	int					r;
 	int					s;
 	int					d;
+	int					e;
+	int					i;
+	int					o;
 }						t_opt;
 
 typedef struct			s_val

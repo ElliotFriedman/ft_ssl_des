@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/04 17:10:04 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/05 21:41:26 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,6 @@ void		print_bytes(unsigned long long *data, int len)
 	use = *data;
 
 	print = (unsigned char *)&use;
-	//swap bytes of stack var
-//	swap_4bytes((int*)&use);
 	while (i < len)
 	{
 		ft_printf("%02X", print[i]);
@@ -132,22 +130,7 @@ void		print_bytes(unsigned long long *data, int len)
 	}
 	ft_putstr("\n");
 }
-/*
-   unsigned int	*permute_subkey(unsigned long long key)
-   {
-   unsigned int	**ret;
-   int				i;
 
-   i = 0;
-   ret = ft_memalloc(sizeof(unsigned long long *) * 32);
-   i = 0;
-   while (i < 32)
-   {
-   ret[i] = ft_memalloc(8);
-   i++;
-   }
-   }
-   */
 unsigned int		*split_subkey(unsigned long long key)
 {
 	unsigned int	*ret;
@@ -191,12 +174,12 @@ char				*get_pass_salt(void)
 	if (!g_salt)
 		create_salt_8bytes(salt, e);
 
-	ft_printf("Random salt: %s\n", salt);
-	ft_printf("Password: %s\n", pass);
+//	ft_printf("Random salt: %s\n", salt);
+//	ft_printf("Password: %s\n", pass);
 	fclose(e);
-	return (ft_strdup(pass));
+//	return (ft_strdup(pass));
 	//uncomment this for later iterations
-	//return (ft_strjoin(pass, 0));//salt));
+	return (ft_strjoin(pass, salt));
 }
 
 //Do key byte orders need to changed to big endian?
@@ -212,10 +195,10 @@ void				des(char **argv, int argc)
 	ft_putstr("key=");
 	//print bytes without reversing byte order in memory
 	print_bytes(tmp, 8);
-	ft_printf("key in binary: %064b\n", key[0]);
+	//ft_printf("key in binary: %064b\n", key[0]);
 	tmp++;
 	ft_putstr("iv =");
 	print_bytes(tmp, 8);
-	ft_printf("iv in binary: %064b\n", key[1]);
+	//ft_printf("iv in binary: %064b\n", key[1]);
 	//do subkey after byte order has been changed to big endian
 }

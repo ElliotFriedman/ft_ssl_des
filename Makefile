@@ -6,13 +6,13 @@
 #    By: efriedma <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/01 16:05:56 by efriedma          #+#    #+#              #
-#    Updated: 2018/08/04 13:09:59 by efriedma         ###   ########.fr        #
+#    Updated: 2018/08/05 22:51:30 by efriedma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #-g -fsanitize=address 
 
-CFLAGS = -Wall -Wextra -I ft_printf/libft -I ft_printf/includes
+CFLAGS = -Wall -Wextra -I ft_printf/libft -I ft_printf/includes ft_dprintf/includes
 
 NAME = ft_ssl
 
@@ -40,15 +40,18 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	$(MAKE) -C ft_printf
-	gcc $(OBJ) ft_printf/libftprintf.a -o ft_ssl
+	$(MAKE) -C ft_dprintf
+	gcc $(OBJ) ft_printf/libftprintf.a ft_dprintf/libftdprintf.a -o ft_ssl
 
 
 clean:
 	@rm $(OBJ)
 	$(MAKE) -C ft_printf clean
+	$(MAKE) -C ft_dprintf clean
 
 fclean: clean
 	rm $(NAME)
 	$(MAKE) -C ft_printf fclean
+	$(MAKE) -C ft_dprintf fclean
 
 re: fclean $(NAME)
