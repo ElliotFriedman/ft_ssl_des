@@ -123,7 +123,7 @@ void		print_bytes(unsigned long long *data, int len)
 	use = *data;
 
 	print = (unsigned char *)&use;
-	while (i < len)
+	while ((int)i < len)
 	{
 		ft_printf("%02X", print[i]);
 		i++;
@@ -173,9 +173,6 @@ char				*get_pass_salt(void)
 		pass = g_pass;
 	if (!g_salt)
 		create_salt_8bytes(salt, e);
-
-//	ft_printf("Random salt: %s\n", salt);
-//	ft_printf("Password: %s\n", pass);
 	fclose(e);
 	return (ft_strdup(pass));
 	//uncomment this for later iterations
@@ -189,7 +186,6 @@ void				des(char **argv, int argc)
 	unsigned long long	*tmp;
 	unsigned long long	*key;
 	static t_hash		h;
-	int					i = 0;
 
 	tmp = create_key(get_pass_salt());
 	key = tmp;

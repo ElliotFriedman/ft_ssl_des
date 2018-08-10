@@ -6,12 +6,12 @@
 #    By: efriedma <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/01 16:05:56 by efriedma          #+#    #+#              #
-#    Updated: 2018/08/06 15:14:41 by efriedma         ###   ########.fr        #
+#    Updated: 2018/08/06 18:59:07 by efriedma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-#-g -fsanitize=address 
-CFLAGS = -g -Wall -Wextra -I ft_printf/libft -I ft_printf/includes ft_dprintf/includes
+#-g -fsanitize=address
+CFLAGS = -g -Werror -Wall -Wextra -I ft_printf/libft -I ft_printf/includes
 
 NAME = ft_ssl
 
