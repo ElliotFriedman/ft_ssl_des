@@ -1,3 +1,4 @@
+rm ._Make*
 rm .DS_Store
 make fclean
 make clean
