@@ -6,7 +6,7 @@
 #    By: efriedma <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/01 16:05:56 by efriedma          #+#    #+#              #
-#    Updated: 2018/08/13 20:02:41 by efriedma         ###   ########.fr        #
+#    Updated: 2018/08/13 23:25:20 by efriedma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,12 +23,12 @@ SRCS += sha256/sha256n.c sha256/sha256n2.c
 all: $(NAME)
 
 go:
-	gcc $(SRCS) ft_printf/libftprintf.a ft_dprintf/libftdprintf.a -o ft_ssl
+	gcc $(SRCS) $(CFLAGS) ft_printf/libftprintf.a ft_dprintf/libftdprintf.a -o ft_ssl
 
 $(NAME):
 	$(MAKE) -C ft_printf/
 	$(MAKE) -C ft_dprintf/
-	gcc $(SRCS) ft_printf/libftprintf.a ft_dprintf/libftdprintf.a -o ft_ssl
+	gcc $(SRCS) $(CFLAGS) ft_printf/libftprintf.a ft_dprintf/libftdprintf.a -o ft_ssl
 
 clean:
 	$(MAKE) -C ft_printf/ clean
