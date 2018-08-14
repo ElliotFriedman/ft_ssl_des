@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/01 15:49:11 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/13 19:34:30 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ unsigned long long	*passhash(char *str, t_hash *h)
 
 unsigned long long	*create_key(char *str)
 {
+	/*
 	t_hash				*h;
 	//dont delete this so that we can use old ported functions
 	//and change as little as possible
@@ -35,5 +36,12 @@ unsigned long long	*create_key(char *str)
 	//strdup so that when we free in epad we don't free stack mem
 	hold = passhash(ft_strdup(str), h);
 	fstruct(s, h);
-	return (hold);
+	*/
+	unsigned long long	*tmp = ft_memalloc(16);
+	tmp[0] = 1383827165325090801;
+
+	
+	ft_printf("key = %064b\n", 1383827165325090801);
+	return tmp;
+	//return (hold);
 }

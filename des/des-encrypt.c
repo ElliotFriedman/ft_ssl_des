@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/06 16:27:29 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/13 19:46:13 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,13 +243,14 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 	//permute original key from 64 bits to 56 bits
 	//least sig byte should be 0
 	key = init_subkey(key);
+	ft_printf("permuted key: %064b\n", key);
 	create_subkey(key, two_key);
 
 	//pad bytes so that it is a multple of 8
 	encrypt = des_pad(encrypt, len);
 	//adjust len to the new padded len
 	len = c_num(len);
-	//Reverse byte order in 8 byte blocks
+	//Reverse byte order in 8 byte blocks. little->big endian
 	rev_8byte(encrypt, len);	
 	//loop to encrypt all bytes, 8 bytes at a time
 	while (i < len)
@@ -257,7 +258,7 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 		//ft_printf("In while loop iteration %d\n", i);
 		//encrypted des will return malloc'd 8 chars
 		tmp = encrypted_des(&encrypt[i], key, two_key);
-		ft_putstr(tmp);
+		//ft_putstr(tmp);
 		//copy these chars to their proper place in print
 		ft_strncpy(&print[i], tmp, 8);
 		//zero and delete this malloc'd memory

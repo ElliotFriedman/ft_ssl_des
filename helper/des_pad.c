@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/02 18:02:38 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/06 14:22:59 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/13 19:29:17 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 //void    print_bytes(char *str, int len);
 
-//rev endianness of bytes
+//rev endianness of bytes, 8 bytes at a time
 void		rev8(char *data)
 {
 	t_sha	n;
@@ -45,6 +45,8 @@ void		rev_8byte(char *data, size_t len)
 	i = 0;
 	if (len % 8 != 0)
 	{
+		//panic function.
+		//This condition should NEVER trigger
 		ft_printf("Incorrect byte amount\n");
 		exit(0);
 	}

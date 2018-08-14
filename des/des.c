@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/06 13:32:16 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/13 19:48:58 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ unsigned long long	init_subkey(unsigned long long key)
 	//This is to extract the 56 bit key from 64 bits
 	unsigned long long	ret;
 	size_t				i;
-	size_t				tmp;
+	unsigned long long	tmp;
 
 	i = 0;
 	ret = 0;
@@ -187,7 +187,9 @@ void				des(char **argv, int argc)
 	unsigned long long	*key;
 	static t_hash		h;
 
+	//this has been modified and it will return a constant value.
 	tmp = create_key(get_pass_salt());
+	
 	key = tmp;
 	ft_putstr("key=");
 	//print bytes without reversing byte order in memory
@@ -199,7 +201,7 @@ void				des(char **argv, int argc)
 	//try to read the last arg in to encrypt it
 	print_bytes(key, 8);
 	if (!ft_fread(argv[argc - 1], &h))
-		ft_printf("%s\n", des_encrypt(key[0], argv[argc - 1], ft_strlen(argv[argc - 1])));
+		/*ft_printf("%s\n", */des_encrypt(key[0], argv[argc - 1], ft_strlen(argv[argc - 1]));//);
 	else
 		des_encrypt(key[0], h.data, ft_strlen(h.data));
 	//ft_printf("iv in binary: %064b\n", key[1]);
