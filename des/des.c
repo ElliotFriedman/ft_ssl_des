@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/13 22:39:27 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/13 23:00:52 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ unsigned long long	init_subkey(unsigned long long key)
 		//ft_printf("%d, ", g_grab[i]);
 		//								this is necessary for grabbing the correct
 		//								bit, we will implement this later
-		tmp = (key >> (g_grab[i]));// - 1));// & 1;
+		tmp = (key >> (g_grab[i])) & 1;// - 1));// & 1;
 		ft_printf("%02d bit =          %064b\n",i, (tmp & 1) << i);
 		ret += (tmp << i);
 		ft_printf("Print as we build %064b\n\n", ret);
