@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/13 22:13:11 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/13 22:24:43 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,6 +225,15 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 	}
 	return (l_bytes(aside, bside));
 }
+void	debug_num(void)
+{
+	size_t	i = -1;
+
+	ft_putstr("0123");
+	while (++i < 64)
+		ft_putnbr(i % 10);
+	ft_putstr("\n");
+}
 
 char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 {
@@ -242,10 +251,13 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 
 	//permute original key from 64 bits to 56 bits
 	//least sig byte should be 0
-	rev_8byte((char*)&key, 8);
+	//rev_8byte((char*)&key, 8);
 	ft_printf("key in dencr: %064b\n", key);
+	
 	key = init_subkey(key);
-	ft_printf("permuted key: %064b\n", key);
+	ft_putstr("\n\npermuted key: ");
+	debug_num();
+	ft_printf("permuted key: %064b\n\n\n", key);
 	create_subkey(key, two_key);
 
 	//pad bytes so that it is a multple of 8
