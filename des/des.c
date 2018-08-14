@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/14 12:35:59 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/14 12:57:01 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,9 +229,11 @@ void				des(char **argv, int argc)
 	print_bytes(tmp, 8);
 	//try to read the last arg in to encrypt it
 	print_bytes(key, 8);
-	rev_8byte((char*)&key);
-	ft_putstr("key=");
-	print_bytes(tmp, 8);
+	ft_printf("key befor endian: %064b\n", key[0]);
+	rev_8byte((char*)key, 8);
+	//ft_putstr("key=");
+	//print_bytes(tmp, 8);
+	ft_printf("key after endian: %064b\n", key[0]);
 	if (!ft_fread(argv[argc - 1], &h))
 		/*ft_printf("%s\n", */des_encrypt(key[0], argv[argc - 1], ft_strlen(argv[argc - 1]));//);
 	else

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/13 22:24:43 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/14 15:10:26 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ int		g_sbox[32][16] = {{14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7},
 	{1, 15, 13, 8, 10, 3, 7, 4, 12, 5, 6, 11, 0, 14, 9, 2},
 	{7, 11, 4, 1, 9, 12, 14, 2, 0, 6, 10, 13, 15, 3, 5, 8},
 	{2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11}};
+
+int         g_permute[64];
 
 //compression permutation
 int		g_cpermutation[48] = {14, 17, 11, 24, 1, 5, 3, 28, 15, 6, 21, 10,
@@ -182,6 +184,22 @@ char	*l_bytes(unsigned long long aside, unsigned long long bside)
 	return (ret);
 }
 
+//initial permutation on the 64 bit block of plaintext
+unsigned long long	initialperm(unsigned long long txt)
+{
+	size_t	i;
+	unsigned long long	ret;
+
+	i = 0;
+	ret = 0;
+	while (i < 64)
+	{
+		ret += ((txt >> (g_permute[i] - 1)) & 1) << i;
+		i++;
+	}
+	return (ret);
+}
+
 char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 {
 	size_t				i;
@@ -193,10 +211,14 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 	i = 0;
 	aside = 0;
 	bside = 0;
+	//do the initial permutation on the 64 block of text
+	key = initialperm(key);
 //	 ft_printf("Before memcpy iteration \n");
 	//break data into 2 4 byte blocks
 	ft_strncpy((char*)&aside, data, 4);
 	ft_strncpy((char*)&bside, data, 4);
+	ft_printf("%032b %032b\n", aside, bside);
+	
 	//shift b right 32 times so that bytes are in order to be manipulated in exp_permute
 	bside >>= 32;
 	//do a round of 16, and return the result
@@ -223,7 +245,11 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 		aside = aside_next;
 		i++;	
 	}
-	return (l_bytes(aside, bside));
+	//merge aside and bside
+	//l_bytes(aside, bside);
+	//perform final permutation on aside and bside merged
+	//final_permutate();
+	return (final_permutate(l_bytes(aside, bside)));
 }
 void	debug_num(void)
 {
@@ -252,7 +278,7 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 	//permute original key from 64 bits to 56 bits
 	//least sig byte should be 0
 	//rev_8byte((char*)&key, 8);
-	ft_printf("key in dencr: %064b\n", key);
+//	ft_printf("key in dencr: %064b\n", key);
 	
 	key = init_subkey(key);
 	ft_putstr("\n\npermuted key: ");

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/13 23:26:04 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/14 12:59:06 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ unsigned long long	*create_key(char *str)
 	tmp[0] = 1383827165325090801;
 
 	
-	ft_printf("key = %064b\n", 1383827165325090801);
+	ft_printf("key             = %064b\n", tmp[0]);
 	return tmp;
 	//return (hold);
 }
