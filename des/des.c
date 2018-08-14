@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/13 19:48:58 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/13 21:51:04 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,20 +64,24 @@ unsigned long long	init_subkey(unsigned long long key)
 	unsigned long long	ret;
 	size_t				i;
 	unsigned long long	tmp;
+	unsigned long long	n;
 
 	i = 0;
 	ret = 0;
+	n = 1;
+	//ft_printf("tmp bits: "); 
 	while (i < 56)
 	{
 		//shift over x bytes, then grab that byte
-		tmp = (key >> g_grab[i]) & 1;
-		//while (tmp && tmp / 2)
-		//	tmp >> 1;
-		//add that byte to ret
-		ret |= tmp << g_grab[i];
-		//ret <<= 1;
+		//may need to do  -1 after grab
+		//ft_printf("%d, ", g_grab[i]);
+		tmp = (key >> (g_grab[i] - 1)) & 1;
+		ft_printf("%d bit = %04b\n",i, tmp);
+		ret += tmp << i;
 		i++;
+		n *= 2;
 	}
+	ft_printf("\ninit_subkey = %064b\n", ret);
 	return (ret);
 }
 

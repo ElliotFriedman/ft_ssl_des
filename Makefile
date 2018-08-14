@@ -6,7 +6,7 @@
 #    By: efriedma <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/01 16:05:56 by efriedma          #+#    #+#              #
-#    Updated: 2018/08/13 16:12:08 by efriedma         ###   ########.fr        #
+#    Updated: 2018/08/13 20:02:41 by efriedma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,9 @@ SRCS += md5_salt/md5.c md5_salt/md5hash.c helper/get_opt.c sha256/sha256hash.c s
 SRCS += sha256/sha256n.c sha256/sha256n2.c 
 
 all: $(NAME)
+
+go:
+	gcc $(SRCS) ft_printf/libftprintf.a ft_dprintf/libftdprintf.a -o ft_ssl
 
 $(NAME):
 	$(MAKE) -C ft_printf/

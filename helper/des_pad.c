@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/02 18:02:38 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/13 19:29:17 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/13 20:08:47 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ void		rev8(char *data)
 	n.f = data[5];
 	n.g = data[6];
 	n.h = data[7];
-	data[7] = n.a;
-	data[6] = n.b;
-	data[5] = n.c;
-	data[4] = n.d;
-	data[3] = n.e;
-	data[2] = n.f;
-	data[1] = n.g;
-	data[0] = n.h;
+	data[7] = (char)n.a;
+	data[6] = (char)n.b;
+	data[5] = (char)n.c;
+	data[4] = (char)n.d;
+	data[3] = (char)n.e;
+	data[2] = (char)n.f;
+	data[1] = (char)n.g;
+	data[0] = (char)n.h;
 }
 
 
