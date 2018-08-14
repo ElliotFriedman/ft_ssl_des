@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/13 23:21:54 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/14 12:35:59 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,16 @@ char		*g_pass = "hello";
 //This permuted key will be divided into 2 28 bit halves that will be permuted once per round
 //
 //16 rounds per 64 bit block
+/*
+int			g_grab[56] = {57, 49, 41, 33, 25, 17, 9,
+	1, 58, 50, 42, 34, 26, 18,
+	10, 2, 59, 51, 43, 35, 27,
+	19, 11, 3, 60, 52, 44, 36,
+	63, 55, 47, 39, 31, 23, 15,
+	7, 62, 54, 46, 38, 30, 22,
+	14, 6, 61, 53, 45, 37, 29,
+	21, 13, 5, 28, 20, 12, 4};
+*/
 
 int			g_grab[56] = {57, 49, 41, 33, 25, 17, 9,
 	1, 58, 50, 42, 34, 26, 18,
@@ -38,6 +48,7 @@ int			g_grab[56] = {57, 49, 41, 33, 25, 17, 9,
 	7, 62, 54, 46, 38, 30, 22,
 	14, 6, 61, 53, 45, 37, 29,
 	21, 13, 5, 28, 20, 12, 4};
+
 
 //This is the initial Permutation done on plaintext
 
@@ -218,6 +229,9 @@ void				des(char **argv, int argc)
 	print_bytes(tmp, 8);
 	//try to read the last arg in to encrypt it
 	print_bytes(key, 8);
+	rev_8byte((char*)&key);
+	ft_putstr("key=");
+	print_bytes(tmp, 8);
 	if (!ft_fread(argv[argc - 1], &h))
 		/*ft_printf("%s\n", */des_encrypt(key[0], argv[argc - 1], ft_strlen(argv[argc - 1]));//);
 	else
