@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/14 12:57:01 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/15 15:25:54 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,27 @@ void	m5()
 	ft_putstr("\n");
 }
 
+unsigned long long	pow2(size_t amt)
+{
+	unsigned long long int	ret;
+
+	ret = 9223372036854775808ul;
+	while (amt--)
+		ret >>= 1;
+	ft_printf("pow2   =          %064b\n", ret);
+	return (ret);
+}
+/*
+size_t				lut(size_t i)
+{
+	//shift left by g_grab[i] - i
+
+	if (!i)
+		return (g_grab[i]);
+
+}
+*/
+
 unsigned long long	init_subkey(unsigned long long key)
 {
 	//This is to extract the 56 bit key from 64 bits
@@ -89,23 +110,25 @@ unsigned long long	init_subkey(unsigned long long key)
 
 	i = 0;
 	ret = 0;
-	n = 1;
+	n = 9223372036854775808ul;
 	//ft_printf("tmp bits: "); 
 	while (i < 56)
 	{
+		m5();
 		tmp = 0;
 		//may need to do  -1 after grab
 		//ft_printf("%d, ", g_grab[i]);
 		//								this is necessary for grabbing the correct
 		//								bit, we will implement this later
-		tmp = (key >> (g_grab[i] - 1)) & 1;// - 1));// & 1;
-		m5();
-		ft_printf("%02d bit =          %064b\n",i, (tmp & 1) << i);
-		ret += (tmp << i);
-		ft_printf("Print as we build %064b\n\n", ret);
+		tmp = (pow2(g_grab[i] - 1) & key) << (g_grab[i] - i - 1);
+		  ft_printf("key binary:       %064b\n", key);
+		ft_printf("%02d bit =          %064b\n",i, tmp);//(tmp & 1) << i);
+		ret += (tmp);
+		  ft_printf("Print as we build %064b\n\n", ret);
 		i++;
-		n *= 2;
+		n >>= 1;
 	}
+	//least significant 8 bits should be empty
 	ft_printf("\ninit_subkey = %064b\n", ret);
 	return (ret);
 }
@@ -230,7 +253,7 @@ void				des(char **argv, int argc)
 	//try to read the last arg in to encrypt it
 	print_bytes(key, 8);
 	ft_printf("key befor endian: %064b\n", key[0]);
-	rev_8byte((char*)key, 8);
+	//rev_8byte((char*)key, 8);
 	//ft_putstr("key=");
 	//print_bytes(tmp, 8);
 	ft_printf("key after endian: %064b\n", key[0]);

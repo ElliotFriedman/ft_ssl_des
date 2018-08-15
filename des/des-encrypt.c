@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/14 15:10:26 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/15 14:56:47 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ unsigned long long	comp_perm(unsigned long long i56bit)
 	return (i48bit);
 }
 
+//2 blocks that are 2 bits each
 char	*l_bytes(unsigned long long aside, unsigned long long bside)
 {
 	char	*ret;
@@ -217,7 +218,9 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 	//break data into 2 4 byte blocks
 	ft_strncpy((char*)&aside, data, 4);
 	ft_strncpy((char*)&bside, data, 4);
-	ft_printf("%032b %032b\n", aside, bside);
+
+	//debug ciphertext
+	//	ft_printf("%032b %032b\n", aside, bside);
 	
 	//shift b right 32 times so that bytes are in order to be manipulated in exp_permute
 	bside >>= 32;
@@ -249,7 +252,8 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 	//l_bytes(aside, bside);
 	//perform final permutation on aside and bside merged
 	//final_permutate();
-	return (final_permutate(l_bytes(aside, bside)));
+	//return (final_permutate(l_bytes(aside, bside)));
+	return (l_bytes(aside, bside));
 }
 void	debug_num(void)
 {
