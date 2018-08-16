@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/15 17:05:37 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/15 21:35:23 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int			g_grab[56] = {57, 49, 41, 33, 25, 17, 9,
 	1, 58, 50, 42, 34, 26, 18,
 	10, 2, 59, 51, 43, 35, 27,
 	19, 11, 3, 60, 52, 44, 36,
-	63, 55, 47, 39, 31, 23, 15,
+	63, 55, 47, 39, 31, 23, 15, //value: 23, index: 33
 	7, 62, 54, 46, 38, 30, 22,
 	14, 6, 61, 53, 45, 37, 29,
 	21, 13, 5, 28, 20, 12, 4};
@@ -99,6 +99,7 @@ size_t				lut(size_t i)
 
 }
 */
+// ft_printf("shiftr: %02d val:   %064b\n",  g_grab[i] - i - 1,(pow2(g_grab[i] - 1) & key));
 
 unsigned long long	init_subkey(unsigned long long key)
 {
@@ -106,29 +107,30 @@ unsigned long long	init_subkey(unsigned long long key)
 	unsigned long long	ret;
 	size_t				i;
 	unsigned long long	tmp;
-	unsigned long long	n;
 
 	i = 0;
 	ret = 0;
-	n = 9223372036854775808ul;
+	//n = 9223372036854775808ul;
 	//ft_printf("tmp bits: "); 
 	while (i < 56)
 	{
 		m5();
 		tmp = 0;
-		//may need to do  -1 after grab
-		//ft_printf("%d, ", g_grab[i]);
-		//								this is necessary for grabbing the correct
-		//								bit, we will implement this later
-		  ft_printf("cur pos: %d shift left: %d i: %d\n",i,  g_grab[i] - i - 1);
-		tmp = (pow2(g_grab[i] - 1) & key) << (g_grab[i] - i - 1);
-		  ft_printf("shiftr: %02d val:   %064b\n",  g_grab[i] - i - 1,(pow2(g_grab[i] - 1) & key));
-		  ft_printf("key binary:       %064b\n", key);
+		  ft_printf("cur pos: %d shift left: %d, shift right: %d i: %d\n",i,  g_grab[i] - i - 1, i - g_grab[i] - 1, i);
+		
+		 tmp = (pow2(g_grab[i] - 1) & key);
+		  //ft_printf("tmp after shift:  %064b\n", (tmp = (g_grab[i] > (int)i > 0) ? (tmp << (g_grab[i] - i - 1)) : (tmp >> (i - g_grab[i] - 1))));
+		if ((g_grab[i] + 1) > (int)i)
+			tmp <<= (g_grab[i] - i - 1);
+		else
+			tmp >>= i - (g_grab[i] - 1);
+		ft_printf("tmp after shift:  %064b\n", tmp);	
+	  	ft_printf("key binary:       %064b\n", key);
 		ft_printf("%02d bit =          %064b\n",i, tmp);//(tmp & 1) << i);
 		ret += (tmp);
 		  ft_printf("Print as we build %064b\n\n", ret);
+		
 		i++;
-		n >>= 1;
 	}
 	//least significant 8 bits should be empty
 	ft_printf("\ninit_subkey = %064b\n", ret);
