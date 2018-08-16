@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/15 15:25:54 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/15 17:05:37 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,9 @@ unsigned long long	init_subkey(unsigned long long key)
 		//ft_printf("%d, ", g_grab[i]);
 		//								this is necessary for grabbing the correct
 		//								bit, we will implement this later
+		  ft_printf("cur pos: %d shift left: %d i: %d\n",i,  g_grab[i] - i - 1);
 		tmp = (pow2(g_grab[i] - 1) & key) << (g_grab[i] - i - 1);
+		  ft_printf("shiftr: %02d val:   %064b\n",  g_grab[i] - i - 1,(pow2(g_grab[i] - 1) & key));
 		  ft_printf("key binary:       %064b\n", key);
 		ft_printf("%02d bit =          %064b\n",i, tmp);//(tmp & 1) << i);
 		ret += (tmp);
