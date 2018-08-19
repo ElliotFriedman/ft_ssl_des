@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/15 14:56:47 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/18 23:12:59 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,15 @@ int		g_expandpermutation[48] = {32, 1, 2, 3, 4, 5, 4, 5, 6, 7, 8, 9,
 	16, 17, 18, 19, 20, 21, 20, 21, 22, 23, 24, 25,
 	24, 25, 26, 27, 28, 29, 28, 29, 30, 31, 32, 1};
 
-int		g_rotate[16];
+
+int		g_rotate[16] = {1, 1, 2, 2,
+	2, 2, 2, 2,
+	1, 2, 2, 2,
+	2, 2, 2, 1};
+
+size_t	g_rsubkey[17];
+
+size_t	g_lsubkey[17];
 
 unsigned long long lmax = 0xFFFFFFFFFFFFFFFF;
 
@@ -95,20 +103,6 @@ size_t	c_num(size_t num)
 
 //subkey[0] will be the most significant bytes
 //subkey[1] will be the least significant bytes
-
-void	create_subkey(unsigned long long key, size_t *sub_key)
-{
-	//Only grab 28 least significant bits.
-	//We can currently only grab significant bits but not the first most significant bit
-	sub_key[1] = (size_t)(key & 0xFFFFFFF00) >> 4;
-	//Grab last 28 most significant bits. Now shift them over 32 times so that they are perfectly inside a size_t
-	//the least significant 4 bits will be zero'd
-	sub_key[0] = (size_t)((key & 0xFFFFFFF000000000ul) >> 32);
-
-	if (sub_key[1] & 1)
-		ft_printf("Error in create_subkey. Ivalid bit ordering\n");
-
-}
 
 //this function takes 32 bits from bside and turns it 48 bits
 unsigned long long	expansion_permutation(unsigned long long bside)
@@ -200,6 +194,48 @@ unsigned long long	initialperm(unsigned long long txt)
 	}
 	return (ret);
 }
+/*
+size_t	rotatex(size_t i)
+{
+	g_rsubkey[i] = (g_rsubkey[i] << g_rotate[i]) | (28 - g_rotate[i] >> g_rsubkey[i]);
+	g_lsubkey[i] = g_rotate[i];
+}
+*/
+
+void	create_subkeys(unsigned long long key)
+{
+	size_t	i;
+
+	i = 0;
+	g_rsubkey[0] = (size_t)((key & 0xFFFFFFF000000000ul) >> 32);
+	g_lsubkey[0] = (size_t)(key & 0xFFFFFFF00) >> 4;
+
+	ft_printf("\n\n%064b\n\n", 0xFFFFFFF00 >> 4);
+	ft_printf("rsubkey:			%032b\n", g_rsubkey[0]);
+	ft_printf("lsubkey:			%032b\n", g_lsubkey[0]);
+	while (i < 16)
+	{
+		g_rsubkey[i] = ((g_rsubkey[i] << g_rotate[i]) | (g_rsubkey[i] >> (28 - g_rotate[i]))) & (0xFFFFFFFF00 >> 4);
+		g_lsubkey[i] = ((g_lsubkey[i] << g_rotate[i]) | (g_lsubkey[i] >> (28 - g_rotate[i]))) & (0xFFFFFFFF00 >> 4);
+		ft_printf("\n\n		i:%d\nrsubkey:         %032b\n", i, (size_t)g_rsubkey[i]);
+	   	ft_printf("lsubkey:         %032b\n", (size_t)g_lsubkey[i]);
+		i++;
+	}
+	//Only grab 28 least significant bits.
+	//We can currently only grab significant bits but not the first most significant bit
+//	sub_key[1] = (size_t)(key & 0xFFFFFFF00) >> 4;
+	//Grab last 28 most significant bits. Now shift them over 32 times so that they are perfectly inside a size_t
+	//the least significant 4 bits will be zero'd
+//	sub_key[0] = (size_t)((key & 0xFFFFFFF000000000ul) >> 32);
+
+	i = 0;
+	while (i < 16)
+	{
+		if ((g_rsubkey[i] & 33) || g_lsubkey[i] & 33)
+			ft_printf("Error in create_subkey. Ivalid bit ordering at index %d\n", i);
+		i++;
+	}
+}
 
 char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 {
@@ -216,8 +252,9 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 	key = initialperm(key);
 //	 ft_printf("Before memcpy iteration \n");
 	//break data into 2 4 byte blocks
-	ft_strncpy((char*)&aside, data, 4);
-	ft_strncpy((char*)&bside, data, 4);
+	ft_strncpy((char*)&g_rsubkey, data, 4);
+	ft_strncpy((char*)&g_lsubkey, data, 4);
+
 
 	//debug ciphertext
 	//	ft_printf("%032b %032b\n", aside, bside);
@@ -235,10 +272,11 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 		//									then compress	(concatenate subkeys)
 		bside = expansion_permutation(bside);
 
+		//precompute subkeys
+
 		//rotate subkeys each round
 		//This is wrong needs to be Compressed,
-		sub_key[0] = LROT(sub_key[0], g_rotate[i]);
-		sub_key[1] = LROT(sub_key[1], g_rotate[i]);
+		
 		key = concat_subkeys(sub_key);
 		expansion_permutation(concat_subkeys(sub_key));
 
@@ -288,7 +326,7 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 	ft_putstr("\n\npermuted key: ");
 	debug_num();
 	ft_printf("permuted key: %064b\n\n\n", key);
-	create_subkey(key, two_key);
+	//create_subkey(key, two_key);
 
 	//pad bytes so that it is a multple of 8
 	encrypt = des_pad(encrypt, len);
@@ -320,5 +358,6 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 	//
 	//	If decrypting:
 	//		Make sure to verify the padded bytes are correct when decrypting
+	create_subkeys(key);
 	return (print);
 }
