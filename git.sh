@@ -14,7 +14,7 @@ echo "
 
 DONE!
 
-
+pushed with commit message: \"${1}\"
 
 
 "
