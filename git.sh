@@ -1,3 +1,4 @@
+rm a.out
 rm -rf ft_ssl.dSYM/Contents
 rm -rf ft_ssl.dSYM
 rm ._Make*
