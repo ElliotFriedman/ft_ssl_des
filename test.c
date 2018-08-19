@@ -2,13 +2,13 @@
 #include "openssl.h"
 #include <stdio.h>
 
-unsigned long long	pow2(size_t amt)
+unsigned long long	pow2(size_t amt, unsigned long long ret)
 {
-	unsigned long long int	ret;
+	//unsigned long long int	ret;
 
-	ret = 9223372036854775808ul;
+	//ret = 1;
 	while (amt--)
-		ret >>= 1;
+		ret <<= 1;
 	return (ret);
 }
 
@@ -37,7 +37,11 @@ int main()
 //	ft_printf("%08b\n", 127);
 //	ft_printf("%08d\n", (127 & pow2(1)) >> 1);
 
-	ft_printf("%064b\n", pow2(1));
-	ft_printf("%llu\n", pow2(63));
+	ft_printf("%032b\n", 3 << 30);
+
+	ft_printf("%032b\n", 1 << 31);
+	
+	ft_printf("%llu\n%llu\n", pow2(30, 3), pow2(31, 1));
+	//ft_printf("%llu\n", pow2(63));
 	return 0;
 }

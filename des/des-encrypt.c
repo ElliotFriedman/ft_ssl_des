@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/18 23:12:59 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/19 00:33:27 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,9 @@ int		g_rotate[16] = {1, 1, 2, 2,
 	1, 2, 2, 2,
 	2, 2, 2, 1};
 
-size_t	g_rsubkey[17];
+unsigned int	g_rsubkey[17];
 
-size_t	g_lsubkey[17];
+unsigned int	g_lsubkey[17];
 
 unsigned long long lmax = 0xFFFFFFFFFFFFFFFF;
 
@@ -205,20 +205,39 @@ size_t	rotatex(size_t i)
 void	create_subkeys(unsigned long long key)
 {
 	size_t	i;
+	size_t	ltmp;
+	size_t	rtmp;
 
 	i = 0;
 	g_rsubkey[0] = (size_t)((key & 0xFFFFFFF000000000ul) >> 32);
 	g_lsubkey[0] = (size_t)(key & 0xFFFFFFF00) >> 4;
 
 	ft_printf("\n\n%064b\n\n", 0xFFFFFFF00 >> 4);
-	ft_printf("rsubkey:			%032b\n", g_rsubkey[0]);
-	ft_printf("lsubkey:			%032b\n", g_lsubkey[0]);
+	ft_printf("rsubkey:	%032b\n", g_rsubkey[0]);
+	ft_printf("lsubkey:	%032b\n", g_lsubkey[0]);
 	while (i < 16)
 	{
-		g_rsubkey[i] = ((g_rsubkey[i] << g_rotate[i]) | (g_rsubkey[i] >> (28 - g_rotate[i]))) & (0xFFFFFFFF00 >> 4);
-		g_lsubkey[i] = ((g_lsubkey[i] << g_rotate[i]) | (g_lsubkey[i] >> (28 - g_rotate[i]))) & (0xFFFFFFFF00 >> 4);
-		ft_printf("\n\n		i:%d\nrsubkey:         %032b\n", i, (size_t)g_rsubkey[i]);
-	   	ft_printf("lsubkey:         %032b\n", (size_t)g_lsubkey[i]);
+		if (i)
+		{
+			g_lsubkey[i] = g_lsubkey[i - 1];
+			g_rsubkey[i] = g_rsubkey[i - 1];
+		}
+		ltmp = (g_rotate[i] == 1 ? 1 << 31: 3 << 30) & g_lsubkey[i];
+		rtmp = (g_rotate[i] == 1 ? 1 << 31: 3 << 30) & g_rsubkey[i];
+//		ft_printf("rtmp:		%032b\n", rtmp);
+//		ft_printf("ltmp:		%032b\n", ltmp);
+		g_lsubkey[i] <<= g_rotate[i];
+		g_rsubkey[i] <<= g_rotate[i];
+//		ft_printf("rsubkey:         %032b\n", (size_t)g_rsubkey[i]);
+//		ft_printf("lsubkey:         %032b\n", (size_t)g_lsubkey[i]);
+		g_lsubkey[i] += ltmp >> (g_rotate[i] == 1 ? 27 : 26);
+		g_rsubkey[i] += rtmp >> (g_rotate[i] == 1 ? 27 : 26);
+//		ft_printf("rsubkey:         %032b\n", (size_t)g_rsubkey[i]);
+//		ft_printf("lsubkey:         %032b\n", (size_t)g_lsubkey[i]);
+		//g_rsubkey[i] = ((g_rsubkey[i] << g_rotate[i]) | (g_rsubkey[i] >> (28 - g_rotate[i]))) & (0xFFFFFFFF00 >> 4);
+		//g_lsubkey[i] = ((g_lsubkey[i] << g_rotate[i]) | (g_lsubkey[i] >> (28 - g_rotate[i]))) & (0xFFFFFFFF00 >> 4);
+		ft_printf("\nrsubkey:         %028b\n", (size_t)g_rsubkey[i] >> 4);
+	   	ft_printf("lsubkey:         %028b\n", (size_t)g_lsubkey[i] >> 4);
 		i++;
 	}
 	//Only grab 28 least significant bits.
