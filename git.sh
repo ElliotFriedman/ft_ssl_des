@@ -1,4 +1,5 @@
-rm ft_ssl.dSYM
+rm -rf ft_ssl.dSYM/Contents
+rm -rf ft_ssl.dSYM
 rm ._Make*
 rm .DS_Store
 make fclean
