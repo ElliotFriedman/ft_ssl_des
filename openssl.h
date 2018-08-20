@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/06 14:22:10 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/20 00:48:12 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,5 +156,6 @@ void					rev_8byte(char *data, size_t len);
 unsigned long long		init_subkey(unsigned long long key);
 void					rev_8byte(char *data, size_t len);
 char					*des_pad(char *encrypt, size_t len);
+unsigned long long		pow2(size_t amt);
 
 #endif
