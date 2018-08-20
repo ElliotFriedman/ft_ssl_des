@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/19 00:33:27 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/19 23:25:26 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,6 @@ void	create_subkeys(unsigned long long key)
 	g_rsubkey[0] = (size_t)((key & 0xFFFFFFF000000000ul) >> 32);
 	g_lsubkey[0] = (size_t)(key & 0xFFFFFFF00) >> 4;
 
-	ft_printf("\n\n%064b\n\n", 0xFFFFFFF00 >> 4);
 	ft_printf("rsubkey:	%032b\n", g_rsubkey[0]);
 	ft_printf("lsubkey:	%032b\n", g_lsubkey[0]);
 	while (i < 16)
@@ -224,34 +223,12 @@ void	create_subkeys(unsigned long long key)
 		}
 		ltmp = (g_rotate[i] == 1 ? 1 << 31: 3 << 30) & g_lsubkey[i];
 		rtmp = (g_rotate[i] == 1 ? 1 << 31: 3 << 30) & g_rsubkey[i];
-//		ft_printf("rtmp:		%032b\n", rtmp);
-//		ft_printf("ltmp:		%032b\n", ltmp);
 		g_lsubkey[i] <<= g_rotate[i];
 		g_rsubkey[i] <<= g_rotate[i];
-//		ft_printf("rsubkey:         %032b\n", (size_t)g_rsubkey[i]);
-//		ft_printf("lsubkey:         %032b\n", (size_t)g_lsubkey[i]);
 		g_lsubkey[i] += ltmp >> (g_rotate[i] == 1 ? 27 : 26);
 		g_rsubkey[i] += rtmp >> (g_rotate[i] == 1 ? 27 : 26);
-//		ft_printf("rsubkey:         %032b\n", (size_t)g_rsubkey[i]);
-//		ft_printf("lsubkey:         %032b\n", (size_t)g_lsubkey[i]);
-		//g_rsubkey[i] = ((g_rsubkey[i] << g_rotate[i]) | (g_rsubkey[i] >> (28 - g_rotate[i]))) & (0xFFFFFFFF00 >> 4);
-		//g_lsubkey[i] = ((g_lsubkey[i] << g_rotate[i]) | (g_lsubkey[i] >> (28 - g_rotate[i]))) & (0xFFFFFFFF00 >> 4);
-		ft_printf("\nrsubkey:         %028b\n", (size_t)g_rsubkey[i] >> 4);
-	   	ft_printf("lsubkey:         %028b\n", (size_t)g_lsubkey[i] >> 4);
-		i++;
-	}
-	//Only grab 28 least significant bits.
-	//We can currently only grab significant bits but not the first most significant bit
-//	sub_key[1] = (size_t)(key & 0xFFFFFFF00) >> 4;
-	//Grab last 28 most significant bits. Now shift them over 32 times so that they are perfectly inside a size_t
-	//the least significant 4 bits will be zero'd
-//	sub_key[0] = (size_t)((key & 0xFFFFFFF000000000ul) >> 32);
-
-	i = 0;
-	while (i < 16)
-	{
-		if ((g_rsubkey[i] & 33) || g_lsubkey[i] & 33)
-			ft_printf("Error in create_subkey. Ivalid bit ordering at index %d\n", i);
+		ft_printf("\nrsubkey:         %032b\n", (size_t)g_rsubkey[i]);
+	   	ft_printf("lsubkey:         %032b\n", (size_t)g_lsubkey[i]);
 		i++;
 	}
 }
@@ -271,8 +248,8 @@ char	*encrypted_des(char *data, unsigned long long key, size_t *sub_key)
 	key = initialperm(key);
 //	 ft_printf("Before memcpy iteration \n");
 	//break data into 2 4 byte blocks
-	ft_strncpy((char*)&g_rsubkey, data, 4);
-	ft_strncpy((char*)&g_lsubkey, data, 4);
+	//ft_strncpy((char*)&g_rsubkey, data, 4);
+	//ft_strncpy((char*)&g_lsubkey, data, 4);
 
 
 	//debug ciphertext

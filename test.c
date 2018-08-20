@@ -37,6 +37,10 @@ int main()
 //	ft_printf("%08b\n", 127);
 //	ft_printf("%08d\n", (127 & pow2(1)) >> 1);
 
+	char a = -1;
+
+	ft_printf("\n\n\n\n\n\n\n%d\n\n\n\n\n\n", CHAR_MIN);
+
 	ft_printf("%032b\n", 3 << 30);
 
 	ft_printf("%032b\n", 1 << 31);
