@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/18 22:42:30 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/20 00:59:15 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	m5()
 {
 	size_t	i = -1;
 
-	ft_putstr("                  ");  
+	ft_putstr("                  ");
 	while (++i < 64)
 		ft_printf("%d", i % 10);
 	ft_putstr("\n");
@@ -108,25 +108,25 @@ unsigned long long	init_subkey(unsigned long long key)
 	i = 0;
 	ret = 0;
 	//n = 9223372036854775808ul;
-	//ft_printf("tmp bits: "); 
+	//ft_printf("tmp bits: ");
 	while (i < 56)
 	{
 		m5();
 		tmp = 0;
 		  ft_printf("cur pos: %d shift left: %d, shift right: %d i: %d\n",i,  g_grab[i] - i - 1, i - g_grab[i] - 1, i);
-		
+
 		 tmp = (pow2(g_grab[i] - 1) & key);
 		  //ft_printf("tmp after shift:  %064b\n", (tmp = (g_grab[i] > (int)i > 0) ? (tmp << (g_grab[i] - i - 1)) : (tmp >> (i - g_grab[i] - 1))));
 		if ((g_grab[i] + 1) > (int)i)
 			tmp <<= (g_grab[i] - i - 1);
 		else
 			tmp >>= i - (g_grab[i] - 1);
-		ft_printf("tmp after shift:  %064b\n", tmp);	
+		ft_printf("tmp after shift:  %064b\n", tmp);
 	  	ft_printf("key binary:       %064b\n", key);
 		ft_printf("%02d bit =          %064b\n",i, tmp);//(tmp & 1) << i);
 		ret += (tmp);
 		  ft_printf("Print as we build %064b\n\n", ret);
-		
+
 		i++;
 	}
 	//least significant 8 bits should be empty
@@ -242,7 +242,7 @@ void				des(char **argv, int argc)
 
 	//this has been modified and it will return a constant value.
 	tmp = create_key(get_pass_salt());
-	
+
 	key = tmp;
 	ft_putstr("key=");
 	//print bytes without reversing byte order in memory
