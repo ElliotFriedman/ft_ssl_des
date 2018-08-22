@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/20 00:59:15 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/20 15:33:14 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int			g_grab[56] = {57, 49, 41, 33, 25, 17, 9,
 
 //This is the initial Permutation done on plaintext
 
-int			g_permute[64] = {58, 50, 42, 34, 26, 18, 10,
+int			g_permute[64];/* = {58, 50, 42, 34, 26, 18, 10,
 	2, 60, 52, 44, 36, 28, 20,
 	12, 4, 62, 54, 46, 38, 30,
 	22, 14, 6, 64, 56, 48, 40,
@@ -60,7 +60,7 @@ int			g_permute[64] = {58, 50, 42, 34, 26, 18, 10,
 	33, 25, 17, 9, 1, 59, 51,
 	43, 35, 27, 19, 11, 3, 61,
 	53, 45, 37, 29, 21, 13, 5,
-	63, 55, 47, 39, 31, 23, 15, 7};
+	63, 55, 47, 39, 31, 23, 15, 7};*/
 
 //rotate subkey x bits left at each round
 
@@ -83,7 +83,7 @@ unsigned long long	pow2(size_t amt)
 	ret = 9223372036854775808ul;
 	while (amt--)
 		ret >>= 1;
-	ft_printf("pow2   =          %064b\n", ret);
+//	ft_printf("pow2   =          %064b\n", ret);
 	return (ret);
 }
 /*
@@ -111,9 +111,9 @@ unsigned long long	init_subkey(unsigned long long key)
 	//ft_printf("tmp bits: ");
 	while (i < 56)
 	{
-		m5();
+//		m5();
 		tmp = 0;
-		  ft_printf("cur pos: %d shift left: %d, shift right: %d i: %d\n",i,  g_grab[i] - i - 1, i - g_grab[i] - 1, i);
+//		  ft_printf("cur pos: %d shift left: %d, shift right: %d i: %d\n",i,  g_grab[i] - i - 1, i - g_grab[i] - 1, i);
 
 		 tmp = (pow2(g_grab[i] - 1) & key);
 		  //ft_printf("tmp after shift:  %064b\n", (tmp = (g_grab[i] > (int)i > 0) ? (tmp << (g_grab[i] - i - 1)) : (tmp >> (i - g_grab[i] - 1))));
@@ -121,16 +121,16 @@ unsigned long long	init_subkey(unsigned long long key)
 			tmp <<= (g_grab[i] - i - 1);
 		else
 			tmp >>= i - (g_grab[i] - 1);
-		ft_printf("tmp after shift:  %064b\n", tmp);
-	  	ft_printf("key binary:       %064b\n", key);
-		ft_printf("%02d bit =          %064b\n",i, tmp);//(tmp & 1) << i);
+//		ft_printf("tmp after shift:  %064b\n", tmp);
+//	  	ft_printf("key binary:       %064b\n", key);
+//		ft_printf("%02d bit =          %064b\n",i, tmp);//(tmp & 1) << i);
 		ret += (tmp);
-		  ft_printf("Print as we build %064b\n\n", ret);
+//		  ft_printf("Print as we build %064b\n\n", ret);
 
 		i++;
 	}
 	//least significant 8 bits should be empty
-	ft_printf("\ninit_subkey = %064b\n", ret);
+//	ft_printf("\ninit_subkey = %064b\n", ret);
 	return (ret);
 }
 
@@ -259,9 +259,15 @@ void				des(char **argv, int argc)
 	//print_bytes(tmp, 8);
 	ft_printf("key after endian: %064b\n", key[0]);
 	if (!ft_fread(argv[argc - 1], &h))
-		/*ft_printf("%s\n", */des_encrypt(key[0], argv[argc - 1], ft_strlen(argv[argc - 1]));//);
+	{
+		ft_printf("\ncould not read, taking last arg as txt block\n\n\n");
+		/*ft_printf("%s\n", */des_encrypt(key[0], ft_strdup(argv[argc - 1]), ft_strlen(argv[argc - 1]));//);
+	}
 	else
+	{
+		ft_printf("\nRead from a file descriptor, taking last arg as txt block\n\n\n");
 		des_encrypt(key[0], h.data, ft_strlen(h.data));
+	}
 	//ft_printf("iv in binary: %064b\n", key[1]);
 	//do subkey after byte order has been changed to big endian
 }

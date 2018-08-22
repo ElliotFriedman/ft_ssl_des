@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/20 00:51:05 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/21 23:54:47 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,22 +66,24 @@ int					g_sbox[32][16] = {{14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7}
 	{7, 11, 4, 1, 9, 12, 14, 2, 0, 6, 10, 13, 15, 3, 5, 8},
 	{2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11}};
 
+//32 rows, 16 values per row
+
 int     		    g_permute[64];
 
 //compression permutation
 /*int					g_cpermutation[48] = {14, 17, 11, 24, 1, 5, 3, 28, 15, 6, 21, 10,
-	23, 19, 12, 4, 26, 8, 16, 7, 27, 20, 13, 2,
-	41, 52, 31, 37, 47, 55, 30, 40, 51, 45, 33, 48,
-	44, 49, 39, 56, 34, 53, 46, 42, 50, 36, 29, 32};
-*/
-int						g_cpermutation[48] = {14,    17,   11,    24,     1,    5,
-                  3,    28,   15,     6,    21,   10,
-                 23,    19,   12,     4,    26,    8,
-                 16,     7,   27,    20,    13,    2,
-                 41,    52,   31,    37,    47,   55,
-                 30,    40,   51,    45,    33,   48,
-                 44,    49,   39,    56,    34,   53,
-                 46,    42,   50,    36,    29,   32};
+  23, 19, 12, 4, 26, 8, 16, 7, 27, 20, 13, 2,
+  41, 52, 31, 37, 47, 55, 30, 40, 51, 45, 33, 48,
+  44, 49, 39, 56, 34, 53, 46, 42, 50, 36, 29, 32};
+  */
+int					g_cpermutation[48] = {14,    17,   11,    24,     1,    5,
+	3,     28,   15,     6,    21,   10,
+	23,    19,   12,     4,    26,    8,
+	16,     7,   27,    20,    13,    2,
+	41,    52,   31,    37,    47,   55,
+	30,    40,   51,    45,    33,   48,
+	44,    49,   39,    56,    34,   53,
+	46,    42,   50,    36,    29,   32};
 //expansion permutation
 int					g_expandpermutation[48] = {32, 1, 2, 3, 4, 5, 4, 5, 6, 7, 8, 9,
 	8, 9, 10, 11, 12, 13, 12, 13, 14, 15, 16, 17,
@@ -94,6 +96,7 @@ int					g_rotate[16] = {1, 1, 2, 2,
 	1, 2, 2, 2,
 	2, 2, 2, 1};
 
+//not sure where we use this
 unsigned long long	g_arr[16];
 
 unsigned int		g_rsubkey[16];
@@ -103,6 +106,8 @@ unsigned int		g_lsubkey[16];
 unsigned long long	g_concatsubkeys[16];
 
 //store 48 bit subkey
+//This will get XOR'ed with the 48 bit right
+//block that goes through an expansion permutation
 unsigned long long	g_k[16];
 
 unsigned long long	lmax = 0xFFFFFFFFFFFFFFFF;
@@ -116,8 +121,49 @@ size_t				c_num(size_t num)
 	return (num);
 }
 
+unsigned long long	permuterightside(unsigned long long rside)
+{
+	unsigned long long	ret;
+	size_t				i;
+	unsigned long long	tmp;
+
+	i = 0;
+	ret = 0;
+	//	ft_printf("\n56 bit shuffled	= %064b\n", g_arr[x]);
+	while (i < 48)
+	{
+		tmp = (pow2(g_cpermutation[i] - 1) & rside);
+//			ft_printf("bit we grabbed:	  %064b\n",tmp);
+		if (((g_expandpermutation[i] + 1) > (int)i) && (g_expandpermutation[i] != (int)i))
+			tmp <<= (g_expandpermutation[i] - i - 1);
+		else if (g_expandpermutation[i] != (int)i)
+			tmp >>= i - (g_expandpermutation[i] - 1);
+		else if (g_expandpermutation[i] == (int)i)
+			tmp >>= 1;
+		ret += (tmp);
+		i++;
+	}
+//		ft_printf("\n48 bit subkey from permuted subkey		= %064b\n", ret);
+	return (ret);
+}
+
 //subkey[0] will be the most significant bytes
 //subkey[1] will be the least significant bytes
+
+unsigned long long	initialperm(unsigned long long txt)
+{
+	size_t	i;
+	unsigned long long	ret;
+
+	i = 0;
+	ret = 0;
+	while (i < 64)
+	{
+		ret += ((txt >> (g_permute[i] - 1)) & 1) << i;
+		i++;
+	}
+	return (ret);
+}
 
 //this function takes 32 bits from bside and turns it 48 bits
 unsigned long long	expansion_permutation(unsigned long long bside)
@@ -152,24 +198,24 @@ unsigned long long	permute_concatsubkeys(size_t x)
 
 	i = 0;
 	ret = 0;
-	ft_printf("\n56 bit shuffled	= %064b\n", g_arr[x]);
+	//	ft_printf("\n56 bit shuffled	= %064b\n", g_arr[x]);
 	while (i < 48)
 	{
 		tmp = (pow2(g_cpermutation[i] - 1) & g_arr[x]);
-	ft_printf("bit we grabbed:	  %064b\n",tmp);
-		if (((g_cpermutation[i] + 1) > (int)i) && (i != 5 && i != 30))
+//			ft_printf("bit we grabbed:	  %064b\n",tmp);
+		if (((g_cpermutation[i] + 1) > (int)i) && (g_cpermutation[i] != (int)i))
 			tmp <<= (g_cpermutation[i] - i - 1);
-		else if (i != 5 && i != 30)
+		else if (g_cpermutation[i] != (int)i)
 			tmp >>= i - (g_cpermutation[i] - 1);
-		else if (i == 5)
+		else if (g_cpermutation[i] == (int)i)
 			tmp >>= 1;
-		else
-			tmp >>= 1;
+		//		else
+		//			tmp >>= 1;
 		ret += (tmp);
-	ft_printf("%02dint as we go:	  %064b\n\n", i, ret);
+//			ft_printf("%02dint as we go:	  %064b\n\n", i, ret);
 		i++;
 	}
-	ft_printf("\n48 bit subkey from permuted subkey		= %064b\n", ret);
+		ft_printf("\n48 bit subkey from permuted subkey		= %064b\n", ret);
 	return (ret);
 }
 
@@ -182,13 +228,13 @@ void				concat_subkeys(void)
 	while (i < 16)
 	{
 		g_arr[i] = g_rsubkey[i];
-		ft_printf("subkey:		%064b\n", g_arr[i]);
+//				ft_printf("subkey:		%064b\n", g_arr[i]);
 		g_arr[i] <<= 28;
-		ft_printf("subkey:		%064b\n", g_arr[i]);
+//				ft_printf("subkey:		%064b\n", g_arr[i]);
 		g_arr[i] += (g_lsubkey[i]);
-		ft_printf("subkey:		%064b\n", g_arr[i]);
+//				ft_printf("subkey:		%064b\n", g_arr[i]);
 		g_arr[i] <<= 4;
-		ft_printf("subkey	%d:	%064b\n\n\n", i, g_arr[i]);
+//				ft_printf("subkey	%d:	%064b\n\n\n", i, g_arr[i]);
 		i++;
 	}
 	i = 0;
@@ -241,23 +287,6 @@ char	*l_bytes(unsigned long long aside, unsigned long long bside)
 	return (ret);
 }
 
-//initial permutation on the 64 bit block of plaintext
-unsigned long long	initialperm(unsigned long long txt)
-{
-	size_t	i;
-	unsigned long long	ret;
-
-	i = 0;
-	ret = 0;
-	while (i < 64)
-	{
-		ret += ((txt >> (g_permute[i] - 1)) & 1) << i;
-		i++;
-	}
-	return (ret);
-}
-
-
 //This function works
 void	create_subkeys(unsigned long long key)
 {
@@ -269,8 +298,8 @@ void	create_subkeys(unsigned long long key)
 	g_rsubkey[0] = (size_t)((key & 0xFFFFFFF000000000ul) >> 32);
 	g_lsubkey[0] = (size_t)(key & 0xFFFFFFF00) >> 4;
 
-	ft_printf("rsubkey:	%032b\n", g_rsubkey[0]);
-	ft_printf("lsubkey:	%032b\n", g_lsubkey[0]);
+	//	ft_printf("rsubkey:	%032b\n", g_rsubkey[0]);
+	//	ft_printf("lsubkey:	%032b\n", g_lsubkey[0]);
 	while (i < 16)
 	{
 		if (i)
@@ -284,55 +313,95 @@ void	create_subkeys(unsigned long long key)
 		g_rsubkey[i] <<= g_rotate[i];
 		g_lsubkey[i] += ltmp >> (g_rotate[i] == 1 ? 27 : 26);
 		g_rsubkey[i] += rtmp >> (g_rotate[i] == 1 ? 27 : 26);
-		ft_printf("\nrsubkey:         %032b\n", (size_t)g_rsubkey[i]);
-	   	ft_printf("lsubkey:         %032b\n", (size_t)g_lsubkey[i]);
+				ft_printf("\nrsubkey:         %032b\n", (size_t)g_rsubkey[i]);
+			   	ft_printf("lsubkey:         %032b\n", (size_t)g_lsubkey[i]);
 		i++;
 	}
 	concat_subkeys();
 }
 
+void	init_txtblock(unsigned long long *block, unsigned char *chrblock)
+{
+	size_t	i;
+
+	i = 0;
+	*block = 0;
+	
+/*	
+ *
+ *		For Testing Purposes
+ *
+ */	chrblock[0] = 1;
+	chrblock[1] = 35;
+	chrblock[2] = 69;
+	chrblock[3] = 103;
+	chrblock[4] = 137;
+	chrblock[5] = 171;
+	chrblock[6] = 205;
+	chrblock[7] = 239;
+
+	ft_printf("txt block:   %08b", chrblock[0]);
+	ft_printf("%08b", chrblock[1]);
+	ft_printf("%08b", chrblock[2]);
+	ft_printf("%08b", chrblock[3]);
+	ft_printf("%08b", chrblock[4]);
+	ft_printf("%08b", chrblock[5]);
+	ft_printf("%08b", chrblock[6]);
+	ft_printf("%08b\n", chrblock[7]);
+
+		ft_printf("Looking at textblock");
+	while (i < 8)
+	{
+		*block += chrblock[i];
+		if (i + 1 != 8)
+			*block <<= 8;
+		ft_printf("\nprint as we go:	%064b\n", *block);
+		i++;
+	}
+	ft_printf("txt block:	%064b\n", *block);
+	//permute textblock
+	*block = initial_perm(*block);
+}
+
+
 char	*encrypted_des(char *data, unsigned long long key/*, size_t *sub_key*/)
 {
+	//where are subkey's permuted?
 	size_t				i;
 	unsigned long long	aside;
 	unsigned long long	bside;
 	//this will store the next L(i) value
 	unsigned long long	aside_next;
+	unsigned long long	textblock;
 
 	i = 0;
-	aside = 0;
-	bside = 0;
+	init_txtblock(&textblock, (unsigned char*)data);
+	
+	aside = textblock >> 32;
+	bside = 0xFFFFFFFF & textblock;
+
 	//do the initial permutation on the 64 block of text
 	key = initialperm(key);
-//	 ft_printf("Before memcpy iteration \n");
+	//	 ft_printf("Before memcpy iteration \n");
 	//break data into 2 4 byte blocks
-	ft_strncpy((char*)&aside, data, 4);
-	ft_strncpy((char*)&bside, data, 4);
 
-
-	//debug ciphertext
-	//	ft_printf("%032b %032b\n", aside, bside);
-
+	ft_printf("aside:	%064b\n", aside);
+	ft_printf("bside:	%064b\n", bside);
 	//shift b right 32 times so that bytes are in order to be manipulated in exp_permute
 	bside >>= 32;
 	//do a round of 16, and return the result
 	while (i < 16)
 	{
-		 //ft_printf("In while loop iteration %d\n", i);
-		//grab current bside value as it will change in this loop
 		aside_next = bside;
-		//run expansion permutation on bside
-		//
-		//									then compress	(concatenate subkeys)
 		bside = expansion_permutation(bside);
 
+		
+		//concatenated 48 bit subkey will be used here in this loop
+		g_concatsubkeys[i]
 		//precompute subkeys
 
-		//rotate subkeys each round
-		//This is wrong needs to be Compressed,
-
-//		key = concat_subkeys(sub_key);
-//		expansion_permutation(concat_subkeys(sub_key));
+		//		key = concat_subkeys(sub_key);			??
+		//		expansion_permutation(concat_subkeys(sub_key));
 
 
 		//after you have done all logic in iteration x, reassign aside to bside b4 modification
@@ -340,29 +409,28 @@ char	*encrypted_des(char *data, unsigned long long key/*, size_t *sub_key*/)
 		aside = aside_next;
 		i++;
 	}
-	//merge aside and bside
-	//l_bytes(aside, bside);
 	//perform final permutation on aside and bside merged
-	//final_permutate();
 	//return (final_permutate(l_bytes(aside, bside)));
 	return (l_bytes(aside, bside));
 }
-void	debug_num(void)
-{
-	size_t	i = -1;
+/*
+   void	debug_num(void)
+   {
+   size_t	i = -1;
 
-	ft_putstr("0123");
-	while (++i < 64)
-		ft_putnbr(i % 10);
-	ft_putstr("\n");
-}
+   ft_putstr("0123");
+   while (++i < 64)
+   ft_putnbr(i % 10);
+   ft_putstr("\n");
+   }
+   */
 
 char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 {
 	//this is where will store all encrypted bytes
 	char	*print;
 	//only 28 bits of this should be utilized
-//	size_t	two_key[2];
+	//	size_t	two_key[2];
 	char	*tmp;
 	size_t	i;
 
@@ -374,11 +442,11 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 	//permute original key from 64 bits to 56 bits
 	//least sig byte should be 0
 	//rev_8byte((char*)&key, 8);
-//	ft_printf("key in dencr: %064b\n", key);
+	//	ft_printf("key in dencr: %064b\n", key);
 
 	key = init_subkey(key);
 	ft_putstr("\n\npermuted key: ");
-	debug_num();
+	//	debug_num();
 	ft_printf("permuted key: %064b\n\n\n", key);
 	//create_subkey(key, two_key);
 
@@ -387,7 +455,7 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 	//adjust len to the new padded len
 	len = c_num(len);
 	//Reverse byte order in 8 byte blocks. little->big endian
-	rev_8byte(encrypt, len);
+	//rev_8byte(encrypt, len);
 	//loop to encrypt all bytes, 8 bytes at a time
 	while (i < len)
 	{
