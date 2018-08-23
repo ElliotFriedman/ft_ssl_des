@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/21 23:54:47 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/23 01:16:29 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int					g_cpermutation[48] = {14,    17,   11,    24,     1,    5,
 	30,    40,   51,    45,    33,   48,
 	44,    49,   39,    56,    34,   53,
 	46,    42,   50,    36,    29,   32};
+
 //expansion permutation
 int					g_expandpermutation[48] = {32, 1, 2, 3, 4, 5, 4, 5, 6, 7, 8, 9,
 	8, 9, 10, 11, 12, 13, 12, 13, 14, 15, 16, 17,
@@ -129,10 +130,9 @@ unsigned long long	permuterightside(unsigned long long rside)
 
 	i = 0;
 	ret = 0;
-	//	ft_printf("\n56 bit shuffled	= %064b\n", g_arr[x]);
 	while (i < 48)
 	{
-		tmp = (pow2(g_cpermutation[i] - 1) & rside);
+		tmp = (pow2(g_expandpermutation[i] - 1) & rside);
 //			ft_printf("bit we grabbed:	  %064b\n",tmp);
 		if (((g_expandpermutation[i] + 1) > (int)i) && (g_expandpermutation[i] != (int)i))
 			tmp <<= (g_expandpermutation[i] - i - 1);
@@ -143,7 +143,7 @@ unsigned long long	permuterightside(unsigned long long rside)
 		ret += (tmp);
 		i++;
 	}
-//		ft_printf("\n48 bit subkey from permuted subkey		= %064b\n", ret);
+		ft_printf("\n48 bit right side expansion:		= %064b\n", ret);
 	return (ret);
 }
 
@@ -166,6 +166,7 @@ unsigned long long	initialperm(unsigned long long txt)
 }
 
 //this function takes 32 bits from bside and turns it 48 bits
+/*
 unsigned long long	expansion_permutation(unsigned long long bside)
 {
 	size_t				i;
@@ -184,7 +185,7 @@ unsigned long long	expansion_permutation(unsigned long long bside)
 	//leave last 2 bytes empty
 	return (ret << 16);
 }
-
+*/
 //we will implement this function later to properly permute the subkeys
 
 //bit 5 & 30 are completely wrong
@@ -363,7 +364,6 @@ void	init_txtblock(unsigned long long *block, unsigned char *chrblock)
 	*block = initial_perm(*block);
 }
 
-
 char	*encrypted_des(char *data, unsigned long long key/*, size_t *sub_key*/)
 {
 	//where are subkey's permuted?
@@ -393,11 +393,15 @@ char	*encrypted_des(char *data, unsigned long long key/*, size_t *sub_key*/)
 	while (i < 16)
 	{
 		aside_next = bside;
-		bside = expansion_permutation(bside);
-
-		
+		bside = permuterightside(bside);
 		//concatenated 48 bit subkey will be used here in this loop
-		g_concatsubkeys[i]
+		//function f has the s-boxes
+		
+
+	//uncomment this		
+//		bside = f(bside ^ g_k[i]);
+		
+		
 		//precompute subkeys
 
 		//		key = concat_subkeys(sub_key);			??
