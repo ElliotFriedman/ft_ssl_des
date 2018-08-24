@@ -43,7 +43,8 @@ int main()
 
 	ft_printf("\n\n\n\n\n\n\n%u\n\n\n\n\n\n", UINT_MAX);
 
-	ft_printf("%032b\n", 3 << 30);
+	ft_printf("%08b\n", 15);
+
 
 	ft_printf("%032b\n", 1 << 31);
 	
