@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/24 01:03:19 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/27 00:19:13 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,10 +139,11 @@ unsigned long long	permuterightside(unsigned long long rside)
 	i = 0;
 	ret = 0;
 	ft_putstr("\n\n\n\n\n\n\n\n\n\n\n\n\nERROR\n\n\n\n\n\n\n\n\n\n");
+	ft_printf("rightside: %064b\n", rside);
 	while (i < 48)
 	{
 		tmp = (pow2(g_expandpermutation[i] - 1) & rside);
-//			ft_printf("bit we grabbed:	  %064b\n",tmp);
+			ft_printf("bit we grabbed:	  %064b\n",tmp);
 		if (((g_expandpermutation[i] + 1) > (int)i) && (g_expandpermutation[i] != (int)i))
 			tmp <<= (g_expandpermutation[i] - i - 1);
 		else if (g_expandpermutation[i] != (int)i)
@@ -251,7 +252,7 @@ void				concat_subkeys(void)
 	while (i < 16)
 	{
 		g_k[i] = permute_concatsubkeys(i);
-		ft_printf("g_k:		%064b\n", g_k[i]);
+		ft_printf("g_k:						%064b\n", g_k[i]);
 		i++;
 	}
 }
@@ -388,9 +389,10 @@ unsigned long long	sboxes(unsigned long long expandrside)
 	{
 		ft_printf("expandrside:	%064b\n", expandrside);
 		tmp = (expandrside & 0xFC00000000000000ul) >> 58;//could be 57
-		ft_printf("%06b	%06b\n", (expandrside & 0xFC00000000000000ul) >> 58, (tmp & 1) | ((tmp & 32) >> 4));
-		ret = g_sbox[(tmp & 1) | ((tmp & 32) >> 4)][(tmp >> 2) & 15];
-		ret <<= 4;
+		ft_printf("%06b	%06b\n", tmp, (tmp & 1) | ((tmp & 32) >> 4));
+		ret += g_sbox[(tmp & 1) | ((tmp & 32) >> 4)][(tmp >> 2) & 15];
+		if (i + 1 != 8)
+			ret <<= 4;
 		expandrside <<= 6;
 		i++;
 	}
@@ -403,40 +405,43 @@ char	*encrypted_des(char *data, unsigned long long key/*, size_t *sub_key*/)
 {
 	//where are subkey's permuted?
 	size_t				i;
-	unsigned long long	aside;
-	unsigned long long	bside;
+	unsigned long long	lside;
+	unsigned long long	rside;
 	//this will store the next L(i) value
 	unsigned long long	aside_next;
 	unsigned long long	textblock;
 
 	i = 0;
+	//initialize txtblock
 	init_txtblock(&textblock, (unsigned char*)data);
 	
-	aside = textblock >> 32;
-	bside = 0xFFFFFFFF & textblock;
-	bside <<= 32;
-	ft_printf("bside:	%064b\n", bside);
+	lside = textblock >> 32;
+	lside <<= 32;
+	rside = (0xFFFFFFFF & textblock) << 32;
+	//rside <<= 32;
+	ft_printf("rside:	%064b\n", rside);
 
 	//do the initial permutation on the 64 block of text
 	key = initialperm(key);
 	//	 ft_printf("Before memcpy iteration \n");
 	//break data into 2 4 byte blocks
 
-	ft_printf("aside:	%064b\n", aside);
-	ft_printf("bside:	%064b\n", bside);
+	ft_printf("lside:	%064b\n", lside);
+	ft_printf("rside:	%064b\n", rside);
 	//shift b right 32 times so that bytes are in order to be manipulated in exp_permute
-	bside >>= 32;
+	//bside >>= 32;
 	//do a round of 16, and return the result
 	while (i < 16)
 	{
-		aside_next = bside;
-		bside = permuterightside(bside);
+		//store un modified right side
+		aside_next = rside;
+		//run expansion permutation on right side
+		rside = permuterightside(rside);
 		//concatenated 48 bit subkey will be used here in this loop
 		//function f has the s-boxes
 		
-	//uncomment this	
-			ft_printf("g_k:	%064b\nbside:	%064b\n", g_k[i], bside);
-			bside = sboxes(bside ^ g_k[i]);
+			ft_printf("g_k:	%064b\nrside:	%064b\n", g_k[i], rside);
+			rside = sboxes(rside ^ g_k[i]);
 		
 		
 		//precompute subkeys
@@ -446,13 +451,14 @@ char	*encrypted_des(char *data, unsigned long long key/*, size_t *sub_key*/)
 
 
 		//after you have done all logic in iteration x, reassign aside to bside b4 modification
-		bside = aside ^ bside;
-		aside = aside_next;
+		rside = lside ^ rside;
+		//rside <<= 24;
+		lside = aside_next;
 		i++;
 	}
 	//perform final permutation on aside and bside merged
 	//return (final_permutate(l_bytes(aside, bside)));
-	return (l_bytes(aside, bside));
+	return (l_bytes(lside, rside));
 }
 /*
    void	debug_num(void)

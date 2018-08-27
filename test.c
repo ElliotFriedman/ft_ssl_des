@@ -47,7 +47,10 @@ int main()
 
 
 	ft_printf("%032b\n", 1 << 31);
-	
+
+	ft_printf("strlen: %d\n", ft_strlen("011100101010110111010110110110110011010100011101"));
+
+	ft_printf("strlen: %d\n", ft_strlen("00011011000000101110111111111100011100000111001"));
 //	ft_printf("%llu\n%llu\n", pow2(30, 3), pow2(31, 1));
 	//ft_printf("%llu\n", pow2(63));
 	return 0;
