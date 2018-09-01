@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/27 00:19:13 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/08/31 22:48:52 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ unsigned long long	permuterightside(unsigned long long rside)
 
 	i = 0;
 	ret = 0;
-	ft_putstr("\n\n\n\n\n\n\n\n\n\n\n\n\nERROR\n\n\n\n\n\n\n\n\n\n");
 	ft_printf("rightside: %064b\n", rside);
 	while (i < 48)
 	{
@@ -384,7 +383,7 @@ unsigned long long	sboxes(unsigned long long expandrside)
 	i = 0;
 	tmp = 0;
 	ret = 0;
-	ft_printf("Entered sboxes\n");
+	ft_printf("Entered sboxes\nError HERE\n\n\n");
 	while (i < 8)
 	{
 		ft_printf("expandrside:	%064b\n", expandrside);
