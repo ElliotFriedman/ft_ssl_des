@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/05 00:16:11 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/05 15:47:46 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ unsigned long long	permuterightside(unsigned long long rside)
 	while (i < 48)
 	{
 		tmp = (pow2(g_expandpermutation[i] - 1) & rside);
-			ft_printf("bit we grabbed:	  %064b\n",tmp);
+//			ft_printf("bit we grabbed:	  %064b\n",tmp);
 		if (((g_expandpermutation[i] + 1) > (int)i) && (g_expandpermutation[i] != (int)i))
 			tmp <<= (g_expandpermutation[i] - i - 1);
 		else if (g_expandpermutation[i] != (int)i)
@@ -155,9 +155,6 @@ unsigned long long	permuterightside(unsigned long long rside)
 		ft_printf("\n48 bit right side expansion:		= %064b\n", ret);
 	return (ret);
 }
-
-//subkey[0] will be the most significant bytes
-//subkey[1] will be the least significant bytes
 
 unsigned long long	initialperm(unsigned long long txt)
 {
@@ -174,31 +171,6 @@ unsigned long long	initialperm(unsigned long long txt)
 	return (ret);
 }
 
-//this function takes 32 bits from bside and turns it 48 bits
-/*
-unsigned long long	expansion_permutation(unsigned long long bside)
-{
-	size_t				i;
-	unsigned long long	ret;
-
-	i = 0;
-	ret = 0;
-	while (i < 48)
-	{
-		//make sure shift evaluates first.
-		//Unsure of bitwise operator precedence
-		ret |= (bside >> g_expandpermutation[i]) & 1;
-		ret <<= 1;
-		i++;
-	}
-	//leave last 2 bytes empty
-	return (ret << 16);
-}
-*/
-//we will implement this function later to properly permute the subkeys
-
-//bit 5 & 30 are completely wrong
-//figure out how to fix this tmrw
 //hard cased for 5 & 30, could be wrong, will check later if need be
 unsigned long long	permute_concatsubkeys(size_t x)
 {
@@ -212,17 +184,13 @@ unsigned long long	permute_concatsubkeys(size_t x)
 	while (i < 48)
 	{
 		tmp = (pow2(g_cpermutation[i] - 1) & g_arr[x]);
-//			ft_printf("bit we grabbed:	  %064b\n",tmp);
 		if (((g_cpermutation[i] + 1) > (int)i) && (g_cpermutation[i] != (int)i))
 			tmp <<= (g_cpermutation[i] - i - 1);
 		else if (g_cpermutation[i] != (int)i)
 			tmp >>= i - (g_cpermutation[i] - 1);
 		else if (g_cpermutation[i] == (int)i)
 			tmp >>= 1;
-		//		else
-		//			tmp >>= 1;
 		ret += (tmp);
-//			ft_printf("%02dint as we go:	  %064b\n\n", i, ret);
 		i++;
 	}
 		ft_printf("\n48 bit subkey from permuted subkey		= %064b\n", ret);
@@ -324,8 +292,8 @@ void	create_subkeys(unsigned long long key)
 		g_rsubkey[i] <<= g_rotate[i];
 		g_lsubkey[i] += ltmp >> (g_rotate[i] == 1 ? 27 : 26);
 		g_rsubkey[i] += rtmp >> (g_rotate[i] == 1 ? 27 : 26);
-				ft_printf("\nrsubkey:         %032b\n", (size_t)g_rsubkey[i]);
-			   	ft_printf("lsubkey:         %032b\n", (size_t)g_lsubkey[i]);
+//				ft_printf("\nrsubkey:         %032b\n", (size_t)g_rsubkey[i]);
+//			   	ft_printf("lsubkey:         %032b\n", (size_t)g_lsubkey[i]);
 		i++;
 	}
 	concat_subkeys();
@@ -351,25 +319,25 @@ void	init_txtblock(unsigned long long *block, unsigned char *chrblock)
 	chrblock[6] = 205;
 	chrblock[7] = 239;
 
-	ft_printf("txt block:   %08b", chrblock[0]);
-	ft_printf("%08b", chrblock[1]);
-	ft_printf("%08b", chrblock[2]);
-	ft_printf("%08b", chrblock[3]);
-	ft_printf("%08b", chrblock[4]);
-	ft_printf("%08b", chrblock[5]);
-	ft_printf("%08b", chrblock[6]);
-	ft_printf("%08b\n", chrblock[7]);
+//	ft_printf("txt block:   %08b", chrblock[0]);
+//	ft_printf("%08b", chrblock[1]);
+//	ft_printf("%08b", chrblock[2]);
+//	ft_printf("%08b", chrblock[3]);
+//	ft_printf("%08b", chrblock[4]);
+//	ft_printf("%08b", chrblock[5]);
+//	ft_printf("%08b", chrblock[6]);
+//	ft_printf("%08b\n", chrblock[7]);
 
-		ft_printf("Looking at textblock");
+//		ft_printf("Looking at textblock");
 	while (i < 8)
 	{
 		*block += chrblock[i];
 		if (i + 1 != 8)
 			*block <<= 8;
-		ft_printf("\nprint as we go:	%064b\n", *block);
+//		ft_printf("\nprint as we go:	%064b\n", *block);
 		i++;
 	}
-	ft_printf("txt block:	%064b\n", *block);
+//	ft_printf("txt block:	%064b\n", *block);
 	//permute textblock
 	*block = initial_perm(*block);
 }
@@ -383,19 +351,18 @@ unsigned long long	sboxes(unsigned long long expandrside)
 	i = 0;
 	tmp = 0;
 	ret = 0;
-	ft_printf("Entered sboxes\nError HERE\n\n\n");
 	while (i < 32)
 	{
 //		ft_printf("expandrside:	%064b\n", expandrside);
-		tmp = (expandrside & 0xFC00000000000000ul) >> 58;//could be 57
+		tmp = (expandrside & 0xFC00000000000000ul) >> 58;
 		
-		ft_printf("%06b	%06b %06b\n", tmp, i + ((tmp & 1) | ((tmp & 32) >> 4)), (tmp & 60) >> 1);
+	//	ft_printf("%06b	%06b %06b\n", tmp, i + ((tmp & 1) | ((tmp & 32) >> 4)), (tmp & 60) >> 1);
 		
-				ft_printf("%02d\n", i);// + (((tmp & 1) | ((tmp & 32) >> 4)) & 3));
+//				ft_printf("row: %02d, index: %02d\n", i + (((tmp & 1) | ((tmp & 32) >> 4)) & 3), (tmp & 30) >> 1);// + (((tmp & 1) | ((tmp & 32) >> 4)) & 3));
 		
-		ret += g_sbox[i + (((tmp & 1) | ((tmp & 32) >> 4)) & 3)] [(tmp & 60) >> 1];
+		ret += g_sbox[i + (((tmp & 1) | ((tmp & 32) >> 4)) & 3)] [(tmp & 30) >> 1];
 		
-		//if (i + 4 != 32)
+		if (i + 4 != 32)
 			ret <<= 4;
 		expandrside <<= 6;
 		i += 4;
@@ -448,8 +415,8 @@ char	*encrypted_des(char *data, unsigned long long key/*, size_t *sub_key*/)
 		ft_printf("g_k[%d] ^ rside: %064b\n", i, g_k[i] ^ rside);
 		//
 		//ft_printf("g_k:	%064b\nrside:	%064b\n", g_k[i], rside);
-			rside = sboxes(rside ^ g_k[i]);
-		
+		rside = sboxes(rside ^ g_k[i]);
+		rside = pperm(rside);
 		
 		//precompute subkeys
 

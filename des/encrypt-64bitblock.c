@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/20 15:05:50 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/21 21:59:16 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/05 14:50:20 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int			g_permute[64] = {58,    50,   42,    34,    26,   18,    10,    2,
             61,    53,   45,    37,    29,   21,    13,    5,
             63,    55,   47,    39,    31,   23,    15,    7};
 
+
+
 //permute textblock
 unsigned long long		initial_perm(unsigned long long textblock)
 {
@@ -33,7 +35,7 @@ unsigned long long		initial_perm(unsigned long long textblock)
 	while (i < 64)
 	{
 		tmp = (pow2(g_permute[i] - 1) & textblock);
-	ft_printf("\nbit we grabbed:	  %064b\n",tmp);
+//	ft_printf("\nbit we grabbed:	  %064b\n",tmp);
 		if (((g_permute[i] + 1) > (int)i) && (g_permute[i] != (int)i))
 			tmp <<= (g_permute[i] - i - 1);
 		else if (g_permute[i] != (int)i)
@@ -44,7 +46,7 @@ unsigned long long		initial_perm(unsigned long long textblock)
 //	ft_printf("%02dint as we go:	  %064b\n\n", i, ret);
 		i++;
 	}
-	ft_printf("permuted text block	%064b\n", ret);
-	ft_printf("\n48 bit subkey from permuted subkey		= %064b\n", ret);
+//	ft_printf("permuted text block	%064b\n", ret);
+//	ft_printf("\n48 bit subkey from permuted subkey		= %064b\n", ret);
 	return (ret);
 }
