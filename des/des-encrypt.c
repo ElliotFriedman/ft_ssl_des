@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/31 22:48:52 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/05 00:16:11 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ int					g_fpermutation[] = {40, 8, 48, 16, 56, 24, 64, 32,
 //sboxes
 int					g_sbox[32][16] = {{14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7},
 	{0, 15, 7, 4, 14, 2, 13, 1, 10, 6, 12, 11, 9, 5, 3, 8},
-	{4, 1, 14, 8, 13, 6, 2, 11, 15, 12, 9, 7, 3, 10, 5, 0},
+	{4, 1, 14, 8, 13, 6, 2, 11, 15, 12, 9, 7, 3, 10, 5, 0},	//i must be 0-3 to finish this
 	{15, 12, 8, 2, 4, 9, 1, 7, 5, 11, 3, 14, 10, 0, 6, 13},
 
 	{15, 1, 8, 14, 6, 11, 3, 4, 9, 7, 2, 13, 12, 0, 5, 10},
 	{3, 13, 4, 7, 15, 2, 8, 14, 12, 0, 1, 10, 6, 9, 11, 5},
-	{0, 14, 7, 11, 10, 4, 13, 1, 5, 8, 12, 6, 9, 3, 2, 15},
+	{0, 14, 7, 11, 10, 4, 13, 1, 5, 8, 12, 6, 9, 3, 2, 15}, //i must be 4-7
 	{13, 8, 10, 1, 3, 15, 4, 2, 11, 6, 7, 12, 0, 5, 14, 9},
 
 	{10, 0, 9, 14, 6, 3, 15, 5, 1, 13, 12, 7, 11, 4, 2, 8},
@@ -384,19 +384,24 @@ unsigned long long	sboxes(unsigned long long expandrside)
 	tmp = 0;
 	ret = 0;
 	ft_printf("Entered sboxes\nError HERE\n\n\n");
-	while (i < 8)
+	while (i < 32)
 	{
-		ft_printf("expandrside:	%064b\n", expandrside);
+//		ft_printf("expandrside:	%064b\n", expandrside);
 		tmp = (expandrside & 0xFC00000000000000ul) >> 58;//could be 57
-		ft_printf("%06b	%06b\n", tmp, (tmp & 1) | ((tmp & 32) >> 4));
-		ret += g_sbox[(tmp & 1) | ((tmp & 32) >> 4)][(tmp >> 2) & 15];
-		if (i + 1 != 8)
+		
+		ft_printf("%06b	%06b %06b\n", tmp, i + ((tmp & 1) | ((tmp & 32) >> 4)), (tmp & 60) >> 1);
+		
+				ft_printf("%02d\n", i);// + (((tmp & 1) | ((tmp & 32) >> 4)) & 3));
+		
+		ret += g_sbox[i + (((tmp & 1) | ((tmp & 32) >> 4)) & 3)] [(tmp & 60) >> 1];
+		
+		//if (i + 4 != 32)
 			ret <<= 4;
 		expandrside <<= 6;
-		i++;
+		i += 4;
 	}
 	ret <<= 32;
-	ft_printf("%064b\n", ret);
+	ft_printf("sbox output: %064b\n", ret);
 	return (ret);
 }
 
@@ -439,7 +444,10 @@ char	*encrypted_des(char *data, unsigned long long key/*, size_t *sub_key*/)
 		//concatenated 48 bit subkey will be used here in this loop
 		//function f has the s-boxes
 		
-			ft_printf("g_k:	%064b\nrside:	%064b\n", g_k[i], rside);
+
+		ft_printf("g_k[%d] ^ rside: %064b\n", i, g_k[i] ^ rside);
+		//
+		//ft_printf("g_k:	%064b\nrside:	%064b\n", g_k[i], rside);
 			rside = sboxes(rside ^ g_k[i]);
 		
 		
