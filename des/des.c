@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/05 15:30:13 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/07 23:52:37 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ unsigned long long	init_subkey(unsigned long long key)
 		i++;
 	}
 	//least significant 8 bits should be empty
-//	ft_printf("\ninit_subkey = %064b\n", ret);
+	//ft_printf("\ninit_subkey = %064b\n", ret);
 	return (ret);
 }
 

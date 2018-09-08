@@ -6,11 +6,11 @@
 #    By: efriedma <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/01 16:05:56 by efriedma          #+#    #+#              #
-#    Updated: 2018/09/05 15:02:56 by efriedma         ###   ########.fr        #
+#    Updated: 2018/09/07 22:36:33 by efriedma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-#-g -fsanitize=address
+DEBUG_FLAGS = -g -fsanitize=address
 CFLAGS = -g -Werror -Wall -Wextra -I ft_printf/libft -I ft_printf/includes
 
 NAME = ft_ssl
@@ -23,7 +23,7 @@ SRCS += sha256/sha256n.c sha256/sha256n2.c
 all: $(NAME)
 
 go:
-	gcc $(SRCS) $(CFLAGS) ft_printf/libftprintf.a ft_dprintf/libftdprintf.a -o ft_ssl
+	gcc $(SRCS) $(CFLAGS) $(DEBUG_FLAGS) ft_printf/libftprintf.a ft_dprintf/libftdprintf.a -o ft_ssl
 
 $(NAME):
 	$(MAKE) -C ft_printf/
