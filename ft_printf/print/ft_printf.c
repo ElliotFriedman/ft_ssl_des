@@ -6,11 +6,22 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/28 16:23:10 by efriedma          #+#    #+#             */
-/*   Updated: 2018/05/24 13:09:05 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/08 01:03:19 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
+
+
+int		chkX(char c, t_data *curr)
+{
+	if (c == 'X')
+	{
+		ft_strncpy(curr->mod, "ll", 2);
+		return (1);
+	}
+	return (0);
+}
 
 int		find(char c, va_list list, t_data *curr)
 {
@@ -32,7 +43,7 @@ int		find(char c, va_list list, t_data *curr)
 		return (print_str(curr, list));
 	else if (c == 'S' || (c == 's' && curr->mod[0] == 'l'))
 		return (print_wstr(curr, list));
-	else if (c == 'x' || c == 'X')
+	else if (c == 'x' || c == 'X' || chkX(c, curr))
 		return (print_hex(c, curr, list));
 	else if (c == 'p')
 		return (print_addy(curr, list));

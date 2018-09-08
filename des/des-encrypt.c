@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/08 00:49:40 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/08 01:11:56 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -399,7 +399,7 @@ char	*l_bytes(unsigned long long aside)
 	return (ret);
 }
 
-char	*encrypted_des(char *data, unsigned long long key)
+unsigned long long	encrypted_des(char *data, unsigned long long key)
 {
 	size_t				i;
 	unsigned long long	lside;
@@ -443,7 +443,9 @@ char	*encrypted_des(char *data, unsigned long long key)
 	//perform final permutation on lside and rside merged
 	//merge right and then left, due to final key arrangement process
 	ft_printf("right block: %064b\nleft block: %064b\n", rside, lside);
-	return (l_bytes(final_permutate(rside | (lside >> 32))));
+
+	ft_printf("\n\n\n\nFINAL PERMUTATION: %016X\n\n\n\n\n", final_permutate(rside | (lside >> 32)));	
+	return ((final_permutate(rside | (lside >> 32))));
 	//return (l_bytes(lside, rside));
 }
 
@@ -483,7 +485,7 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 	char	*print;
 	//only 28 bits of this should be utilized
 	//	size_t	two_key[2];
-	char	*tmp;
+	//char	*tmp;
 	size_t	i;
 
 	i = 0;
@@ -509,15 +511,16 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 	create_subkeys(key);
 	while (i < len)
 	{
-		//ft_printf("In while loop iteration %d\n", i);
 		//encrypted des will return malloc'd 8 chars
-		tmp = encrypted_des(&encrypt[i], key);
-		//ft_putstr(tmp);
-		//copy these chars to their proper place in print
-		ft_strncpy(&print[i], tmp, 8);
+		//tmp = encrypted_des(&encrypt[i], key);
+		
+		printf("tmp: %16llX\n", encrypted_des(&encrypt[i], key));
+		//ft_strncpy(&print[i], tmp, 8);
+		
+		
 		//zero and delete this malloc'd memory
 		//ft_printf("Output:
-		ft_memdel((void**)&tmp);
+		//ft_memdel((void**)&tmp);
 
 		// 	?????
 		//two_key[0];
