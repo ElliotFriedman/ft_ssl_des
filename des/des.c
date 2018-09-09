@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/07 23:52:37 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/09 01:26:02 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,17 +87,6 @@ unsigned long long	pow2(size_t amt)
 		ret >>= 1;
 	return (ret);
 }
-/*
-size_t				lut(size_t i)
-{
-	//shift left by g_grab[i] - i
-
-	if (!i)
-		return (g_grab[i]);
-
-}
-*/
-// ft_printf("shiftr: %02d val:   %064b\n",  g_grab[i] - i - 1,(pow2(g_grab[i] - 1) & key));
 
 unsigned long long	init_subkey(unsigned long long key)
 {
@@ -115,7 +104,6 @@ unsigned long long	init_subkey(unsigned long long key)
 //		m5();
 		tmp = 0;
 //		  ft_printf("cur pos: %d shift left: %d, shift right: %d i: %d\n",i,  g_grab[i] - i - 1, i - g_grab[i] - 1, i);
-
 		 tmp = (pow2(g_grab[i] - 1) & key);
 		  //ft_printf("tmp after shift:  %064b\n", (tmp = (g_grab[i] > (int)i > 0) ? (tmp << (g_grab[i] - i - 1)) : (tmp >> (i - g_grab[i] - 1))));
 		if ((g_grab[i] + 1) > (int)i)
@@ -262,12 +250,13 @@ void				des(char **argv, int argc)
 	if (!ft_fread(argv[argc - 1], &h))
 	{
 		ft_printf("\ncould not read, taking last arg as txt block\n\n\n");
-		/*ft_printf("%s\n", */des_encrypt(key[0], ft_strdup(argv[argc - 1]), ft_strlen(argv[argc - 1]));//);
+		des_encrypt(key[0], ft_strdup(argv[argc - 1]), ft_strlen(argv[argc - 1]));
 	}
 	else
 	{
 		ft_printf("\nRead from a file descriptor, taking last arg as txt block\n\n\n");
 		des_encrypt(key[0], h.data, ft_strlen(h.data));
+		
 	}
 	//ft_printf("iv in binary: %064b\n", key[1]);
 	//do subkey after byte order has been changed to big endian
