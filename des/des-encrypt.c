@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/08 01:11:56 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/08 23:45:52 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ unsigned long long	permuterightside(unsigned long long rside)
 	while (i < 48)
 	{
 		tmp = (pow2(g_expandpermutation[i] - 1) & rside);
-//			ft_printf("bit we grabbed:	  %064b\n",tmp);
+		//			ft_printf("bit we grabbed:	  %064b\n",tmp);
 		if (((g_expandpermutation[i] + 1) > (int)i) && (g_expandpermutation[i] != (int)i))
 			tmp <<= (g_expandpermutation[i] - i - 1);
 		else if (g_expandpermutation[i] != (int)i)
@@ -151,7 +151,7 @@ unsigned long long	permuterightside(unsigned long long rside)
 		ret += (tmp);
 		i++;
 	}
-		ft_printf("\n48 bit right side expansion:		= %064b\n", ret);
+	ft_printf("\n48 bit right side expansion:		= %064b\n", ret);
 	return (ret);
 }
 
@@ -192,7 +192,7 @@ unsigned long long	permute_concatsubkeys(size_t x)
 		ret += (tmp);
 		i++;
 	}
-		ft_printf("\n48 bit subkey from permuted subkey		= %064b\n", ret);
+	ft_printf("\n48 bit subkey from permuted subkey		= %064b\n", ret);
 	return (ret);
 }
 
@@ -205,13 +205,13 @@ void				concat_subkeys(void)
 	while (i < 16)
 	{
 		g_arr[i] = g_rsubkey[i];
-//				ft_printf("subkey:		%064b\n", g_arr[i]);
+		//				ft_printf("subkey:		%064b\n", g_arr[i]);
 		g_arr[i] <<= 28;
-//				ft_printf("subkey:		%064b\n", g_arr[i]);
+		//				ft_printf("subkey:		%064b\n", g_arr[i]);
 		g_arr[i] += (g_lsubkey[i]);
-//				ft_printf("subkey:		%064b\n", g_arr[i]);
+		//				ft_printf("subkey:		%064b\n", g_arr[i]);
 		g_arr[i] <<= 4;
-//				ft_printf("subkey	%d:	%064b\n\n\n", i, g_arr[i]);
+		//				ft_printf("subkey	%d:	%064b\n\n\n", i, g_arr[i]);
 		i++;
 	}
 	i = 0;
@@ -270,8 +270,8 @@ void	create_subkeys(unsigned long long key)
 		g_rsubkey[i] <<= g_rotate[i];
 		g_lsubkey[i] += ltmp >> (g_rotate[i] == 1 ? 27 : 26);
 		g_rsubkey[i] += rtmp >> (g_rotate[i] == 1 ? 27 : 26);
-//				ft_printf("\nrsubkey:         %032b\n", (size_t)g_rsubkey[i]);
-//			   	ft_printf("lsubkey:         %032b\n", (size_t)g_lsubkey[i]);
+		//				ft_printf("\nrsubkey:         %032b\n", (size_t)g_rsubkey[i]);
+		//			   	ft_printf("lsubkey:         %032b\n", (size_t)g_lsubkey[i]);
 		i++;
 	}
 	concat_subkeys();
@@ -283,39 +283,43 @@ void	init_txtblock(unsigned long long *block, unsigned char *chrblock)
 
 	i = 0;
 	*block = 0;
-	
-/*	
- *
- *		For Testing Purposes
- *
- */	chrblock[0] = 1;
-	chrblock[1] = 35;
-	chrblock[2] = 69;
-	chrblock[3] = 103;
-	chrblock[4] = 137;
-	chrblock[5] = 171;
-	chrblock[6] = 205;
-	chrblock[7] = 239;
 
-//	ft_printf("txt block:   %08b", chrblock[0]);
-//	ft_printf("%08b", chrblock[1]);
-//	ft_printf("%08b", chrblock[2]);
-//	ft_printf("%08b", chrblock[3]);
-//	ft_printf("%08b", chrblock[4]);
-//	ft_printf("%08b", chrblock[5]);
-//	ft_printf("%08b", chrblock[6]);
-//	ft_printf("%08b\n", chrblock[7]);
+	/*	
+	 *
+	 *		For Testing Purposes
+	 *
+	 *	chrblock[0] = 1;
+	 chrblock[1] = 35;
+	 chrblock[2] = 69;
+	 chrblock[3] = 103;
+	 chrblock[4] = 137;
+	 chrblock[5] = 171;
+	 chrblock[6] = 205;
+	 chrblock[7] = 239;
+	 */
 
-//		ft_printf("Looking at textblock");
+
+
+	//	ft_printf("txt block:   %08b", chrblock[0]);
+	//	ft_printf("%08b", chrblock[1]);
+	//	ft_printf("%08b", chrblock[2]);
+	//	ft_printf("%08b", chrblock[3]);
+	//	ft_printf("%08b", chrblock[4]);
+	//	ft_printf("%08b", chrblock[5]);
+	//	ft_printf("%08b", chrblock[6]);
+	//	ft_printf("%08b\n", chrblock[7]);
+
+	//		ft_printf("Looking at textblock");
 	while (i < 8)
 	{
 		*block += chrblock[i];
+		ft_printf("%064b\n", *block);
 		if (i + 1 != 8)
 			*block <<= 8;
-//		ft_printf("\nprint as we go:	%064b\n", *block);
+		//		ft_printf("\nprint as we go:	%064b\n", *block);
 		i++;
 	}
-//	ft_printf("txt block:	%064b\n", *block);
+	//	ft_printf("txt block:	%064b\n", *block);
 	//run initial permutation on textblock
 	*block = initial_perm(*block);
 }
@@ -331,15 +335,15 @@ unsigned long long	sboxes(unsigned long long expandrside)
 	ret = 0;
 	while (i < 32)
 	{
-//		ft_printf("expandrside:	%064b\n", expandrside);
+		//		ft_printf("expandrside:	%064b\n", expandrside);
 		tmp = (expandrside & 0xFC00000000000000ul) >> 58;
-		
-	//	ft_printf("%06b	%06b %06b\n", tmp, i + ((tmp & 1) | ((tmp & 32) >> 4)), (tmp & 60) >> 1);
-		
-//				ft_printf("row: %02d, index: %02d\n", i + (((tmp & 1) | ((tmp & 32) >> 4)) & 3), (tmp & 30) >> 1);// + (((tmp & 1) | ((tmp & 32) >> 4)) & 3));
-		
+
+		//	ft_printf("%06b	%06b %06b\n", tmp, i + ((tmp & 1) | ((tmp & 32) >> 4)), (tmp & 60) >> 1);
+
+		//				ft_printf("row: %02d, index: %02d\n", i + (((tmp & 1) | ((tmp & 32) >> 4)) & 3), (tmp & 30) >> 1);// + (((tmp & 1) | ((tmp & 32) >> 4)) & 3));
+
 		ret += g_sbox[i + (((tmp & 1) | ((tmp & 32) >> 4)) & 3)] [(tmp & 30) >> 1];
-		
+
 		if (i + 4 != 32)
 			ret <<= 4;
 		expandrside <<= 6;
@@ -362,7 +366,7 @@ unsigned long long	final_permutate(unsigned long long rside)//, unsigned long lo
 	while (i < 64)
 	{
 		tmp = (pow2(g_fperm[i] - 1) & rside);
-//			ft_printf("bit we grabbed:	  %064b\n",tmp);
+		//			ft_printf("bit we grabbed:	  %064b\n",tmp);
 		if (((g_fperm[i] + 1) > (int)i) && (g_fperm[i] != (int)i))
 			tmp <<= (g_fperm[i] - i - 1);
 		else if (g_fperm[i] != (int)i)
@@ -399,7 +403,7 @@ char	*l_bytes(unsigned long long aside)
 	return (ret);
 }
 
-unsigned long long	encrypted_des(char *data, unsigned long long key)
+char	*encrypted_des(char *data, unsigned long long key)
 {
 	size_t				i;
 	unsigned long long	lside;
@@ -410,7 +414,7 @@ unsigned long long	encrypted_des(char *data, unsigned long long key)
 	i = 0;
 	//initialize txtblock
 	init_txtblock(&textblock, (unsigned char*)data);
-	
+
 	//break data into 2 4 byte blocks
 	lside = textblock >> 32;
 	lside <<= 32;
@@ -428,7 +432,7 @@ unsigned long long	encrypted_des(char *data, unsigned long long key)
 		aside_next = rside;
 		//permute right side
 		rside = permuterightside(rside);
-	//	ft_printf("g_k[%d] ^ rside: %064b\n", i, g_k[i] ^ rside);
+		//	ft_printf("g_k[%d] ^ rside: %064b\n", i, g_k[i] ^ rside);
 		//sbox
 		rside = sboxes(rside ^ g_k[i]);
 		//pbox permutation
@@ -445,89 +449,125 @@ unsigned long long	encrypted_des(char *data, unsigned long long key)
 	ft_printf("right block: %064b\nleft block: %064b\n", rside, lside);
 
 	ft_printf("\n\n\n\nFINAL PERMUTATION: %016X\n\n\n\n\n", final_permutate(rside | (lside >> 32)));	
-	return ((final_permutate(rside | (lside >> 32))));
+	unsigned long long *b = malloc(8);
+	return l_bytes((*b = (final_permutate(rside | (lside >> 32)))));
 	//return (l_bytes(lside, rside));
 }
 
-unsigned long long	swaplong_endian(unsigned long long num)
+//unsigned long long	swaplong_endian(unsigned long long num)
+void				swaplong_endian(char *encrypt)
 {
-	unsigned long long	b[8];
+	/*
+	   unsigned long long	b[8];
 
-	b[0] = (num & 0xff) << 56;
-	b[1] = (num & 0xff00) << 40;
-	b[2] = (num & 0xff0000) << 24;
-	b[3] = (num & 0xff000000) << 8;
+	   b[0] = (num & 0xff) << 56;
+	   b[1] = (num & 0xff00) << 40;
+	   b[2] = (num & 0xff0000) << 24;
+	   b[3] = (num & 0xff000000) << 8;
 
-    b[4] = (num & 0xff00000000) >> 8;
-    b[5] = (num & 0xff0000000000) >> 24;
-	b[6] = (num & 0xff000000000000) >> 40;
-	b[7] = (num & 0xff00000000000000) >> 56;
-	return (b[0] | b[1] | b[2] | b[3] | b[4] | b[5] | b[6] | b[7]);
+	   b[4] = (num & 0xff00000000) >> 8;
+	   b[5] = (num & 0xff0000000000) >> 24;
+	   b[6] = (num & 0xff000000000000) >> 40;
+	   b[7] = (num & 0xff00000000000000) >> 56;
+	   return (b[0] | b[1] | b[2] | b[3] | b[4] | b[5] | b[6] | b[7]);
+	   */
+	char	b[8];
+	b[0] = encrypt[0];
+	b[1] = encrypt[1];
+	b[2] = encrypt[2];
+	b[3] = encrypt[3];
+	b[4] = encrypt[4];
+	b[5] = encrypt[5];
+	b[6] = encrypt[6];
+	b[7] = encrypt[7];
+
+	encrypt[0] = b[7];
+	encrypt[1] = b[6];
+	encrypt[2] = b[5];
+	encrypt[3] = b[4];
+	encrypt[4] = b[3];
+	encrypt[5] = b[2];
+	encrypt[6] = b[1];
+	encrypt[7] = b[0];
 }
 
-void			swap_long_endian(unsigned long long *encrypt, size_t bytes)
+void			swap_long_endian(char *encrypt, size_t bytes)
 {
 	size_t			i;
 
 	i = 0;
 	while (i < (bytes / 8))
 	{
-		ft_printf("before endian swap: %016X\n", encrypt[i]);
-		encrypt[i] = swaplong_endian(encrypt[i]);
-		ft_printf("after endian swap: %016X\n", encrypt[i]);
+		ft_printf("before endian swap: %02X %02X %02X %02X %02X %02X %02X %02X\n", encrypt[0], encrypt[1],encrypt[2],encrypt[3],encrypt[4],encrypt[5],encrypt[6],encrypt[7]);
+		swaplong_endian(&encrypt[i]);
+		ft_printf("after endian swap: %02X %02X %02X %02X %02X %02X %02X %02X\n", encrypt[0], encrypt[1],encrypt[2],encrypt[3],encrypt[4],encrypt[5],encrypt[6],encrypt[7]);
 		i++;
 	}
+}
+//we will remove this... at some point
+void        print_bytes(unsigned long long *data, int len);
+
+void	print_spec(char *str, size_t bytes)
+{
+	size_t i = 0;
+	
+	while (i < bytes)
+	{
+		ft_printf("%c", str[i]);
+		i++;
+	}
+	ft_putstr("\n");
 }
 
 char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 {
 	//this is where will store all encrypted bytes
 	char	*print;
-	//only 28 bits of this should be utilized
-	//	size_t	two_key[2];
-	//char	*tmp;
+	char	*tmp;
+	char	*tmp2;
 	size_t	i;
 
 	i = 0;
 	print = ft_memalloc(len);
 
-	
-	//uncomment this when we are ready to try the algorithm
-	//rev_8byte((char*)&key, 8);
-	
+	ft_printf("key: %064b\n", key);
+	//swap endianness of key
+	swap_long_endian((char *)&key, 8);
+	ft_printf("key: %064b\n", key);
 	key = init_subkey(key);
 
 	//ft_putstr("\n\npermuted key: ");
 	ft_printf("permuted key: %064b\n\n\n", key);
-	
+
 	//pad bytes so that it is a multple of 8
 	encrypt = des_pad(encrypt, len);
+
 	//adjust len to the new padded len
 	len = c_num(len);
-	//swap_long_endian((unsigned long long *)encrypt, len);
+
 	//Reverse byte order in 8 byte blocks. little->big endian
-	//rev_8byte(encrypt, len);
-	//loop to encrypt all bytes, 8 bytes at a time
+	swap_long_endian(encrypt, len);
+
+	//create subkeys
 	create_subkeys(key);
+
 	while (i < len)
 	{
 		//encrypted des will return malloc'd 8 chars
-		//tmp = encrypted_des(&encrypt[i], key);
-		
-		printf("tmp: %16llX\n", encrypted_des(&encrypt[i], key));
-		//ft_strncpy(&print[i], tmp, 8);
-		
-		
-		//zero and delete this malloc'd memory
-		//ft_printf("Output:
-		//ft_memdel((void**)&tmp);
+		tmp = print;//encrypted_des(&encrypt[i], key);
 
-		// 	?????
-		//two_key[0];
+		tmp2 = (char*)encrypted_des(&encrypt[i], key);	
+
+		print = ft_memjoin(print, tmp2, i, 8);
+
+		//zero and delete this malloc'd memory
+		ft_memdel((void**)&tmp);
+
 		i += 8;
 	}
 	//reverse byte order again
 	rev_8byte(encrypt, len);
+	print_spec(print, i);
 	//output the ciphertext to the area specified
 	//handle output.
 	//write to stdout or file descriptor

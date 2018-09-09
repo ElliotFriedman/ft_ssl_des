@@ -3,9 +3,11 @@
 openssl enc -des -pass pass:"${1}" -P -nosalt -in working.txt
 
 echo "${1}"
-#openssl enc -des -pass pass:MYPASSWORD -P -S 2F6760E3D7713CBA
 
+# openssl enc -des -pass pass:MYPASSWORD -P -S 2F6760E3D7713CBA
 
+#echo  "56aWZJGAybc=" | openssl enc -des -d -a -pass pass:"hello" -nosalt 
+#echo " " | openssl enc -des-cbc -e -a -pass pass:"hello" -nosalt
 
 
 # -A                 Process base64 data on one line (requires -a)
