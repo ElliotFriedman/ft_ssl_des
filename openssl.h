@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/05 15:01:25 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/09 20:52:01 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ void					ffstruct(t_opt *opt, t_hash *h);
  *	DES
  */
 
-char					*des_encrypt(unsigned long long key, char *encrypt, size_t len);
+unsigned long long		*des_encrypt(unsigned long long key, char *encrypt, size_t len);
 char					*des_pad(char *encrypt, size_t len);
 void					rev_8byte(char *data, size_t len);
 unsigned long long		init_subkey(unsigned long long key);

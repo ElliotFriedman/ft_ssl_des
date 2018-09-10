@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/09 19:59:44 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/09 21:18:53 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,7 +229,7 @@ void				pbyte(char *str, size_t len)
 	while (i < len)
 	{
 		ft_printf("%02hhX", str[i]);
-		if (i && i % 7 == 0)
+		if (((i + 1) % 8) == 0)
 			ft_putstr(" ");
 		i++;
 	}
@@ -273,15 +273,27 @@ void				des(char **argv, int argc)
 	if (!ft_fread(argv[argc - 1], &h))
 	{
 		ft_printf("\ncould not read, taking last arg as txt block\n\n\n");
-		des_encrypt(key[0], ft_strdup(argv[argc - 1]), ft_strlen(argv[argc - 1]));
+		
+		//grab return value for later use
+		
+		tmp = des_encrypt(key[0], ft_strdup(argv[argc - 1]), ft_strlen(argv[argc - 1]));
 	}
 	else
 	{
 		ft_printf("\nRead from a file descriptor, taking last arg as txt block\n\n\n");
 //		pbyte(h.data, h.bytes);
-		des_encrypt(key[0], h.data, h.bytes);
 		
+		//grab return value for later use
+
+		tmp = des_encrypt(key[0], h.data, h.bytes);
 	}
+	size_t	i = 0;
+	while (tmp[i])
+	{
+		printf("%016llX ", tmp[i]);
+		i++;
+	}
+	printf("\n");
 	//ft_printf("iv in binary: %064b\n", key[1]);
 	//do subkey after byte order has been changed to big endian
 }

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/09 19:56:52 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/09 20:20:44 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 }
 
 void                pbyte(char *str, size_t len);
+void    print_spec(char *str, size_t bytes);
 
 void			base64start(char **argv, int argc)
 {
@@ -90,7 +91,7 @@ void			base64start(char **argv, int argc)
 		close(g_fd);
 	}
 	else
-		ft_printf("%s\n", h);
+		print_spec((char*)h, g_len);
 	if (opt.o)
 		pbyte((char*)h, g_len);
 	free(h);

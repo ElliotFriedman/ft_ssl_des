@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/09 18:41:23 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/09 20:52:20 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,19 +199,14 @@ unsigned long long	permute_concatsubkeys(size_t x)
 void				concat_subkeys(void)
 {
 	size_t				i;
-	//unsigned long long	arr[16];
 
 	i = 0;
 	while (i < 16)
 	{
 		g_arr[i] = g_rsubkey[i];
-		//				ft_printf("subkey:		%064b\n", g_arr[i]);
 		g_arr[i] <<= 28;
-		//				ft_printf("subkey:		%064b\n", g_arr[i]);
 		g_arr[i] += (g_lsubkey[i]);
-		//				ft_printf("subkey:		%064b\n", g_arr[i]);
 		g_arr[i] <<= 4;
-		//				ft_printf("subkey	%d:	%064b\n\n\n", i, g_arr[i]);
 		i++;
 	}
 	i = 0;
@@ -525,39 +520,33 @@ unsigned long long	char2long(unsigned long long *block, unsigned char *chrblock)
 	return (*block);
 }
 
-char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
+unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 {
 	//this is where will store all encrypted bytes
-	char	*print;
-	char	*tmp;
-	char	*tmp2;
+	char				*print;
+	char				*tmp;
+	char				*tmp2;
+	unsigned long long	stor[c_num(len)];
 	size_t	i;
 
 	i = 0;
 	print = ft_memalloc(len);
-
-//	ft_printf("key: %064b\n", key);
+	
+	
 	//swap endianness of key
-//	swap_long_endian((char *)&key, 8);
-//	ft_printf("key: %064b\n", key);
+	//swap_long_endian((char *)&key, 8);
 	key = init_subkey(key);
-
-	//ft_putstr("\n\npermuted key: ");
-//	ft_printf("permuted key: %064b\n\n\n", key);
 
 	//pad bytes so that it is a multple of 8
 	encrypt = des_pad(encrypt, len);
 
-	//print_bytes((unsigned long long*)&encrypt, 8);
 	//adjust len to the new padded len
 	len = c_num(len);
 
 	//Reverse byte order in 8 byte blocks. little->big endian
-//	swap_long_endian(encrypt, len);
-
+	//swap_long_endian(encrypt, len);
 	//create subkeys
 	create_subkeys(key);
-
 	while (i < len)
 	{
 		//encrypted des will return malloc'd 8 chars
@@ -572,11 +561,10 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 		unsigned long long t = char2long(&key, (unsigned char*)&print[i]);
    		swap_long_endian((char *)&t, 8);
 		printf("%016llX ", t);
+		stor[i / 8] = t;
 		i += 8;
 	}
 	printf("\n\n\n");
-	//reverse byte order again
-//	rev_8byte(encrypt, len);
 	//print_spec(print, i);
 	//print_bytes((unsigned long long*)&print, i);
 	//unsigned long long t = char2long(&key, (unsigned char*)print);
@@ -588,5 +576,5 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 	//
 	//	If decrypting:
 	//		Make sure to verify the padded bytes are correct when decrypting
-	return (print);
+	return (ft_memdup(stor, i));
 }
