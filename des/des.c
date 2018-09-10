@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/09 01:26:02 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/09 18:11:26 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,6 +222,26 @@ char				*get_pass_salt(void)
 }
 
 //Do key byte orders need to changed to big endian?
+void				pbyte(char *str, size_t len)
+{
+	size_t	i = 0;
+
+	while (i < len)
+	{
+		ft_printf("%02hhX ", str[i]); 
+		i++;
+	}
+	ft_putstr("\n");
+	i = 0;
+	char hold;
+	while (i < len)
+	{
+		hold = str[i];
+		ft_printf("%08hhb ", (char)hold & 255); 
+		i++;
+	}
+	ft_putstr("\n");
+}
 
 void				des(char **argv, int argc)
 {
@@ -246,7 +266,7 @@ void				des(char **argv, int argc)
 	//rev_8byte((char*)key, 8);
 	//ft_putstr("key=");
 	//print_bytes(tmp, 8);
-	ft_printf("key after endian: %064b\n", key[0]);
+	//ft_printf("key after endian: %064b\n", key[0]);
 	if (!ft_fread(argv[argc - 1], &h))
 	{
 		ft_printf("\ncould not read, taking last arg as txt block\n\n\n");
@@ -255,7 +275,8 @@ void				des(char **argv, int argc)
 	else
 	{
 		ft_printf("\nRead from a file descriptor, taking last arg as txt block\n\n\n");
-		des_encrypt(key[0], h.data, ft_strlen(h.data));
+		pbyte(h.data, h.bytes);
+		des_encrypt(key[0], h.data, h.bytes);
 		
 	}
 	//ft_printf("iv in binary: %064b\n", key[1]);

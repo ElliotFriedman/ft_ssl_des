@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/05 14:50:34 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/05 15:41:26 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/09 18:16:25 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,6 @@ unsigned long long		pperm(unsigned long long txtblock)
 		ret += (tmp);
 		i++;
 	}
-	ft_printf("\n\nOutput of pperm: %064b\n\n", ret);
+//	ft_printf("\n\nOutput of pperm: %064b\n\n", ret);
 	return (ret);
 }
