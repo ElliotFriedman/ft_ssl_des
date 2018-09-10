@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/09 18:18:29 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/09 18:41:23 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,30 +284,6 @@ void	init_txtblock(unsigned long long *block, unsigned char *chrblock)
 	i = 0;
 	*block = 0;
 
-	/*	
-	 *
-	 *		For Testing Purposes
-	 *
-	 */	
-//	chrblock[0] = 1;
-//	chrblock[1] = 35;
-//	chrblock[2] = 69;
-//	chrblock[3] = 103;
-//	chrblock[4] = 137;
-//	chrblock[5] = 171;
-//	chrblock[6] = 205;
-//	chrblock[7] = 239;
-
-//	ft_printf("txt block:   %08b", chrblock[0]);
-//	ft_printf(" %08b", chrblock[1]);
-//	ft_printf(" %08b", chrblock[2]);
-//	ft_printf(" %08b", chrblock[3]);
-//	ft_printf(" %08b", chrblock[4]);
-//	ft_printf(" %08b", chrblock[5]);
-//	ft_printf(" %08b", chrblock[6]);
-//	ft_printf(" %08b\n", chrblock[7]);
-//	/*
-//	ft_printf("Looking at textblock\n");
 	while (i < 8)
 	{
 		*block += chrblock[i];
@@ -572,7 +548,7 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 	//pad bytes so that it is a multple of 8
 	encrypt = des_pad(encrypt, len);
 
-	print_bytes((unsigned long long*)&encrypt, 8);
+	//print_bytes((unsigned long long*)&encrypt, 8);
 	//adjust len to the new padded len
 	len = c_num(len);
 
@@ -598,7 +574,7 @@ char	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 		printf("%016llX ", t);
 		i += 8;
 	}
-	ft_putstr("\n\n\n");
+	printf("\n\n\n");
 	//reverse byte order again
 //	rev_8byte(encrypt, len);
 	//print_spec(print, i);

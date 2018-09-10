@@ -6,11 +6,12 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/04 13:10:26 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/09 19:56:11 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
+int			g_len;
 
 int				find_chr(char c)
 {
@@ -36,7 +37,7 @@ unsigned char	*base64_decode(unsigned char *str, int len)
 	i = 0;
 	x = 0;
 	tmp = 0;
-	n = ft_memalloc(((len / 4) * 3) + 1);
+	n = ft_memalloc(((len / 4) * 3) + 3);
 	//convert from char to corresponding index in b64
 	while ((int)i < len)
 	{
@@ -66,5 +67,6 @@ unsigned char	*base64_decode(unsigned char *str, int len)
 		x += 3;
 	}
 	//return the newly created string :)
+	g_len = x;
 	return (n);
 }

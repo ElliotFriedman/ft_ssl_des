@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/05 23:06:37 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/09 19:56:52 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 const char	g_ref[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 int			g_pad;
 int			g_fd;
+int			g_len;
 
 int	findb_len(int len)
 {
@@ -58,6 +59,8 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 	return (n);
 }
 
+void                pbyte(char *str, size_t len);
+
 void			base64start(char **argv, int argc)
 {
 	size_t			i;
@@ -83,10 +86,12 @@ void			base64start(char **argv, int argc)
 	if (g_fd)
 	{
 		ft_printf("Writing to file descriptor %d\n", g_fd);
-		dprintf(g_fd, "%s\n", h);
+		dprintf(1, "%s\n", h);
 		close(g_fd);
 	}
 	else
 		ft_printf("%s\n", h);
+	if (opt.o)
+		pbyte((char*)h, g_len);
 	free(h);
 }

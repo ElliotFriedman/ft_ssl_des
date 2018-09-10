@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/09 18:11:26 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/09 19:59:44 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,12 +228,14 @@ void				pbyte(char *str, size_t len)
 
 	while (i < len)
 	{
-		ft_printf("%02hhX ", str[i]); 
+		ft_printf("%02hhX", str[i]);
+		if (i && i % 7 == 0)
+			ft_putstr(" ");
 		i++;
 	}
 	ft_putstr("\n");
-	i = 0;
-	char hold;
+//	i = 0;
+/*	char hold;
 	while (i < len)
 	{
 		hold = str[i];
@@ -241,7 +243,8 @@ void				pbyte(char *str, size_t len)
 		i++;
 	}
 	ft_putstr("\n");
-}
+*/
+	}
 
 void				des(char **argv, int argc)
 {
@@ -255,13 +258,13 @@ void				des(char **argv, int argc)
 	key = tmp;
 	ft_putstr("key=");
 	//print bytes without reversing byte order in memory
-	print_bytes(tmp, 8);
+//	print_bytes(tmp, 8);
 	//ft_printf("key in binary: %064b\n", key[0]);
 	tmp++;
 	ft_putstr("iv =");
-	print_bytes(tmp, 8);
+//	print_bytes(tmp, 8);
 	//try to read the last arg in to encrypt it
-	print_bytes(key, 8);
+//	print_bytes(key, 8);
 	ft_printf("key befor endian: %064b\n", key[0]);
 	//rev_8byte((char*)key, 8);
 	//ft_putstr("key=");
@@ -275,7 +278,7 @@ void				des(char **argv, int argc)
 	else
 	{
 		ft_printf("\nRead from a file descriptor, taking last arg as txt block\n\n\n");
-		pbyte(h.data, h.bytes);
+//		pbyte(h.data, h.bytes);
 		des_encrypt(key[0], h.data, h.bytes);
 		
 	}
