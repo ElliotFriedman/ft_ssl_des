@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/02 18:02:38 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/13 20:08:47 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/10 14:33:13 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,15 +99,3 @@ char	*des_pad(char *encrypt, size_t len)
 	ft_printf("total len %d\n", len);
 	return (encrypt);
 }
-
-/*
-int main(void)
-{
-	char *a = ft_memalloc(12);
-	ft_strcpy(a, "Pad me12 b1");
-	print_bytes(a, ft_strlen(a));
-	a = des_pad(a, ft_strlen(a));
-	print_bytes(a, 16);
-	return 1;
-}
-*/

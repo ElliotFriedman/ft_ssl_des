@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:51:40 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/06 13:30:01 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/10 14:52:00 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ size_t	ft_flen(int fd)
 {
 	size_t	i;
 	size_t	ctr;
-	char	buf[1000000];
+	char	buf[100];
 
 	ctr = 0;
 	i = 0;
-	while ((i = read(fd, buf, 1000000)) > 0)
+	while ((i = read(fd, buf, 100)) > 0)
 		ctr += i;
 	close(fd);
 	return (ctr);

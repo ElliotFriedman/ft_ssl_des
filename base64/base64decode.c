@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/09 19:56:11 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/10 16:13:14 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ unsigned char	*base64_decode(unsigned char *str, int len)
 		i++;
 	}
 	i = 0;
-	//put 4 char values into a unsigned int
+	//put 4 char values into an unsigned int
 	//then transfer the values from the uint
 	//into the new string
 	while ((int)i < len)

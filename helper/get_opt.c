@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/05 23:17:00 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/09 23:26:54 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int		g_file;
 int		g_bool;
 int		g_fd;
+int		g_decrypt;
 
 int		opt(char *argv, t_opt *new, int i)
 {
@@ -27,8 +28,10 @@ int		opt(char *argv, t_opt *new, int i)
 		new->r = 1;
 	if (ft_strchr(argv, (int)'s') && ++g_bool)
 		new->s = 1;
-	if (ft_strchr(argv, (int)'D') && ++g_bool)
+	if ((ft_strchr(argv, (int)'D') || ft_strchr(argv, (int)'d')) && ++g_bool && ++g_decrypt)
 		new->d = 1;
+	if (ft_strchr(argv, (int)'a') && ++g_bool)
+		new->a = 1;
 	if (ft_strchr(argv, (int)'o') && ++g_bool)
 	{
 		ft_printf("-o flag found at argc %d\n", i);

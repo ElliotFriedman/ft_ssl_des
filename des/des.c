@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/09 21:18:53 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/10 21:02:10 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int			g_permute[64];/* = {58, 50, 42, 34, 26, 18, 10,
 
 //rotate subkey x bits left at each round
 
+int		g_len;
 int		g_rotate[16];
 
 /*
@@ -229,8 +230,8 @@ void				pbyte(char *str, size_t len)
 	while (i < len)
 	{
 		ft_printf("%02hhX", str[i]);
-		if (((i + 1) % 8) == 0)
-			ft_putstr(" ");
+		//if (((i + 1) % 8) == 0)
+		//	ft_putstr(" ");
 		i++;
 	}
 	ft_putstr("\n");
@@ -244,56 +245,58 @@ void				pbyte(char *str, size_t len)
 	}
 	ft_putstr("\n");
 */
-	}
+}
+
+void    print_spec(char *str, size_t bytes);
 
 void				des(char **argv, int argc)
 {
 	unsigned long long	*tmp;
 	unsigned long long	*key;
 	static t_hash		h;
-
+	static t_opt		opt;
+	//char				*tmphold;
 	//this has been modified and it will return a constant value.
 	tmp = create_key(get_pass_salt());
 
 	key = tmp;
-	ft_putstr("key=");
-	//print bytes without reversing byte order in memory
-//	print_bytes(tmp, 8);
-	//ft_printf("key in binary: %064b\n", key[0]);
 	tmp++;
-	ft_putstr("iv =");
-//	print_bytes(tmp, 8);
 	//try to read the last arg in to encrypt it
-//	print_bytes(key, 8);
 	ft_printf("key befor endian: %064b\n", key[0]);
 	//rev_8byte((char*)key, 8);
 	//ft_putstr("key=");
-	//print_bytes(tmp, 8);
-	//ft_printf("key after endian: %064b\n", key[0]);
+	int i = 2;
+	while (get_opt(argc, argv, &opt, i))
+		i++;
+	tmp = 0;
 	if (!ft_fread(argv[argc - 1], &h))
 	{
 		ft_printf("\ncould not read, taking last arg as txt block\n\n\n");
-		
 		//grab return value for later use
-		
 		tmp = des_encrypt(key[0], ft_strdup(argv[argc - 1]), ft_strlen(argv[argc - 1]));
 	}
 	else
 	{
 		ft_printf("\nRead from a file descriptor, taking last arg as txt block\n\n\n");
-//		pbyte(h.data, h.bytes);
-		
 		//grab return value for later use
-
 		tmp = des_encrypt(key[0], h.data, h.bytes);
 	}
-	size_t	i = 0;
-	while (tmp[i])
+	i = 0;
+	ft_printf("\n\nG_len: %d\n\n", g_len);
+	while ((i * 8) < g_len - 8)
 	{
 		printf("%016llX ", tmp[i]);
 		i++;
 	}
-	printf("\n");
+	printf("\n\nFinished printing bytes\n\n\n");
+	
+	if (opt.a)
+	{
+	//	ft_printf("g_len: %d\n", g_len);
+	//	tmphold = (char*)&tmp;
+		//tmphold = _add_byte(tmphold, g_len);
+	//	ft_printf("base 64 encoding:\n %s\n", base64_encode((unsigned char*)tmphold, g_len));
+	}
 	//ft_printf("iv in binary: %064b\n", key[1]);
 	//do subkey after byte order has been changed to big endian
 }

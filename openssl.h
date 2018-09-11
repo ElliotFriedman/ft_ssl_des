@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/09 20:52:01 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/10 14:30:40 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct			s_opt
 	int					e;
 	int					i;
 	int					o;
+	int					a;
 }						t_opt;
 
 typedef struct			s_val
@@ -160,5 +161,7 @@ char					*des_pad(char *encrypt, size_t len);
 unsigned long long		pow2(size_t amt);
 unsigned long long		initial_perm(unsigned long long textblock);
 unsigned long long		pperm(unsigned long long txtblock);
+unsigned char			*base64_encode(unsigned char *str, int len);
+char					*_add_byte(char *data, size_t bytes);
 
 #endif
