@@ -6,12 +6,12 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/10 16:13:14 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/10 21:42:54 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
-int			g_len;
+int			g_b64;
 
 int				find_chr(char c)
 {
@@ -67,6 +67,6 @@ unsigned char	*base64_decode(unsigned char *str, int len)
 		x += 3;
 	}
 	//return the newly created string :)
-	g_len = x;
+	g_b64 = x;
 	return (n);
 }

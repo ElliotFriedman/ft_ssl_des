@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/10 21:01:03 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/10 21:45:03 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,13 +213,13 @@ void				concat_subkeys(void)
 		i++;
 	}
 	i = -1;
-//	ft_printf("G_decrypt == %d\n", g_decrypt);
-//	if (!g_decrypt)
+	ft_printf("G_decrypt == %d\n", g_decrypt);
+	if (!g_decrypt)
 		while (++i < 16)
 			g_k[i] = permute_concatsubkeys(i);
-//	else
-//		while (++i < 16)
-//			g_k[i] = permute_concatsubkeys(15 - i);
+	else
+		while (++i < 16)
+			g_k[i] = permute_concatsubkeys(15 - i);
 }
 
 //compression permutation

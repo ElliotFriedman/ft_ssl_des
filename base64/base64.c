@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/10 21:06:43 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/10 21:44:00 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,14 @@ void			base64start(char **argv, int argc)
 	if (argc > 2 && opt.d)
 	{
 		h = base64_decode((unsigned char *)argv[i - 1], ft_strlen(argv[i - 1]));
-		ft_putstr((char*)h);
+		//ft_putstr((char*)h);
+		print_spec((char*)h, g_b64);
 	}
 	else
 	{
 		h = base64_encode((unsigned char *)argv[argc - 1], ft_strlen(argv[argc - 1]));
-		print_spec((char*)h, g_b64);
+		//print_spec((char*)h, g_b64);
+		ft_putstr((char*)h);
 	}
 //	if (g_fd)
 //	{
