@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/10 21:52:23 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/11 01:50:27 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,9 +287,11 @@ void				des(char **argv, int argc)
 	char	*str;
 	str = (char*)&tmp;
 	ft_printf("\n\nG_len: %d\n\n", g_len);
-	while ((i * 8) < g_len - 8)
+	while ((i * 8) < g_len)// - 8)
 	{
-		printf("%016llX ", tmp[i]);
+		str = (char*)&tmp[i];
+		ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
+		//printf("%016llX ", tmp[i]);
 		i++;
 	}
 	printf("\n\nFinished printing bytes\n\n\n");
