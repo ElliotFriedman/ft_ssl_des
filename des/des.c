@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/10 21:02:10 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/10 21:52:23 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 // boolean for key provided
 int			g_key = 1;
+
 //boolean for whether or not we need to salt
 //doubles as a salt value if they specify salt. we convert their string to a ull and store here
+
 unsigned long long	g_salt;
 //if pass is provided store it here
 char		*g_pass = "hello";
@@ -282,6 +284,8 @@ void				des(char **argv, int argc)
 		tmp = des_encrypt(key[0], h.data, h.bytes);
 	}
 	i = 0;
+	char	*str;
+	str = (char*)&tmp;
 	ft_printf("\n\nG_len: %d\n\n", g_len);
 	while ((i * 8) < g_len - 8)
 	{

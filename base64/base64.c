@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/10 21:44:00 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/10 21:56:39 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void			base64start(char **argv, int argc)
 //	if (g_fd)
 //	{
 	//	ft_printf("Writing to file descriptor %d\n", g_fd);
-	//	dprintf(1, "%s\n", h);
+	//	ft_dprintf(1, "%s\n", h);
 	//	close(g_fd);
 //	}
 //	else
