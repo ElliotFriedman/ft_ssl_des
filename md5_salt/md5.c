@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/09 21:17:00 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/11 22:20:29 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ unsigned long long	*create_key(char *str)
 	hold = passhash(ft_strdup(str), h);
 	fstruct(s, h);
 	
+		
 	
-
 	//Delete this line in the future, this is only to avoid compiler errors
 	//str[0] = 0;
 	

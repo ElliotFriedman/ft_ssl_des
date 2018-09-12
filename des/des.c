@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/11 01:50:27 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/11 23:02:54 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 // boolean for key provided
 int			g_key = 1;
+int			g_decrypt;
 
 //boolean for whether or not we need to salt
 //doubles as a salt value if they specify salt. we convert their string to a ull and store here
@@ -251,6 +252,27 @@ void				pbyte(char *str, size_t len)
 
 void    print_spec(char *str, size_t bytes);
 
+void				removepadbytes(char *str)
+{
+	size_t	i;
+	size_t	hold;
+	
+	i = 7;
+	//sanity check to make sure that padding bytes were valid
+	if (str[i] == 0 || str[i] > 8)
+	{
+		ft_printf("Bad byte pattern found in padding byte(s) ascii val %d found\n", str[i]);
+	}
+	hold = str[i];
+	//zero out padding bytes
+	while (hold && i < 8)
+	{
+		str[i] = 0;
+		hold--;
+		i--;
+	}
+}
+
 void				des(char **argv, int argc)
 {
 	unsigned long long	*tmp;
@@ -285,8 +307,16 @@ void				des(char **argv, int argc)
 	}
 	i = 0;
 	char	*str;
-	str = (char*)&tmp;
+	str = (char*)&tmp[(g_len / 8) - 1];
+	if (g_decrypt)
+		removepadbytes(str);
 	ft_printf("\n\nG_len: %d\n\n", g_len);
+	if (opt.d)
+	{
+		
+
+
+	}
 	while ((i * 8) < g_len)// - 8)
 	{
 		str = (char*)&tmp[i];
@@ -294,7 +324,7 @@ void				des(char **argv, int argc)
 		//printf("%016llX ", tmp[i]);
 		i++;
 	}
-	printf("\n\nFinished printing bytes\n\n\n");
+//	printf("Finished printing bytes\n\n\n");
 	
 	if (opt.a)
 	{

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/10 21:45:03 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/11 23:09:35 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -494,11 +494,13 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	i = 0;
 	print = ft_memalloc(len);
 	//swap endianness of key
-	//swap_long_endian((char *)&key, 8);
+	swap_long_endian((char *)&key, 8);
 	key = init_subkey(key);
 
 	//pad bytes so that it is a multple of 8
-	encrypt = des_pad(encrypt, len);
+	//as long as you aren't decrypting :)
+	if (!g_decrypt)
+		encrypt = des_pad(encrypt, len);
 
 	//adjust len to the new padded len
 	len = c_num(len);
