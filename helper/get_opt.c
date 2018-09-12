@@ -6,16 +6,16 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/12 00:16:19 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/12 13:06:24 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
-extern int		g_file;
-extern int		g_bool;
-extern int		g_fd;
-extern int		g_decrypt;
+int		g_file;
+int		g_bool;
+int		g_fd;
+int		g_decrypt;
 
 int		opt(char *argv, t_opt *new, int i)
 {

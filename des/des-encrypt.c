@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/12 00:15:07 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/12 13:24:32 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,13 +213,13 @@ void				concat_subkeys(void)
 		i++;
 	}
 	i = -1;
-	ft_printf("G_decrypt == %d\n", g_decrypt);
+//	ft_printf("G_decrypt == %d\n", g_decrypt);
 	if (!g_decrypt)
 		while (++i < 16)
-			g_k[i] = permute_concatsubkeys(i);
-	else
-		while (++i < 16)
-			g_k[i] = permute_concatsubkeys(15 - i);
+			g_k[i] = permute_concatsubkeys((!g_decrypt ? i : 15 - i));
+//	else
+//		while (++i < 16)
+//			g_k[i] = permute_concatsubkeys(15 - i);
 }
 
 //compression permutation
@@ -528,10 +528,10 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 		i += 8;
 	}
 	g_len = len;
-	unsigned char	*str;
-	str = (unsigned char *)&stor;
+	//unsigned char	*str;
+	//str = (unsigned char *)&stor;
 //	swap_long_endian((char*)str, g_len - 8);
-	ft_printf("\n\n\nbase 64 encoding:\n%s\n", base64_encode((unsigned char*)str, g_len));
+	//ft_printf("\n\n\nbase 64 encoding:\n%s\n", base64_encode((unsigned char*)str, g_len));
 	//	If decrypting:
 	//		Make sure to verify the padded bytes are correct when decrypting
 	return (ft_memdup(stor, i + 8));

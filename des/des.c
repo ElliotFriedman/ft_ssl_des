@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/12 00:14:51 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/12 13:23:27 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 // boolean for key provided
 int			g_key = 1;
+extern int	g_b64;
 extern int	g_decrypt;
 
 //boolean for whether or not we need to salt
@@ -279,14 +280,13 @@ void				des(char **argv, int argc)
 	unsigned long long	*key;
 	static t_hash		h;
 	static t_opt		opt;
-	//char				*tmphold;
+	
 	//this has been modified and it will return a constant value.
 	tmp = create_key(get_pass_salt());
-
 	key = tmp;
 	tmp++;
 	//try to read the last arg in to encrypt it
-	ft_printf("key befor endian: %064b\n", key[0]);
+//	ft_printf("key befor endian: %064b\n", key[0]);
 	//rev_8byte((char*)key, 8);
 	//ft_putstr("key=");
 	int i = 2;
@@ -295,44 +295,40 @@ void				des(char **argv, int argc)
 	tmp = 0;
 	if (!ft_fread(argv[argc - 1], &h))
 	{
-		ft_printf("\ncould not read, taking last arg as txt block\n\n\n");
-		//grab return value for later use
-		tmp = des_encrypt(key[0], ft_strdup(argv[argc - 1]), ft_strlen(argv[argc - 1]));
+		h.data = argv[argc - 1];
+		h.bytes = ft_strlen(argv[argc - 1]);
 	}
-	else
+	if (g_decrypt && opt.a)
 	{
-		ft_printf("\nRead from a file descriptor, taking last arg as txt block\n\n\n");
-		//grab return value for later use
-		tmp = des_encrypt(key[0], h.data, h.bytes);
+		char *tmp = h.data;
+		h.data = (char*)base64_decode((unsigned char*)h.data, h.bytes);
+		free(tmp);
+		h.bytes = g_b64;
 	}
+	tmp = des_encrypt(key[0], h.data, h.bytes);
+//	if (!ft_fread(argv[argc - 1], &h))
+//	{
+//		ft_printf("\ncould not read, taking last arg as txt block\n\n\n");
+		//grab return value for later use
+//		tmp = des_encrypt(key[0], ft_strdup(argv[argc - 1]), ft_strlen(argv[argc - 1]));
+//	}
+//	else
+//	{
+//		ft_printf("\nRead from a file descriptor, taking last arg as txt block\n\n\n");
+		//grab return value for later use
+//		tmp = des_encrypt(key[0], h.data, h.bytes);
+//	}
 	i = 0;
 	char	*str;
 	str = (char*)&tmp[(g_len / 8) - 1];
 	if (g_decrypt)
 		removepadbytes(str);
-	ft_printf("\n\nG_len: %d\n\n", g_len);
-	if (opt.d)
-	{
-		
-
-
-	}
-	while ((i * 8) < g_len)// - 8)
+//	ft_printf("\n\nG_len: %d\n\n", g_len);
+	while ((i * 8) < g_len)
 	{
 		str = (char*)&tmp[i];
 		ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
-		//printf("%016llX ", tmp[i]);
 		i++;
 	}
-//	printf("Finished printing bytes\n\n\n");
-	
-	if (opt.a)
-	{
-	//	ft_printf("g_len: %d\n", g_len);
-	//	tmphold = (char*)&tmp;
-		//tmphold = _add_byte(tmphold, g_len);
-	//	ft_printf("base 64 encoding:\n %s\n", base64_encode((unsigned char*)tmphold, g_len));
-	}
-	//ft_printf("iv in binary: %064b\n", key[1]);
 	//do subkey after byte order has been changed to big endian
 }
