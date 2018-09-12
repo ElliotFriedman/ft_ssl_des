@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/11 23:02:54 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/12 00:14:51 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // boolean for key provided
 int			g_key = 1;
-int			g_decrypt;
+extern int	g_decrypt;
 
 //boolean for whether or not we need to salt
 //doubles as a salt value if they specify salt. we convert their string to a ull and store here

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/11 23:09:35 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/12 00:15:07 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int					g_sbox[32][16] = {{14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7}
 
 int     		    g_permute[64];
 
-unsigned int		g_decrypt;
+extern unsigned int	g_decrypt;
 //compression permutation
 /*int					g_cpermutation[48] = {14, 17, 11, 24, 1, 5, 3, 28, 15, 6, 21, 10,
   23, 19, 12, 4, 26, 8, 16, 7, 27, 20, 13, 2,
