@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/12 13:58:33 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/13 00:14:07 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 int			g_key = 1;
 extern int	g_b64;
 extern int	g_decrypt;
+extern int	g_cbc;
 
 //boolean for whether or not we need to salt
 //doubles as a salt value if they specify salt. we convert their string to a ull and store here
@@ -298,7 +299,7 @@ void				des(char **argv, int argc)
 		h.data = argv[argc - 1];
 		h.bytes = ft_strlen(argv[argc - 1]);
 	}
-	if (opt.a)
+	if (opt.a && g_decrypt)
 	{
 		ft_printf("\n\n\nDecrypting and translating base64 to bytes\n\n\n\n");
 		char *tmp = h.data;
@@ -306,8 +307,13 @@ void				des(char **argv, int argc)
 		free(tmp);
 		h.bytes = g_b64;
 	}
-
 	tmp = des_encrypt(key[0], h.data, h.bytes);
+	char *out = 0;
+	if (opt.a && !g_decrypt)
+	{
+		out = (char*)base64_encode((unsigned char*)tmp, g_len);
+		ft_printf("\nBase64 ciphertext:\n%s\n\n", out);
+	}
 //	if (!ft_fread(argv[argc - 1], &h))
 //	{
 //		ft_printf("\ncould not read, taking last arg as txt block\n\n\n");
@@ -326,7 +332,8 @@ void				des(char **argv, int argc)
 	if (g_decrypt)
 		removepadbytes(str);
 //	ft_printf("\n\nG_len: %d\n\n", g_len);
-	while ((i * 8) < g_len)
+	
+	while ((i * 8) < g_len && !opt.a)
 	{
 		str = (char*)&tmp[i];
 		ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);

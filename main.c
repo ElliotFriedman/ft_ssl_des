@@ -6,13 +6,14 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/06 15:34:21 by efriedma          #+#    #+#             */
-/*   Updated: 2018/08/13 16:11:14 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/12 23:52:34 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "openssl.h"
 
-const int g_total = 4;
+const int	g_total = 6;
+int			g_cbc;
 
 void	init_command(t_type **arr, size_t index, char *str, void *command)
 {
@@ -35,6 +36,8 @@ t_type	**create(t_type **s)
 	init_command(s, 1, "sha256", sha256start);
 	init_command(s, 2, "base64", base64start);
 	init_command(s, 3, "des", des);
+	init_command(s, 4, "des-cbc", des);
+	init_command(s, 5, "des-ecb", des);
 	return (s);
 }
 
@@ -45,6 +48,8 @@ int		dispatch(t_type *t, int argc, char **argv)
 	if (!ft_strcmp(t->name, argv[1]))
 	{
 		x = (void (*)(char**, int))(t->ptr);
+		if (!ft_strcmp(t->name, "des-cbc") || !ft_strcmp(t->name, "des-cbc"))
+			g_cbc = 1;
 		x(argv, argc);
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/22 11:31:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/12 14:57:32 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/12 21:32:42 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,4 @@ unsigned long long		ft_atoibase16(const char *str)
 		str++;
 	}
 	return (nbr);
-}
-
-int main()
-{
-	printf("%llu\n", ft_atoibase16("AAAAAAAAAAAFFFF"));
-
-	return 0;
 }

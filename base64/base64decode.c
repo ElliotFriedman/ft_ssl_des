@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/12 13:41:55 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/12 22:07:44 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ unsigned char	*base64_decode(unsigned char *str, int len)
 		tmp <<= 6;
 		tmp += (str[i + 3] << 2);
 		tmp <<= 6;
-
 		n[x] = (tmp >> 24) & 255;
 		n[x + 1] = (tmp >> 16) & 255;
 		n[x + 2] = (tmp >> 8) & 255;
