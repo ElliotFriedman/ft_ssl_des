@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/12 13:24:32 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/12 13:55:05 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,10 +216,10 @@ void				concat_subkeys(void)
 //	ft_printf("G_decrypt == %d\n", g_decrypt);
 	if (!g_decrypt)
 		while (++i < 16)
-			g_k[i] = permute_concatsubkeys((!g_decrypt ? i : 15 - i));
-//	else
-//		while (++i < 16)
-//			g_k[i] = permute_concatsubkeys(15 - i);
+			g_k[i] = permute_concatsubkeys(i);
+	else
+		while (++i < 16)
+			g_k[i] = permute_concatsubkeys(15 - i);
 }
 
 //compression permutation
@@ -494,7 +494,7 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	i = 0;
 	print = ft_memalloc(len);
 	//swap endianness of key
-	swap_long_endian((char *)&key, 8);
+	//swap_long_endian((char *)&key, 8);
 	key = init_subkey(key);
 
 	//pad bytes so that it is a multple of 8

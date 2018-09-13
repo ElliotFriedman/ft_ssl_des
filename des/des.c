@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/12 13:23:27 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/12 13:58:33 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,13 +298,15 @@ void				des(char **argv, int argc)
 		h.data = argv[argc - 1];
 		h.bytes = ft_strlen(argv[argc - 1]);
 	}
-	if (g_decrypt && opt.a)
+	if (opt.a)
 	{
+		ft_printf("\n\n\nDecrypting and translating base64 to bytes\n\n\n\n");
 		char *tmp = h.data;
 		h.data = (char*)base64_decode((unsigned char*)h.data, h.bytes);
 		free(tmp);
 		h.bytes = g_b64;
 	}
+
 	tmp = des_encrypt(key[0], h.data, h.bytes);
 //	if (!ft_fread(argv[argc - 1], &h))
 //	{
