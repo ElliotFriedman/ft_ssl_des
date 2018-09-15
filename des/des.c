@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/13 00:14:07 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/14 22:32:10 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,6 +291,7 @@ void				des(char **argv, int argc)
 	//rev_8byte((char*)key, 8);
 	//ft_putstr("key=");
 	int i = 2;
+	//replace this with get_opt loop
 	while (get_opt(argc, argv, &opt, i))
 		i++;
 	tmp = 0;

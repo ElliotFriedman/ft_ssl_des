@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/06 15:34:21 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/12 23:52:34 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/14 22:59:46 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ int		main(int argc, char **argv)
 		if (i == g_total || !dispatch(s[i], argc, argv))
 		{
 			ft_printf("ft_ssl: Error: '%s' is an invalid command.\n", argv[1]);
-			ft_printf("\nStandard commands:\n\n");
-			ft_printf("Message Digest commands:\nmd5\nsha256\n");
+			ft_printf("\nStandard commands:\n\nMessage Digest commands:\nmd5\nsha256\n\n");
+			ft_putstr("Cipher commands:\nbase64\ndes\ndes-ecb\ndes-cbc\n");
 		}
 		free_struct(s);
 	}

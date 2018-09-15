@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/10 21:56:39 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/14 23:11:22 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,24 +66,26 @@ void    print_spec(char *str, size_t bytes);
 
 void			base64start(char **argv, int argc)
 {
-	size_t			i;
 	static t_opt	opt;
 	unsigned char	*h;
+	static t_hash	stor;
 
 	//Handle options -d decode
 	//				 -e encode
 	//				 -i input file
 	//				 -o output file
-	i = 1;
 	h = 0;
-	while ((int)++i < argc)
+	get_opt_loop(1, argc, argv, &opt);
+	if (argc == 2)
 	{
-		get_opt(argc, argv, &opt, i);
-	//	ft_printf("g_fd: %d, opt->o %d\n", g_fd, opt.o);
+		rkey(&stor);
+		h = (unsigned char *)stor.data;
+		h = base64_encode((unsigned char*)stor.data, stor.bytes);
+		ft_printf("%s\n", (char*)h);
 	}
-	if (argc > 2 && opt.d)
+	else if (argc > 2 && opt.d)
 	{
-		h = base64_decode((unsigned char *)argv[i - 1], ft_strlen(argv[i - 1]));
+		h = base64_decode((unsigned char *)argv[argc - 1], ft_strlen(argv[argc - 1]));
 		//ft_putstr((char*)h);
 		print_spec((char*)h, g_b64);
 	}
@@ -93,15 +95,5 @@ void			base64start(char **argv, int argc)
 		//print_spec((char*)h, g_b64);
 		ft_putstr((char*)h);
 	}
-//	if (g_fd)
-//	{
-	//	ft_printf("Writing to file descriptor %d\n", g_fd);
-	//	ft_dprintf(1, "%s\n", h);
-	//	close(g_fd);
-//	}
-//	else
-//	ft_putstr((char*)h);
-	//	if (opt.o)
-//		pbyte((char*)h, g_len);
 	free(h);
 }

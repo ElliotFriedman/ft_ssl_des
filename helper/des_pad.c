@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/02 18:02:38 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/10 14:33:13 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/14 22:38:34 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char		*_add_byte(char *data, size_t bytes)
 
 	//this will be freed after we re assign data
 	tmp = data;
-	bytes++;
+	//bytes++;
 	//add an extra byte
 	snew = ft_memalloc(bytes);
 	//copy the old bytes in from data
@@ -96,6 +96,6 @@ char	*des_pad(char *encrypt, size_t len)
 //		print_bytes(encrypt, len);
 		dif--;
 	}
-	ft_printf("total len %d\n", len);
+//	ft_printf("total len %d\n", len);
 	return (encrypt);
 }
