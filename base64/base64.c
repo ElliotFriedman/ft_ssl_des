@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/14 23:48:42 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/15 00:31:45 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,25 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 void                pbyte(char *str, size_t len);
 void    print_spec(char *str, size_t bytes);
 
+void			choice00(unsigned char *h, t_hash *stor)
+{
+		if (!rstdin(stor))
+			rkey(stor);
+		removewhitespace(stor->data);
+		h = (unsigned char *)stor->data;
+		h = base64_encode((unsigned char*)stor->data, ft_strlen((char*)h));
+		ft_printf("%s\n", (char*)h);
+}
+
+void			choice01(unsigned char *h, t_hash *stor)
+{
+		rkey(stor);
+		removewhitespace(stor->data);
+		h = (unsigned char *)stor->data;
+		h = base64_decode((unsigned char*)stor->data, ft_strlen((char*)h));
+		ft_printf("%s\n", (char*)h);
+}
+
 void			base64start(char **argv, int argc)
 {
 	static t_opt	opt;
@@ -78,34 +97,30 @@ void			base64start(char **argv, int argc)
 	get_opt_loop(1, argc, argv, &opt);
 	if (argc == 2)
 	{
-		if (!rstdin(&stor))
-			rkey(&stor);
-		//
-		//ft_putstr(stor.data);
-		removewhitespace(stor.data);
-		//
-		//ft_putstr(stor.data);
-		h = (unsigned char *)stor.data;
-		h = base64_encode((unsigned char*)stor.data, ft_strlen((char*)h));
-		ft_printf("%s\n", (char*)h);
+		choice00(h, &stor);
 	}
 	else if (argc == 3 && opt.d)
 	{
-		rkey(&stor);
+		choice01(h, &stor);
+//		rkey(&stor);
 		//
 		//ft_putstr(stor.data);
-		removewhitespace(stor.data);
+//		removewhitespace(stor.data);
 		//
 		//ft_putstr(stor.data);
-		h = (unsigned char *)stor.data;
-		h = base64_decode((unsigned char*)stor.data, ft_strlen((char*)h));
-		ft_printf("%s\n", (char*)h);
+//		h = (unsigned char *)stor.data;
+//		h = base64_decode((unsigned char*)stor.data, ft_strlen((char*)h));
+//		ft_printf("%s\n", (char*)h);
 	}
-	else if (argc > 2 && opt.d)
+	else if (argc > 2 && opt.d && !opt.i)
 	{
 		removewhitespace(argv[argc - 1]);
 		h = base64_decode((unsigned char *)argv[argc - 1], ft_strlen(argv[argc - 1]));
 		//ft_putstr((char*)h);
+		//
+		//put this to whatever file descriptor we need to
+		if (opt.o)
+			
 		print_spec((char*)h, g_b64);
 	}
 	else
