@@ -6,12 +6,12 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/28 17:40:29 by efriedma          #+#    #+#             */
-/*   Updated: 2018/05/25 17:18:39 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/16 15:58:53 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#ifndef FT_DPRINTF_H
+# define FT_DPRINTF_H
 
 # include <stdarg.h>
 # include <unistd.h>

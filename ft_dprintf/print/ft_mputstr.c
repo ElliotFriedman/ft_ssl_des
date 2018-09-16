@@ -6,11 +6,11 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/05 18:10:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/05/25 17:10:51 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/16 16:01:21 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/ft_printf.h"
+#include "../includes/ft_dprintf.h"
 
 void	ft_nputstr(char *str, t_data *curr, int i)
 {

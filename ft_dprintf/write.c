@@ -1,4 +1,4 @@
-#include "includes/ft_printf.h"
+#include "includes/ft_dprintf.h"
 #include <fcntl.h>
 
 int main()
@@ -16,7 +16,7 @@ int main()
 	chrblock[6] = 205;
 	chrblock[7] = 239;
 
-	int fd = open("test.txt", O_WRONLY);
+	int fd = open("test.txt", O_WRONLY | O_CREAT);
 
 	write(fd, &chrblock[0], 1);
 	write(fd, &chrblock[1], 1);

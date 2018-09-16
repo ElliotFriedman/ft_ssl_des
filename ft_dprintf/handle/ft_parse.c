@@ -6,11 +6,11 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 21:46:02 by efriedma          #+#    #+#             */
-/*   Updated: 2018/05/24 14:56:39 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/16 16:00:15 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/ft_printf.h"
+#include "../includes/ft_dprintf.h"
 
 void	find_mod(t_data *curr, const char *str)
 {

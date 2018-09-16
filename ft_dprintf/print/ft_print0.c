@@ -6,11 +6,11 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/30 21:40:30 by efriedma          #+#    #+#             */
-/*   Updated: 2018/05/24 23:57:40 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/16 16:01:32 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/ft_printf.h"
+#include "../includes/ft_dprintf.h"
 
 int		hexgen2(char *print, char *snew, t_data *curr)
 {
