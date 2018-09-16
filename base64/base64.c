@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/15 00:31:45 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/16 15:08:05 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,21 +66,62 @@ void    print_spec(char *str, size_t bytes);
 
 void			choice00(unsigned char *h, t_hash *stor)
 {
-		if (!rstdin(stor))
-			rkey(stor);
-		removewhitespace(stor->data);
-		h = (unsigned char *)stor->data;
-		h = base64_encode((unsigned char*)stor->data, ft_strlen((char*)h));
-		ft_printf("%s\n", (char*)h);
+	if (!rstdin(stor))
+		rkey(stor);
+	removewhitespace(stor->data);
+	h = (unsigned char *)stor->data;
+	h = base64_encode((unsigned char*)stor->data, ft_strlen((char*)h));
+	ft_printf("%s\n", (char*)h);
 }
 
 void			choice01(unsigned char *h, t_hash *stor)
 {
-		rkey(stor);
-		removewhitespace(stor->data);
-		h = (unsigned char *)stor->data;
-		h = base64_decode((unsigned char*)stor->data, ft_strlen((char*)h));
-		ft_printf("%s\n", (char*)h);
+	rkey(stor);
+	removewhitespace(stor->data);
+	h = (unsigned char *)stor->data;
+	h = base64_decode((unsigned char*)stor->data, ft_strlen((char*)h));
+	ft_printf("%s\n", (char*)h);
+}
+
+void			err0r(char error)
+{
+	ft_printf("base64: option requires an argument -- %c\n", error);
+	ft_putstr("Usage:	base64 [-hvD] [-b num] [-i in_file] [-o out_file]\n");
+	ft_putstr("	-d, --decode   decodes input\n  -i, --input    input file ");
+	ft_putstr("(default: \"-\" for stdin)\n  -o, --output   output file (default: \"-\" for stdout)\n");
+	exit(0);
+}
+
+void			find_options(char **argv, int argc, t_hash *stor)
+{
+	int				i;
+	unsigned char	*h;
+
+	i = -1;
+	h = 0;
+	while (++i < argc)
+	{
+		if (ft_strnstr(argv[i], "-i", 2))
+		{
+			if (i + 1 == argc)
+			{
+				err0r('i');
+			}
+			else if (!ft_fread(argv[i + 1], stor))
+				ft_printf("Unable to open '%s': No such file or directory\n", argv[i + 1]);
+			removewhitespace(stor->data);
+			h = (unsigned char *)stor->data;
+			h = base64_encode((unsigned char*)stor->data, ft_strlen((char*)h));
+		}
+		if (ft_strnstr(argv[i], "-o", 2))
+		{
+			if (i + 1 == argc)
+			{
+				err0r('o');
+			}
+		}
+	}
+
 }
 
 void			base64start(char **argv, int argc)
@@ -102,27 +143,18 @@ void			base64start(char **argv, int argc)
 	else if (argc == 3 && opt.d)
 	{
 		choice01(h, &stor);
-//		rkey(&stor);
-		//
-		//ft_putstr(stor.data);
-//		removewhitespace(stor.data);
-		//
-		//ft_putstr(stor.data);
-//		h = (unsigned char *)stor.data;
-//		h = base64_decode((unsigned char*)stor.data, ft_strlen((char*)h));
-//		ft_printf("%s\n", (char*)h);
 	}
-	else if (argc > 2 && opt.d && !opt.i)
-	{
-		removewhitespace(argv[argc - 1]);
-		h = base64_decode((unsigned char *)argv[argc - 1], ft_strlen(argv[argc - 1]));
-		//ft_putstr((char*)h);
-		//
-		//put this to whatever file descriptor we need to
-		if (opt.o)
-			
-		print_spec((char*)h, g_b64);
-	}
+	//	else if (argc > 2 && opt.d && !opt.i)
+	//	{
+	//		removewhitespace(argv[argc - 1]);
+	//		h = base64_decode((unsigned char *)argv[argc - 1], ft_strlen(argv[argc - 1]));
+	//ft_putstr((char*)h);
+	//
+	//put this to whatever file descriptor we need to
+	//		if (opt.o)
+
+	//		print_spec((char*)h, g_b64);
+	//	}
 	else
 	{
 		h = base64_encode((unsigned char *)argv[argc - 1], ft_strlen(argv[argc - 1]));
