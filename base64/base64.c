@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 00:13:40 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/17 00:31:02 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,12 +121,16 @@ void			find_options(char **argv, int argc, t_hash *stor, t_opt *opt)
 				ft_printf("Unable to open '%s': No such file or directory\n", argv[i + 1]);
 				exit(0);
 			}
+			//read in all data
 			h = (unsigned char *)stor->data;
+			//if we aren't decoding, we are encoding
 			if (!opt->d)
 				h = base64_encode((unsigned char*)stor->data, stor->bytes);
 			else
 			{
+				//if we are decoding, remove all whitespaces
 				removewhitespace(stor->data);
+				//now decode
 				h = base64_decode((unsigned char*)stor->data, ft_strlen(stor->data));
 			}
 		}

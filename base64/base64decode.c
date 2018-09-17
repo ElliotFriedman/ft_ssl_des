@@ -6,13 +6,14 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/12 22:07:44 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/17 00:38:58 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
-int			g_b64;
+int					g_b64;
+//extern const char	g_ref[64];
 
 int				find_chr(char c)
 {
@@ -68,5 +69,7 @@ unsigned char	*base64_decode(unsigned char *str, int len)
 	}
 	//return the newly created string :)
 	g_b64 = x;
+	if (str[x - 3] == '=' && (g_ref[str[x - 2]] & 3) == 0)
+		g_b64--;
 	return (n);
 }
