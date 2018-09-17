@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/05 18:10:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/05/23 14:23:37 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/16 23:29:16 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,8 @@ void	ft_mputstr(char *str, t_data *curr)
 	i = 0;
 	if (str)
 	{
-		i = 0;
-		while (str[i])
-		{
-			curr->iter++;
-			write(1, &str[i], 1);
-			i++;
-		}
+		i = ft_strlen(str);
+		curr->iter += i;
+		write(1, str, i);
 	}
 }
