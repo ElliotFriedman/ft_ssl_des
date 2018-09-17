@@ -1,0 +1,4 @@
+ft_dprintf/libftdprintf.a
+ft_printf/libftprintf.a
+ft_printf/libft/libft.a
+ft_dprintf/libft/dlibft.a
