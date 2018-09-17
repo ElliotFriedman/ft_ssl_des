@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/12 23:29:36 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/16 23:03:11 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int		opt(char *argv, t_opt *new, int i)
 		new->a = 1;
 	if (ft_strchr(argv, (int)'o') && ++g_bool)
 	{
-		ft_printf("-o flag found at argc %d\n", i);
 		new->o = 1;
 		g_file = ++i;
 	}
@@ -70,10 +69,7 @@ int		get_opt(int argc, char **argv, t_opt *new, int i)
 			return (1);
 		}
 		else if (!g_fd && new->o && ((fd = (open(argv[i], O_RDONLY)) > 2)))
-		{
-			ft_printf("found file descriptor %d with name %s found at index %d\n", fd, argv[i], i);
 			g_fd = fd;
-		}
 		i++;
 	}
 	return (0);

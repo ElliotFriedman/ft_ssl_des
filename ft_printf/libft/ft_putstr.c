@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/23 12:26:53 by efriedma          #+#    #+#             */
-/*   Updated: 2018/02/26 00:42:26 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/16 23:19:37 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,8 @@
 
 void	ft_putstr(char *str)
 {
-	size_t	i;
-
 	if (str)
 	{
-		i = -1;
-		while (str[++i])
-			write(1, &str[i], 1);
+		write(1, str, ft_strlen(str));
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/16 16:54:51 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/16 23:16:34 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,18 +118,21 @@ void			find_options(char **argv, int argc, t_hash *stor, t_opt *opt)
 	{
 		if (ft_strnstr(argv[i], "-i", 2))
 		{
+			opt->i = 1;
 			if (i + 1 == argc)
 				err0r('i');
 			else if (!ft_fread(argv[i + 1], stor))
+			{
 				ft_printf("Unable to open '%s': No such file or directory\n", argv[i + 1]);
+				exit(0);
+			}
 			h = (unsigned char *)stor->data;
 			if (!opt->d)
 				h = base64_encode((unsigned char*)stor->data, stor->bytes);
 			else
 			{
-				//should i remove whitespaces?
-				//
-				h = base64_decode((unsigned char*)stor->data, stor->bytes);
+				removewhitespace(stor->data);
+				h = base64_decode((unsigned char*)stor->data, ft_strlen(stor->data));
 			}
 		}
 		if (ft_strnstr(argv[i], "-o", 2))
@@ -137,9 +140,18 @@ void			find_options(char **argv, int argc, t_hash *stor, t_opt *opt)
 			if (i + 1 == argc)
 				err0r('o');
 			fd = open(argv[i + 1], O_WRONLY | O_CREAT);
-			//ft_dprintf(fd,"%s\n", (char*)h);
+			if (!opt->i)
+			{
+				rkey(stor);
+				h = (unsigned char *)stor->data;
+				if (opt->d)
+					h = base64_decode((unsigned char*)stor->data, ft_strlen((char*)h));
+				else
+					h = base64_encode((unsigned char*)stor->data, stor->bytes);
+			}
 			fd_putstr((char*)h, fd);
 			fd_putstr("\n", fd);
+			close(fd);
 			return ;
 		}
 	}
