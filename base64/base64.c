@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/16 23:16:34 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/17 00:13:40 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,6 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 	i = 0;
 	m = 0;
 	//add 2 bytes to string
-	//char        *add_byte(t_hash *h)
-	char    *ft_memjoin(void *a1, void *b1, size_t asize, size_t bsize);
-
 	str = (unsigned char*)ft_memjoin((void*)str, 0, len, 0);
 	str = (unsigned char*)ft_memjoin((void*)str, 0, ++len, 0);
 	while ((int)i < bit_len)
@@ -62,7 +59,7 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 		i++;
 		g_pad--;
 	}
-	//	g_len = (int)ft_strlen((char*)n);
+	g_b64 = (int)ft_strlen((char*)n);
 	return (n);
 }
 
@@ -79,13 +76,19 @@ void			choice00(unsigned char *h, t_hash *stor)
 	ft_printf("%s\n", (char*)h);
 }
 
+void	fd_putstr(char *str, int fd, int len)
+{
+	write(fd, str, len);
+}
+
 void			choice01(unsigned char *h, t_hash *stor)
 {
 	rkey(stor);
 	removewhitespace(stor->data);
 	h = (unsigned char *)stor->data;
 	h = base64_decode((unsigned char*)stor->data, ft_strlen((char*)h));
-	ft_printf("%s\n", (char*)h);
+	fd_putstr((char*)h, 1, g_b64);
+	fd_putstr("\n", 1, 1);
 }
 
 void			err0r(char error)
@@ -95,14 +98,6 @@ void			err0r(char error)
 	ft_putstr("	-d, --decode   decodes input\n  -i, --input    input file ");
 	ft_putstr("(default: \"-\" for stdin)\n  -o, --output   output file (default: \"-\" for stdout)\n");
 	exit(0);
-}
-
-void	fd_putstr(char *str, int fd)
-{
-	if (str)
-	{
-		write(fd, str, ft_strlen(str));
-	}
 }
 
 void			find_options(char **argv, int argc, t_hash *stor, t_opt *opt)
@@ -149,13 +144,14 @@ void			find_options(char **argv, int argc, t_hash *stor, t_opt *opt)
 				else
 					h = base64_encode((unsigned char*)stor->data, stor->bytes);
 			}
-			fd_putstr((char*)h, fd);
-			fd_putstr("\n", fd);
+			fd_putstr((char*)h, fd, g_b64);
+			fd_putstr("\n", 1, fd);
 			close(fd);
 			return ;
 		}
 	}
-	ft_printf("%s\n", (char*)h);
+	fd_putstr((char*)h, 1, g_b64);
+	fd_putstr("\n", 1, fd);
 }
 
 void			base64start(char **argv, int argc)

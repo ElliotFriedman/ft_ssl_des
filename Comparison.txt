@@ -1,8 +1,0 @@
-//take output of openssl and put it into this converter to turn base64 to bytes:
-//https://cryptii.com/base64-to-hex
-
-openssl enc -des-ecb -a -e -K 133457799BBCDFF1  -iv 00 -nosalt -in desDemo.sh
-
-output is the same :)
-./ft_ssl des desDemo.sh
-
