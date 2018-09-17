@@ -1,8 +1,8 @@
 
 #this works
-echo " " | openssl enc -des-ecb -a -e -K  6162636461626364 -iv 0011223344556677
+echo "one deep secret" | openssl enc -des-ecb -a -e -K  6162636461626364 -iv 0011223344556677
 
-echo "zqYWONX68rWNxl7msIdGC67Uh2HfVEBo" | openssl enc -des-cbc -d -a -K 6162636461626364 -iv 0011223344556677
+echo " OCIyZana6sRzSyapHzTBDDDE2DehuEx/" | openssl enc -des-ecb -d -a -K 6162636461626364 -iv 0011223344556677
 
 
 #this won't work because we are not using base64 encoding so reading the output is next to impossible
