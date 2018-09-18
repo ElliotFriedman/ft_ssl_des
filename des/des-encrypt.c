@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 17:37:49 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/17 18:10:04 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -484,16 +484,22 @@ unsigned long long	char2long(unsigned long long *block, unsigned char *chrblock)
 	return (*block);
 }
 
-unsigned long long	chaincipher(char *plaintext, unsigned long long prev)
+void				chaincipher(char *plaintext, unsigned long long prev)
 {
-	plaintext[0] ^= prev & 255;
-	plaintext[1] ^= (prev >> 8) & 255;
-	plaintext[2] ^= (prev >> 16) & 255;
-	plaintext[3] ^= (prev >> 24) & 255;
-	plaintext[4] ^= (prev >> 32) & 255;
-	plaintext[5] ^= (prev >> 40) & 255;
-	plaintext[6] ^= (prev >> 48) & 255;
-	plaintext[7] ^= (prev >> 56) & 255;
+	unsigned long long *tmp;
+
+//	swaplong_endian(plaintext);
+	tmp = (unsigned long long*)plaintext;
+	*tmp = *tmp ^ prev;
+//	swaplong_endian(plaintext);
+//	plaintext[7] ^= prev & 255;
+//	plaintext[6] ^= (prev >> 8) & 255;
+//	plaintext[5] ^= (prev >> 16) & 255;
+//	plaintext[4] ^= (prev >> 24) & 255;
+//	plaintext[3] ^= (prev >> 32) & 255;
+//	plaintext[2] ^= (prev >> 40) & 255;
+//	plaintext[1] ^= (prev >> 48) & 255;
+//	plaintext[0] ^= (prev >> 56) & 255;
 }
 
 unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
@@ -528,7 +534,8 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 		chaincipher(encrypt, g_iv);	
 	while (i < len)
 	{
-		if (i && g_cbc)
+		//different set of rules for decrypting using CBC
+		if (i && g_cbc && !g_decrypt)
 			chaincipher(&encrypt[i], stor[(i / 8) - 1]);
 		//encrypted des will return malloc'd 8 chars
 		tmp = print;//encrypted_des(&encrypt[i], key);
