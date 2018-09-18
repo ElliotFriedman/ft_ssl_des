@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 22:48:07 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/17 23:23:26 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ void			find_options(char **argv, int argc, t_hash *stor, t_opt *opt)
 					h = base64_encode((unsigned char*)stor->data, stor->bytes);
 			}
 			fd_putstr((char*)h, fd, g_b64);
-			fd_putstr("\n", 1, fd);
+			fd_putstr("\n", fd, 1);
 			close(fd);
 			return ;
 		}
