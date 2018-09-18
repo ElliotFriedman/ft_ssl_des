@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 23:31:47 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/17 23:53:43 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,13 +269,17 @@ void				removepadbytes(char *str)
 	{
 		ft_printf("Bad byte pattern found in padding byte(s) ascii val %d found\n", str[i]);
 	}
-	hold = str[i];
+	hold = str[i] & 127;
+	ft_printf("Final byte found: %b\n", hold);
 	//zero out padding bytes
-	while (hold && i < 8)
+//	if (hold)
+//		hold--;
+	i = 8;
+	while (hold && i)
 	{
-		str[i] = 0;
-		hold--;
 		i--;
+	//	str[i] = 0;
+		hold--;
 	}
 }
 

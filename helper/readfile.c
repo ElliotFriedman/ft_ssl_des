@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:51:40 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/10 14:52:00 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/17 23:57:54 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int		ft_fread(char *str, t_hash *h)
 		h->bytes = h->ini;
 		close(fd);
 		h->arr = (unsigned int *)h->data;
+//		ft_printf("read %d bytes in ft_fread\n", h->bytes);
 		return (1);
 	}
 	return (0);
