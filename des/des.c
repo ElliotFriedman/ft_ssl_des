@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 23:53:43 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/18 00:10:58 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,6 +283,22 @@ void				removepadbytes(char *str)
 	}
 }
 
+void				checkbase64encode(char *str, size_t bytes)
+{
+	size_t			i;
+
+	i = 0;
+	while (i < bytes)
+	{
+		if (!ft_strchr(g_ref, str[i]) && str[i] != '=')
+		{
+			ft_putstr("Error, invalid byte sequence detected in base64 encoded string\n");
+			exit(0);
+		}
+		i++;
+	}
+}
+
 void				des(char **argv, int argc)
 {
 	unsigned long long	*tmp;
@@ -320,7 +336,9 @@ void				des(char **argv, int argc)
 //		ft_printf("address of h.data: %p\n", &h.data);
 		char *tmp1 = h.data;
 		removewhitespace(h.data);
+		
 		h.bytes = ft_strlen(h.data);
+		checkbase64encode(h.data, h.bytes);
 //		ft_printf("\nb64 - whitespace: %s\n", h.data);
 		h.data = (char*)base64_decode((unsigned char*)h.data, h.bytes);
 //		ft_printf("address of h.data: %p\n", &h.data);
@@ -349,6 +367,6 @@ void				des(char **argv, int argc)
 		ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
 		i++;
 	}
-	if (g_decrypt)
+	if (g_decrypt && !opt.a)
 		ft_putstr("\n");
 }
