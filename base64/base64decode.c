@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 00:38:58 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/17 22:48:14 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,6 @@ unsigned char	*base64_decode(unsigned char *str, int len)
 	g_b64 = x;
 	if (str[x - 3] == '=' && (g_ref[str[x - 2]] & 3) == 0)
 		g_b64--;
+//	ft_printf("%d\n", g_b64);
 	return (n);
 }

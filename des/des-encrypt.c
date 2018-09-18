@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 20:03:51 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/17 22:46:57 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ void				concat_subkeys(void)
 		i++;
 	}
 	i = -1;
-//	ft_printf("G_decrypt == %d\n", g_decrypt);
+	//	ft_printf("G_decrypt == %d\n", g_decrypt);
 	if (!g_decrypt)
 		while (++i < 16)
 			g_k[i] = permute_concatsubkeys(i);
@@ -488,18 +488,18 @@ void				chaincipher(char *plaintext, unsigned long long prev)
 {
 	unsigned long long *tmp;
 
-//	swaplong_endian(plaintext);
+	//	swaplong_endian(plaintext);
 	tmp = (unsigned long long*)plaintext;
 	*tmp = *tmp ^ prev;
-//	swaplong_endian(plaintext);
-//	plaintext[7] ^= prev & 255;
-//	plaintext[6] ^= (prev >> 8) & 255;
-//	plaintext[5] ^= (prev >> 16) & 255;
-//	plaintext[4] ^= (prev >> 24) & 255;
-//	plaintext[3] ^= (prev >> 32) & 255;
-//	plaintext[2] ^= (prev >> 40) & 255;
-//	plaintext[1] ^= (prev >> 48) & 255;
-//	plaintext[0] ^= (prev >> 56) & 255;
+	//	swaplong_endian(plaintext);
+	//	plaintext[7] ^= prev & 255;
+	//	plaintext[6] ^= (prev >> 8) & 255;
+	//	plaintext[5] ^= (prev >> 16) & 255;
+	//	plaintext[4] ^= (prev >> 24) & 255;
+	//	plaintext[3] ^= (prev >> 32) & 255;
+	//	plaintext[2] ^= (prev >> 40) & 255;
+	//	plaintext[1] ^= (prev >> 48) & 255;
+	//	plaintext[0] ^= (prev >> 56) & 255;
 }
 
 unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
@@ -512,6 +512,7 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	size_t	i;
 
 	i = 0;
+	//ft_printf("address of h.data: %p\n", &encrypt);
 	print = ft_memalloc(len);
 	//swap endianness of key
 	//swap_long_endian((char *)&key, 8);
@@ -520,37 +521,42 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	//pad bytes so that it is a multple of 8
 	//as long as you aren't decrypting :)
 	if (!g_decrypt)
+	{
 		encrypt = des_pad(encrypt, len);
 
-	//adjust len to the new padded len
-	len = c_num(len);
+		//adjust len to the new padded len
 
+		len = c_num(len);
+	}
 	//Reverse byte order in 8 byte blocks. little->big endian
 	//swap_long_endian(encrypt, len);
 	//create subkeys
 	create_subkeys(key);
 	//handle cipher block chaining
-//	if (g_cbc)
-//		chaincipher(encrypt, g_iv);	
-	while (i < len)
+	//	if (g_cbc)
+	//		chaincipher(encrypt, g_iv);	
+	//ft_printf("address of h.data: %p\n", &encrypt);
+	while (g_decrypt ? i < len - 8 : i < len)
 	{
-		//different set of rules for decrypting using CBC
-//		if (i && g_cbc && !g_decrypt)
-//			chaincipher(&encrypt[i], stor[(i / 8) - 1]);
-//
+		//		ft_putnbr(i);
+		//		ft_putstr("\n");
+		//		different set of rules for decrypting using CBC
+		//		if (i && g_cbc && !g_decrypt)
+		//			chaincipher(&encrypt[i], stor[(i / 8) - 1]);
+		//
 		//encrypted des will return malloc'd 8 chars
 		tmp = print;//encrypted_des(&encrypt[i], key);
 		tmp2 = (char*)encrypted_des(&encrypt[i], key);	
 		//add a byte to tmp2
-//		tmp2 = _add_byte(tmp2, 9);
-//		tmp2 = (char*)base64_encode((unsigned char *)tmp2, 8);
-//		ft_printf("%s", tmp2);
+		//		tmp2 = _add_byte(tmp2, 9);
+		//		tmp2 = (char*)base64_encode((unsigned char *)tmp2, 8);
+		//		ft_printf("%s", tmp2);
 		print = ft_memjoin(print, tmp2, i, 8);
 		//zero and delete this malloc'd memory
 		ft_memdel((void**)&tmp);
 		unsigned long long t = char2long(&key, (unsigned char*)&print[i]);
-//		swap_long_endian((char *)&t, 8);
-//		printf("%016llX ", t);
+		//		swap_long_endian((char *)&t, 8);
+		//		printf("%016llX ", t);
 		stor[i / 8] = t;
 		i += 8;
 	}
@@ -558,7 +564,7 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	g_len = len;
 	//unsigned char	*str;
 	//str = (unsigned char *)&stor;
-//	swap_long_endian((char*)str, g_len - 8);
+	//	swap_long_endian((char*)str, g_len - 8);
 	//ft_printf("\n\n\nbase 64 encoding:\n%s\n", base64_encode((unsigned char*)str, g_len));
 	//	If decrypting:
 	//		Make sure to verify the padded bytes are correct when decrypting

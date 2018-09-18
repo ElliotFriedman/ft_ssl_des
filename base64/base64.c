@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 00:31:02 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/17 22:48:07 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,9 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 		i++;
 		g_pad--;
 	}
+
 	g_b64 = (int)ft_strlen((char*)n);
+//	ft_printf("%d\n", g_b64);
 	return (n);
 }
 

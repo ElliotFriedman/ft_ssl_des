@@ -10,6 +10,7 @@ while :
 
 	"
 	sleep 1
-
+	./ft_ssl des -d -a out
+	./ft_ssl des -d -a out
 	./ft_ssl des main.c
 done

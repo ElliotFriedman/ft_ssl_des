@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 20:18:03 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/17 22:55:59 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,24 +232,22 @@ void				pbyte(char *str, size_t len)
 {
 	size_t	i = 0;
 
-	while (i < len)
-	{
-		ft_printf("%02hhX", str[i]);
+//	while (i < len)
+   //	{
+	//	ft_printf("%02hhX", str[i]);
 		//if (((i + 1) % 8) == 0)
 		//	ft_putstr(" ");
-		i++;
-	}
-	ft_putstr("\n");
+	//	i++;
+	//}
+	//ft_putstr("\n");
 //	i = 0;
-/*	char hold;
 	while (i < len)
 	{
-		hold = str[i];
-		ft_printf("%08hhb ", (char)hold & 255); 
+		ft_putchar(str[i]);
 		i++;
 	}
 	ft_putstr("\n");
-*/
+
 }
 
 void    print_spec(char *str, size_t bytes);
@@ -259,8 +257,14 @@ void				removepadbytes(char *str)
 	size_t	i;
 	size_t	hold;
 	
-	i = 7;
 	//sanity check to make sure that padding bytes were valid
+//	i = 0;
+//	while (i < 8)
+//	{
+//		ft_printf("%02x ", str[i]);
+//		i++;
+//	}
+	i = 7;
 	if (str[i] == 0 || str[i] > 8)
 	{
 		ft_printf("Bad byte pattern found in padding byte(s) ascii val %d found\n", str[i]);
@@ -291,59 +295,54 @@ void				des(char **argv, int argc)
 	//rev_8byte((char*)key, 8);
 	//ft_putstr("key=");
 	int i = 2;
-	//replace this with get_opt loop
-	while (get_opt(argc, argv, &opt, i))
-		i++;
+//	while (get_opt(argc, argv, &opt, i))
+//		i++;
+	get_opt_loop(2, argc, argv, &opt);
 	tmp = 0;
+	int gbool = 0;
 	if (!ft_fread(argv[argc - 1], &h))
 	{
 		h.data = argv[argc - 1];
 		h.bytes = ft_strlen(argv[argc - 1]);
+		ft_printf("Error, file \'%s\' not found\n", argv[argc - 1]);
+		exit(0);
 	}
-//	else
-//		ft_printf("successfully read in this amoutn of bytes:\n%d\n", h.bytes);
+	//else
+	//	ft_printf("successfully read in this amoutn of bytes:\n%d\n", h.bytes);
+//	ft_printf("address of h.data: %p\n", &h.data);
 	if (opt.a && g_decrypt)
 	{
 //		ft_printf("\n\n\nDecrypting and translating base64 to bytes\n\n\n\n");
-		char *tmp = h.data;
+//		ft_printf("address of h.data: %p\n", &h.data);
+		char *tmp1 = h.data;
+		removewhitespace(h.data);
+		h.bytes = ft_strlen(h.data);
+//		ft_printf("\nb64 - whitespace: %s\n", h.data);
 		h.data = (char*)base64_decode((unsigned char*)h.data, h.bytes);
-		free(tmp);
+//		ft_printf("address of h.data: %p\n", &h.data);
+		if (!gbool)
+			free(tmp1);
+		pbyte(h.data, g_b64);
 		h.bytes = g_b64;
+//		ft_printf("address of h.data: %p\n", &h.data);
 	}
+//	ft_printf("address of h.data: %p\n", &h.data);
 	tmp = des_encrypt(key[0], h.data, h.bytes);
+	if (g_decrypt)
+		removepadbytes(&h.data[h.bytes - 8]);
 	char *out = 0;
 	if (opt.a && !g_decrypt)
 	{
 		out = (char*)base64_encode((unsigned char*)tmp, g_len);
-		ft_printf("\nBase64 ciphertext:\n%s\n\n", out);
+		ft_putstr(out);
 	}
-//	if (!ft_fread(argv[argc - 1], &h))
-//	{
-//		ft_printf("\ncould not read, taking last arg as txt block\n\n\n");
-		//grab return value for later use
-//		tmp = des_encrypt(key[0], ft_strdup(argv[argc - 1]), ft_strlen(argv[argc - 1]));
-//	}
-//	else
-//	{
-//		ft_printf("\nRead from a file descriptor, taking last arg as txt block\n\n\n");
-		//grab return value for later use
-//		tmp = des_encrypt(key[0], h.data, h.bytes);
-//	}
 	i = 0;
 	char	*str;
 	str = (char*)&tmp[(g_len / 8) - 1];
-	if (g_decrypt)
-	{
-		removewhitespace(str);
-		removepadbytes(str);
-	}
-//	ft_printf("\n\nG_len: %d\n\n", g_len);
-	
-	while ((i * 8) < g_len && !opt.a)
+	while ((i * 8) < g_len && (!opt.a || g_decrypt))
 	{
 		str = (char*)&tmp[i];
 		ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
 		i++;
 	}
-	//do subkey after byte order has been changed to big endian
 }
