@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/02 18:02:38 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 22:00:01 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/17 23:05:06 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,12 @@ char	*des_pad(char *encrypt, size_t len)
 	char	set[1];
 
 	dif = len % 8;
-	ft_printf("dif: %d\n", dif);
+//	ft_printf("dif: %d\n", dif);
 	set[0] = 8 - dif;
 	if (dif == 0)
 		set[0] = 8;
 	dif = set[0];
-	ft_printf("diff: %c\n", set[0]);
+//	ft_printf("diff: %c\n", set[0]);
 //	ft_printf("adding %d bytes\n", dif);
 	while (dif)
 	{
