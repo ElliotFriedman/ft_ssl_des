@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 17:48:22 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/17 20:18:03 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,11 +300,11 @@ void				des(char **argv, int argc)
 		h.data = argv[argc - 1];
 		h.bytes = ft_strlen(argv[argc - 1]);
 	}
-	//else
-	//	ft_printf("successfully read in this data:\n%s\n", h.data);
+//	else
+//		ft_printf("successfully read in this amoutn of bytes:\n%d\n", h.bytes);
 	if (opt.a && g_decrypt)
 	{
-		ft_printf("\n\n\nDecrypting and translating base64 to bytes\n\n\n\n");
+//		ft_printf("\n\n\nDecrypting and translating base64 to bytes\n\n\n\n");
 		char *tmp = h.data;
 		h.data = (char*)base64_decode((unsigned char*)h.data, h.bytes);
 		free(tmp);

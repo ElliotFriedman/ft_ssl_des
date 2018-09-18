@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 18:10:04 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/17 20:03:51 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -530,13 +530,14 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	//create subkeys
 	create_subkeys(key);
 	//handle cipher block chaining
-	if (g_cbc)
-		chaincipher(encrypt, g_iv);	
+//	if (g_cbc)
+//		chaincipher(encrypt, g_iv);	
 	while (i < len)
 	{
 		//different set of rules for decrypting using CBC
-		if (i && g_cbc && !g_decrypt)
-			chaincipher(&encrypt[i], stor[(i / 8) - 1]);
+//		if (i && g_cbc && !g_decrypt)
+//			chaincipher(&encrypt[i], stor[(i / 8) - 1]);
+//
 		//encrypted des will return malloc'd 8 chars
 		tmp = print;//encrypted_des(&encrypt[i], key);
 		tmp2 = (char*)encrypted_des(&encrypt[i], key);	
@@ -553,6 +554,7 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 		stor[i / 8] = t;
 		i += 8;
 	}
+	//ft_printf("total amt of bytes: %d\n", len);
 	g_len = len;
 	//unsigned char	*str;
 	//str = (unsigned char *)&stor;
@@ -560,5 +562,5 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	//ft_printf("\n\n\nbase 64 encoding:\n%s\n", base64_encode((unsigned char*)str, g_len));
 	//	If decrypting:
 	//		Make sure to verify the padded bytes are correct when decrypting
-	return (ft_memdup(stor, i + 8));
+	return (ft_memdup(stor, len));
 }
