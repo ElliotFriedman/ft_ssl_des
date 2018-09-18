@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/18 00:10:58 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/18 00:12:28 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,7 +290,7 @@ void				checkbase64encode(char *str, size_t bytes)
 	i = 0;
 	while (i < bytes)
 	{
-		if (!ft_strchr(g_ref, str[i]) && str[i] != '=')
+		if ((!ft_strchr(g_ref, str[i]) && str[i] != '=') || bytes % 4 != 0)
 		{
 			ft_putstr("Error, invalid byte sequence detected in base64 encoded string\n");
 			exit(0);
