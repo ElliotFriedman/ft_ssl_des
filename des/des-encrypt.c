@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/18 00:01:59 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/18 00:47:04 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ unsigned int				g_lsubkey[16];
 
 unsigned long long			g_concatsubkeys[16];
 
-extern unsigned long long	g_iv;
+unsigned long long	g_iv;
 
 unsigned int				g_len;
 
@@ -509,15 +509,16 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	char				*tmp;
 	char				*tmp2;
 	unsigned long long	stor[c_num(len) + 1];
+	unsigned long long	*plaintext;
 	size_t	i;
 
 	i = 0;
-	//ft_printf("address of h.data: %p\n", &encrypt);
+	ft_printf("address of h.data: %p, sizeof data: %d\n", &encrypt, len);
 	print = ft_memalloc(len);
 	//swap endianness of key
 	//swap_long_endian((char *)&key, 8);
 	key = init_subkey(key);
-
+	plaintext = (unsigned long long *)encrypt;
 	//pad bytes so that it is a multple of 8
 	//as long as you aren't decrypting :)
 	if (!g_decrypt)
@@ -541,7 +542,14 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 		//		ft_putnbr(i);
 		//		ft_putstr("\n");
 		//		different set of rules for decrypting using CBC
-		//		if (i && g_cbc && !g_decrypt)
+		if (g_cbc && !g_decrypt)
+		{
+			ft_printf("address of g_iv: %p address of plaintext: %p\n", &g_iv, &plaintext);
+			if (!i)
+				plaintext[i] ^= g_iv;
+			else
+				plaintext[i / 8] ^= g_iv;
+		}
 		//			chaincipher(&encrypt[i], stor[(i / 8) - 1]);
 		//
 		//encrypted des will return malloc'd 8 chars
@@ -558,6 +566,7 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 		//		swap_long_endian((char *)&t, 8);
 		//		printf("%016llX ", t);
 		stor[i / 8] = t;
+		g_iv = t;
 		i += 8;
 	}
 	//ft_printf("total amt of bytes: %d\n", len);
