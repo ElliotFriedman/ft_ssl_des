@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/18 21:14:58 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/18 21:31:08 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -545,12 +545,14 @@ plaintext = (unsigned long long *)encrypt;
 		//		different set of rules for decrypting using CBC
 		if (g_cbc && !g_decrypt)
 		{
+			//rev_8byte(&encrypt[i], 8);
 			//ft_printf("address of g_iv: %p address of plaintext: %p\n", &g_iv, &plaintext);
 			unsigned long long	tmp = char2long(&tmp, (unsigned char*)&encrypt[i]);
 			if (!i)
 				plaintext[i] = tmp ^ g_iv;
 			else
 				plaintext[i / 8] = tmp ^ g_iv;
+			rev_8byte(&encrypt[i], 8);
 		}
 		//			chaincipher(&encrypt[i], stor[(i / 8) - 1]);
 		//
