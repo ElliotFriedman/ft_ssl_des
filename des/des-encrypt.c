@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/18 00:47:04 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/18 21:14:58 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -513,12 +513,11 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	size_t	i;
 
 	i = 0;
-	ft_printf("address of h.data: %p, sizeof data: %d\n", &encrypt, len);
+	//ft_printf("address of h.data: %p, sizeof data: %d\n", &encrypt, len);
 	print = ft_memalloc(len);
 	//swap endianness of key
 	//swap_long_endian((char *)&key, 8);
 	key = init_subkey(key);
-	plaintext = (unsigned long long *)encrypt;
 	//pad bytes so that it is a multple of 8
 	//as long as you aren't decrypting :)
 	if (!g_decrypt)
@@ -529,6 +528,8 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 
 		len = c_num(len);
 	}
+plaintext = (unsigned long long *)encrypt;
+	//ft_printf("%p\n", );
 	//Reverse byte order in 8 byte blocks. little->big endian
 	//swap_long_endian(encrypt, len);
 	//create subkeys
@@ -544,11 +545,12 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 		//		different set of rules for decrypting using CBC
 		if (g_cbc && !g_decrypt)
 		{
-			ft_printf("address of g_iv: %p address of plaintext: %p\n", &g_iv, &plaintext);
+			//ft_printf("address of g_iv: %p address of plaintext: %p\n", &g_iv, &plaintext);
+			unsigned long long	tmp = char2long(&tmp, (unsigned char*)&encrypt[i]);
 			if (!i)
-				plaintext[i] ^= g_iv;
+				plaintext[i] = tmp ^ g_iv;
 			else
-				plaintext[i / 8] ^= g_iv;
+				plaintext[i / 8] = tmp ^ g_iv;
 		}
 		//			chaincipher(&encrypt[i], stor[(i / 8) - 1]);
 		//

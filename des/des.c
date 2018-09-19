@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/18 00:12:28 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/18 21:00:08 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,8 +322,8 @@ void				des(char **argv, int argc)
 	int gbool = 0;
 	if (!ft_fread(argv[argc - 1], &h))
 	{
-		h.data = argv[argc - 1];
-		h.bytes = ft_strlen(argv[argc - 1]);
+//		h.data = argv[argc - 1];
+//		h.bytes = ft_strlen(argv[argc - 1]);
 		ft_printf("Error, file \'%s\' not found\n", argv[argc - 1]);
 		exit(0);
 	}
