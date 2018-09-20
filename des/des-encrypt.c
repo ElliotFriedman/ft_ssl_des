@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/19 21:59:32 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/19 22:33:57 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -514,7 +514,6 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	char				*tmp;
 	char				*tmp2;
 	unsigned long long	stor[c_num(len) + 1];
-	unsigned long long	*plaintext;
 	size_t	i;
 
 	i = 0;
@@ -542,7 +541,7 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	//	if (g_cbc)
 	//		chaincipher(encrypt, g_iv);	
 	//ft_printf("address of h.data: %p\n", &encrypt);
-	while (/*g_decrypt ? i < len - 8 :*/ i < len)
+	while (i < len)
 	{
 		//		different set of rules for decrypting using CBC
 		//
@@ -559,7 +558,7 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 		//		swap_long_endian((char *)&t, 8);
 		//		printf("%016llX ", t);
 		stor[i / 8] = t;
-		g_iv = t;
+//		g_iv = t;
 		i += 8;
 	}
 	//ft_printf("total amt of bytes: %d\n", len);
