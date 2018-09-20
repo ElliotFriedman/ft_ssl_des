@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/02 18:02:38 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 23:58:09 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/20 00:36:20 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,19 +75,26 @@ char		*_add_byte(char *data, size_t bytes)
 	return (snew);
 }
 
+//need to revisit this when I'M NOT tired
 char	*des_pad(char *encrypt, size_t len)
 {
 	size_t	dif;
 	char	set[1];
 
+	//get the length of the file, and then with the length, find out how many bytes you will need to pad
 	dif = len % 8;
 //	ft_printf("dif: %d\n", dif);
+//	now we find the value we will pad with
 	set[0] = 8 - dif;
+	//if there is no diff, meaning the file is divisible by 8,
+	//then the set byte will equal 8
 	if (dif == 0)
 		set[0] = 8;
+	//dif will equal set, we will pad bytes with the value of the set
 	dif = set[0];
 //	ft_printf("diff: %c\n", set[0]);
 //	ft_printf("adding %d bytes\n", dif);
+//	add all padding bytes
 	while (dif)
 	{
 //		ft_printf("Dif in while loop %d, Len: %d\n", dif, len + 1);
