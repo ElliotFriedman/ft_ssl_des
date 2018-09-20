@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/18 21:31:08 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/19 21:59:32 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -383,6 +383,8 @@ char	*encrypted_des(char *data, unsigned long long key)
 	//initialize txtblock
 	//pbyte(data, 8);
 	init_txtblock(&textblock, (unsigned char*)data);
+	if (g_cbc)
+		textblock ^= g_iv;
 	textblock = initial_perm(textblock);
 	//break data into 2 4 byte blocks
 	lside = textblock >> 32;
@@ -415,7 +417,10 @@ char	*encrypted_des(char *data, unsigned long long key)
 	}
 	//perform final permutation on lside and rside merged
 	//merge right and then left, due to final key arrangement process
-
+	if (g_cbc)
+	{
+		g_iv = final_permutate(rside | (lside >> 32));
+	}
 	return l_bytes(((final_permutate(rside | (lside >> 32)))));
 }
 
@@ -528,7 +533,6 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 
 		len = c_num(len);
 	}
-plaintext = (unsigned long long *)encrypt;
 	//ft_printf("%p\n", );
 	//Reverse byte order in 8 byte blocks. little->big endian
 	//swap_long_endian(encrypt, len);
@@ -540,24 +544,9 @@ plaintext = (unsigned long long *)encrypt;
 	//ft_printf("address of h.data: %p\n", &encrypt);
 	while (/*g_decrypt ? i < len - 8 :*/ i < len)
 	{
-		//		ft_putnbr(i);
-		//		ft_putstr("\n");
 		//		different set of rules for decrypting using CBC
-		if (g_cbc && !g_decrypt)
-		{
-			//rev_8byte(&encrypt[i], 8);
-			//ft_printf("address of g_iv: %p address of plaintext: %p\n", &g_iv, &plaintext);
-			unsigned long long	tmp = char2long(&tmp, (unsigned char*)&encrypt[i]);
-			if (!i)
-				plaintext[i] = tmp ^ g_iv;
-			else
-				plaintext[i / 8] = tmp ^ g_iv;
-			rev_8byte(&encrypt[i], 8);
-		}
-		//			chaincipher(&encrypt[i], stor[(i / 8) - 1]);
 		//
-		//encrypted des will return malloc'd 8 chars
-		tmp = print;//encrypted_des(&encrypt[i], key);
+		tmp = print;
 		tmp2 = (char*)encrypted_des(&encrypt[i], key);	
 		//add a byte to tmp2
 		//		tmp2 = _add_byte(tmp2, 9);

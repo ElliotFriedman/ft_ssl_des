@@ -3,14 +3,12 @@
 
 while :
 	do
-#	openssl enc -des-ecb  -pass pass:"helloworld" -iv 00 -nosalt -in desDemo.sh
+	openssl enc -des-ecb  -pass pass:"hello" -iv 00 -nosalt -in main.c
 
 	echo "
 
 
 	"
 	sleep 1
-	./ft_ssl des -d -a out
-	./ft_ssl des -d -a out
 	./ft_ssl des main.c
 done
