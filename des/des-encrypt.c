@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/19 22:33:57 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/19 22:43:52 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -489,24 +489,6 @@ unsigned long long	char2long(unsigned long long *block, unsigned char *chrblock)
 	return (*block);
 }
 
-void				chaincipher(char *plaintext, unsigned long long prev)
-{
-	unsigned long long *tmp;
-
-	//	swaplong_endian(plaintext);
-	tmp = (unsigned long long*)plaintext;
-	*tmp = *tmp ^ prev;
-	//	swaplong_endian(plaintext);
-	//	plaintext[7] ^= prev & 255;
-	//	plaintext[6] ^= (prev >> 8) & 255;
-	//	plaintext[5] ^= (prev >> 16) & 255;
-	//	plaintext[4] ^= (prev >> 24) & 255;
-	//	plaintext[3] ^= (prev >> 32) & 255;
-	//	plaintext[2] ^= (prev >> 40) & 255;
-	//	plaintext[1] ^= (prev >> 48) & 255;
-	//	plaintext[0] ^= (prev >> 56) & 255;
-}
-
 unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 {
 	//this is where will store all encrypted bytes
@@ -519,8 +501,6 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	i = 0;
 	//ft_printf("address of h.data: %p, sizeof data: %d\n", &encrypt, len);
 	print = ft_memalloc(len);
-	//swap endianness of key
-	//swap_long_endian((char *)&key, 8);
 	key = init_subkey(key);
 	//pad bytes so that it is a multple of 8
 	//as long as you aren't decrypting :)
@@ -538,36 +518,18 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	//create subkeys
 	create_subkeys(key);
 	//handle cipher block chaining
-	//	if (g_cbc)
-	//		chaincipher(encrypt, g_iv);	
 	//ft_printf("address of h.data: %p\n", &encrypt);
 	while (i < len)
 	{
-		//		different set of rules for decrypting using CBC
-		//
 		tmp = print;
 		tmp2 = (char*)encrypted_des(&encrypt[i], key);	
-		//add a byte to tmp2
-		//		tmp2 = _add_byte(tmp2, 9);
-		//		tmp2 = (char*)base64_encode((unsigned char *)tmp2, 8);
-		//		ft_printf("%s", tmp2);
 		print = ft_memjoin(print, tmp2, i, 8);
-		//zero and delete this malloc'd memory
 		ft_memdel((void**)&tmp);
 		unsigned long long t = char2long(&key, (unsigned char*)&print[i]);
-		//		swap_long_endian((char *)&t, 8);
-		//		printf("%016llX ", t);
 		stor[i / 8] = t;
-//		g_iv = t;
 		i += 8;
 	}
 	//ft_printf("total amt of bytes: %d\n", len);
 	g_len = len;
-	//unsigned char	*str;
-	//str = (unsigned char *)&stor;
-	//	swap_long_endian((char*)str, g_len - 8);
-	//ft_printf("\n\n\nbase 64 encoding:\n%s\n", base64_encode((unsigned char*)str, g_len));
-	//	If decrypting:
-	//		Make sure to verify the padded bytes are correct when decrypting
 	return (ft_memdup(stor, len));
 }
