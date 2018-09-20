@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/19 22:43:52 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/19 23:18:41 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -378,13 +378,19 @@ char	*encrypted_des(char *data, unsigned long long key)
 	unsigned long long	rside;
 	unsigned long long	aside_next;
 	unsigned long long	textblock;
+	unsigned long long	ciphertext;
 
 	i = 0;
 	//initialize txtblock
 	//pbyte(data, 8);
+	ciphertext = 0;
 	init_txtblock(&textblock, (unsigned char*)data);
-	if (g_cbc)
+	
+	if (g_cbc && !g_decrypt)
 		textblock ^= g_iv;
+	else if (g_cbc && g_decrypt)
+		ciphertext = textblock;
+
 	textblock = initial_perm(textblock);
 	//break data into 2 4 byte blocks
 	lside = textblock >> 32;
@@ -417,9 +423,16 @@ char	*encrypted_des(char *data, unsigned long long key)
 	}
 	//perform final permutation on lside and rside merged
 	//merge right and then left, due to final key arrangement process
-	if (g_cbc)
+	if (g_cbc && !g_decrypt)
 	{
 		g_iv = final_permutate(rside | (lside >> 32));
+	}
+	else if (g_cbc && g_decrypt)
+	{
+		unsigned long long ret = final_permutate(rside | (lside >> 32));
+		ret ^= g_iv;
+		g_iv = ciphertext;
+		return (l_bytes(ret));
 	}
 	return l_bytes(((final_permutate(rside | (lside >> 32)))));
 }
