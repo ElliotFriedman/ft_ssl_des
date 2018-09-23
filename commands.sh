@@ -1,8 +1,20 @@
-#password 
+echo "
 
-openssl enc -des -pass pass:"${1}" -P -nosalt -in working.txt
+	CBC pass: ${1}
+	in main.c
 
-echo "${1}"
+"
+
+openssl enc -des-cbc -pass pass:"${1}" -nosalt -in main.c
+
+echo "
+
+	ECB pass: ${1}
+	in main.c
+   
+"
+
+openssl enc -des-ecb -pass pass:"${1}" -nosalt -in main.c
 
 # openssl enc -des -pass pass:MYPASSWORD -P -S 2F6760E3D7713CBA
 
@@ -36,18 +48,24 @@ echo "${1}"
 
 #		Flags I Have to be Concerned About
 
-#
 # -a, decode/encode the input/output in base64, depending on the encrypt mode
+
 # -d, decrypt mode
+
 # -e, encrypt mode (default)
+
 # -i, input file for message
+
 # -k, key in hex is the next arguement.
 #	(Behave like openssl des -K not openssl des -k)
 #
 # -o, output file for message
+
 # -p, password in ascii is the next argument.
 #(Behave like a modifiedd openssl des -pass not like openssl des -p or -P) (A verbose explanation is given in the next section)
+
 # -s, the salt in hex is the next argument. (Behave like openssl des -S)
+
 # -v, initialization vector in hex is the next argument. (Behave like openssl des -iv not openssl des -v)
 
 

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/20 00:27:51 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/22 22:46:44 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,6 @@ char		*g_pass = "hello";
 //This permuted key will be divided into 2 28 bit halves that will be permuted once per round
 //
 //16 rounds per 64 bit block
-/*
-int			g_grab[56] = {57, 49, 41, 33, 25, 17, 9,
-	1, 58, 50, 42, 34, 26, 18,
-	10, 2, 59, 51, 43, 35, 27,
-	19, 11, 3, 60, 52, 44, 36,
-	63, 55, 47, 39, 31, 23, 15,
-	7, 62, 54, 46, 38, 30, 22,
-	14, 6, 61, 53, 45, 37, 29,
-	21, 13, 5, 28, 20, 12, 4};
-*/
 
 int			g_grab[56] = {57, 49, 41, 33, 25, 17, 9,
 	1, 58, 50, 42, 34, 26, 18,
@@ -67,22 +57,8 @@ int			g_permute[64];/* = {58, 50, 42, 34, 26, 18, 10,
 	53, 45, 37, 29, 21, 13, 5,
 	63, 55, 47, 39, 31, 23, 15, 7};*/
 
-//rotate subkey x bits left at each round
-
 int		g_len;
 int		g_rotate[16];
-
-/*
-void	m5()
-{
-	size_t	i = -1;
-
-	ft_putstr("                  ");
-	while (++i < 64)
-//		ft_printf("%d", i % 10);
-	ft_putstr("\n");
-}
-*/
 
 unsigned long long	pow2(size_t amt)
 {
@@ -103,25 +79,15 @@ unsigned long long	init_subkey(unsigned long long key)
 
 	i = 0;
 	ret = 0;
-	//n = 9223372036854775808ul;
-	//ft_printf("tmp bits: ");
 	while (i < 56)
 	{
-//		m5();
 		tmp = 0;
-//		  ft_printf("cur pos: %d shift left: %d, shift right: %d i: %d\n",i,  g_grab[i] - i - 1, i - g_grab[i] - 1, i);
 		 tmp = (pow2(g_grab[i] - 1) & key);
-		  //ft_printf("tmp after shift:  %064b\n", (tmp = (g_grab[i] > (int)i > 0) ? (tmp << (g_grab[i] - i - 1)) : (tmp >> (i - g_grab[i] - 1))));
 		if ((g_grab[i] + 1) > (int)i)
 			tmp <<= (g_grab[i] - i - 1);
 		else
 			tmp >>= i - (g_grab[i] - 1);
-//		ft_printf("tmp after shift:  %064b\n", tmp);
-//	  	ft_printf("key binary:       %064b\n", key);
-//		ft_printf("%02d bit =          %064b\n",i, tmp);//(tmp & 1) << i);
 		ret += (tmp);
-//		  ft_printf("Print as we build %064b\n\n", ret);
-
 		i++;
 	}
 	//least significant 8 bits should be empty
@@ -227,27 +193,17 @@ char				*get_pass_salt(void)
 //	return (ft_strjoin(pass, salt));
 }
 
-//Do key byte orders need to changed to big endian?
 void				pbyte(char *str, size_t len)
 {
-	size_t	i = 0;
+	size_t			i;
 
-//	while (i < len)
-   //	{
-	//	ft_printf("%02hhX", str[i]);
-		//if (((i + 1) % 8) == 0)
-		//	ft_putstr(" ");
-	//	i++;
-	//}
-	//ft_putstr("\n");
-//	i = 0;
+	i = 0;
 	while (i < len)
 	{
 		ft_putchar(str[i]);
 		i++;
 	}
 	ft_putstr("\n");
-
 }
 
 void    print_spec(char *str, size_t bytes);
@@ -258,25 +214,23 @@ void				removepadbytes(char *str)
 	size_t	hold;
 	
 	i = 7;
+	hold = (size_t)(str[i] & 15);
+	ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
 	if (str[i] == 0 || str[i] > 8)
 	{
 		ft_printf("Bad byte pattern found in padding byte(s) ascii val %d found\n", str[i]);
 	}
-	hold = (size_t)(str[i] & 15);
+	g_len -= hold & 15;
 	ft_printf("Final byte found: %u\n", hold);
 	//zero out padding bytes
-//	if (hold)
-//		hold--;
-	i = 7;
-	while (i < 9 && ((str[i] & 15) == (hold & 15)))
+	while (i < 8 && ((str[i] & 15) == (hold & 15)))
 	{
 		str[i] = 0;
-		hold--;
 		i--;
 	}
 }
 
-void				checkbase64encode(char *str, size_t bytes)
+void			checkbase64encode(char *str, size_t bytes)
 {
 	size_t			i;
 
@@ -308,43 +262,33 @@ void				des(char **argv, int argc)
 	//rev_8byte((char*)key, 8);
 	//ft_putstr("key=");
 	int i = 2;
-//	while (get_opt(argc, argv, &opt, i))
-//		i++;
 	get_opt_loop(2, argc, argv, &opt);
 	tmp = 0;
 	int gbool = 0;
 	if (!ft_fread(argv[argc - 1], &h))
 	{
-//		h.data = argv[argc - 1];
-//		h.bytes = ft_strlen(argv[argc - 1]);
 		ft_printf("Error, file \'%s\' not found\n", argv[argc - 1]);
 		exit(0);
 	}
-	//else
-	//	ft_printf("successfully read in this amoutn of bytes:\n%d\n", h.bytes);
-//	ft_printf("address of h.data: %p\n", &h.data);
 	if (opt.a && g_decrypt)
 	{
-//		ft_printf("\n\n\nDecrypting and translating base64 to bytes\n\n\n\n");
-//		ft_printf("address of h.data: %p\n", &h.data);
 		char *tmp1 = h.data;
 		removewhitespace(h.data);
-		
 		h.bytes = ft_strlen(h.data);
 		checkbase64encode(h.data, h.bytes);
-//		ft_printf("\nb64 - whitespace: %s\n", h.data);
 		h.data = (char*)base64_decode((unsigned char*)h.data, h.bytes);
-//		ft_printf("address of h.data: %p\n", &h.data);
 		if (!gbool)
 			free(tmp1);
 		pbyte(h.data, g_b64);
 		h.bytes = g_b64;
-//		ft_printf("address of h.data: %p\n", &h.data);
 	}
-//	ft_printf("address of h.data: %p\n", &h.data);
 	tmp = des_encrypt(key[0], h.data, h.bytes);
 	if (g_decrypt)
-		removepadbytes(&h.data[h.bytes - 8]);
+	{
+		char *n = (char *)&tmp[(g_len / 8) - 1];
+		ft_printf("g_len: %d, h.bytes: %d\n", g_len, h.bytes);
+		removepadbytes(n);
+	}
 	char *out = 0;
 	if (opt.a && !g_decrypt)
 	{
@@ -354,10 +298,13 @@ void				des(char **argv, int argc)
 	i = 0;
 	char	*str;
 	str = (char*)&tmp[(g_len / 8) - 1];
-	while ((i * 8) < g_len && (!opt.a || g_decrypt))
+	if (i < g_len && (!opt.a || g_decrypt))
+	//while ((i * 8) < g_len && (!opt.a || g_decrypt))
 	{
+		str = (char *)&tmp[0];
+		write(1, str, g_len); 
 		str = (char*)&tmp[i];
-		ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
+//		ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
 		i++;
 	}
 	if (g_decrypt && !opt.a)

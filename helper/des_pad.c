@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/02 18:02:38 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/20 00:36:20 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/22 22:12:22 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ char	*des_pad(char *encrypt, size_t len)
 //		ft_printf("Dif in while loop %d, Len: %d\n", dif, len + 1);
 		len++;
 		encrypt = _add_byte(encrypt, len);
-		ft_memset(&encrypt[len - 1], (char)set[0], 1);
+		ft_memset(&encrypt[len - 1], ((char)set[0] & 15), 1);
 //		print_bytes(encrypt, len);
 		dif--;
 	}
