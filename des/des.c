@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/22 22:46:44 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/23 21:28:33 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,13 +215,12 @@ void				removepadbytes(char *str)
 	
 	i = 7;
 	hold = (size_t)(str[i] & 15);
-	ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
-	if (str[i] == 0 || str[i] > 8)
+	if (hold == 0 || hold > 8)
 	{
 		ft_printf("Bad byte pattern found in padding byte(s) ascii val %d found\n", str[i]);
+	//	exit(0);
 	}
 	g_len -= hold & 15;
-	ft_printf("Final byte found: %u\n", hold);
 	//zero out padding bytes
 	while (i < 8 && ((str[i] & 15) == (hold & 15)))
 	{
@@ -235,12 +234,14 @@ void			checkbase64encode(char *str, size_t bytes)
 	size_t			i;
 
 	i = 0;
+	if (str[bytes - 1] == '\n')
+		bytes--;
 	while (i < bytes)
 	{
-		if ((!ft_strchr(g_ref, str[i]) && str[i] != '=') || bytes % 4 != 0)
+		if (((!ft_strchr(g_ref, str[i]) && str[i] != '=') || bytes % 4 != 0) && str[i] != '\n')
 		{
 			ft_putstr("Error, invalid byte sequence detected in base64 encoded string\n");
-			exit(0);
+			//exit(0);
 		}
 		i++;
 	}
@@ -275,25 +276,27 @@ void				des(char **argv, int argc)
 		char *tmp1 = h.data;
 		removewhitespace(h.data);
 		h.bytes = ft_strlen(h.data);
+		ft_printf("Data is %d bytes\n", h.bytes);
 		checkbase64encode(h.data, h.bytes);
 		h.data = (char*)base64_decode((unsigned char*)h.data, h.bytes);
 		if (!gbool)
 			free(tmp1);
-		pbyte(h.data, g_b64);
+//		This is to debug
+//		pbyte(h.data, g_b64);
+	//	if (g_cbc)
 		h.bytes = g_b64;
 	}
 	tmp = des_encrypt(key[0], h.data, h.bytes);
 	if (g_decrypt)
 	{
 		char *n = (char *)&tmp[(g_len / 8) - 1];
-		ft_printf("g_len: %d, h.bytes: %d\n", g_len, h.bytes);
 		removepadbytes(n);
 	}
 	char *out = 0;
 	if (opt.a && !g_decrypt)
 	{
 		out = (char*)base64_encode((unsigned char*)tmp, g_len);
-		ft_putstr(out);
+		ft_printf("%s\n", out);
 	}
 	i = 0;
 	char	*str;
@@ -303,10 +306,10 @@ void				des(char **argv, int argc)
 	{
 		str = (char *)&tmp[0];
 		write(1, str, g_len); 
-		str = (char*)&tmp[i];
+//		str = (char*)&tmp[i];
 //		ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
 		i++;
 	}
-	if (g_decrypt && !opt.a)
-		ft_putstr("\n");
+//	if (!g_decrypt && opt.a)
+//		ft_putstr("\n");
 }

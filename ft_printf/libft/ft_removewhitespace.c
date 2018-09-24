@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/14 23:35:01 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/14 23:44:38 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/23 21:24:55 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	removewhitespace(char *str)
 	x = i;
 	while (str[i])
 	{
-		if (str[i] == ' ' || str[i] == '\n' || str[i] == '\t')
+		if (str[i] == ' ' || (str[i] == '\n' /*&& str[i + 1]*/) || str[i] == '\t')
 		{
 			x = i;
 			i = 0;

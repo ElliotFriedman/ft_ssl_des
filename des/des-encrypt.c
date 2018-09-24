@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/19 23:18:41 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/23 02:10:32 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,11 +143,9 @@ unsigned long long	permuterightside(unsigned long long rside)
 
 	i = 0;
 	ret = 0;
-	//ft_printf("rightside: %064b\n", rside);
 	while (i < 48)
 	{
 		tmp = (pow2(g_expandpermutation[i] - 1) & rside);
-		//			ft_printf("bit we grabbed:	  %064b\n",tmp);
 		if (((g_expandpermutation[i] + 1) > (int)i) && (g_expandpermutation[i] != (int)i))
 			tmp <<= (g_expandpermutation[i] - i - 1);
 		else if (g_expandpermutation[i] != (int)i)
@@ -312,7 +310,6 @@ unsigned long long	sboxes(unsigned long long expandrside)
 	ret = 0;
 	while (i < 32)
 	{
-		//		ft_printf("expandrside:	%064b\n", expandrside);
 		tmp = (expandrside & 0xFC00000000000000ul) >> 58;
 
 		ret += g_sbox[i + (((tmp & 1) | ((tmp & 32) >> 4)) & 3)] [(tmp & 30) >> 1];
@@ -405,12 +402,9 @@ char	*encrypted_des(char *data, unsigned long long key)
 	//	ft_printf("rside:	%064b\n", rside);
 	while (i < 16)
 	{
-		//save right side value before you permute and shift it
 		aside_next = rside;
-		//permute right side
 		rside = permuterightside(rside);
 		//	ft_printf("g_k[%d] ^ rside: %064b\n", i, g_k[i] ^ rside);
-		//sbox
 		rside = sboxes(rside ^ g_k[i]);
 		//pbox permutation
 		rside = pperm(rside);
@@ -424,9 +418,7 @@ char	*encrypted_des(char *data, unsigned long long key)
 	//perform final permutation on lside and rside merged
 	//merge right and then left, due to final key arrangement process
 	if (g_cbc && !g_decrypt)
-	{
 		g_iv = final_permutate(rside | (lside >> 32));
-	}
 	else if (g_cbc && g_decrypt)
 	{
 		unsigned long long ret = final_permutate(rside | (lside >> 32));
@@ -512,7 +504,6 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	size_t	i;
 
 	i = 0;
-	//ft_printf("address of h.data: %p, sizeof data: %d\n", &encrypt, len);
 	print = ft_memalloc(len);
 	key = init_subkey(key);
 	//pad bytes so that it is a multple of 8
@@ -520,18 +511,12 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	if (!g_decrypt)
 	{
 		encrypt = des_pad(encrypt, len);
-
-		//adjust len to the new padded len
-
 		len = c_num(len);
 	}
-	//ft_printf("%p\n", );
 	//Reverse byte order in 8 byte blocks. little->big endian
-	//swap_long_endian(encrypt, len);
 	//create subkeys
 	create_subkeys(key);
 	//handle cipher block chaining
-	//ft_printf("address of h.data: %p\n", &encrypt);
 	while (i < len)
 	{
 		tmp = print;

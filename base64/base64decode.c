@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 22:48:14 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/23 21:06:26 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ unsigned char	*base64_decode(unsigned char *str, int len)
 	i = 0;
 	x = 0;
 	tmp = 0;
-	n = ft_memalloc(((len / 4) * 3) + 3);
+	n = ft_memalloc(((len / 4) * 3) + 8);
 	//convert from char to corresponding index in b64
 	while ((int)i < len)
 	{
@@ -69,8 +69,8 @@ unsigned char	*base64_decode(unsigned char *str, int len)
 	}
 	//return the newly created string :)
 	g_b64 = x;
-	if (str[x - 3] == '=' && (g_ref[str[x - 2]] & 3) == 0)
-		g_b64--;
+//	if (str[x - 3] == '=' && (g_ref[str[x - 2]] & 3) == 0)
+//		g_b64--;
 //	ft_printf("%d\n", g_b64);
 	return (n);
 }

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 23:23:26 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/23 21:05:40 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 
 	g_pad = ((len * 8) % 3);
 	bit_len = findb_len(len);
-	n = ft_memalloc(bit_len + 1);
+	n = ft_memalloc(bit_len + 8);
 	i = 0;
 	m = 0;
 	//add 2 bytes to string
