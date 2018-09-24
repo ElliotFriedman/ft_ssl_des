@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/23 21:58:45 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/24 12:25:52 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,7 +294,6 @@ void	init_txtblock(unsigned long long *block, unsigned char *chrblock)
 		//		ft_printf("\nprint as we go:	%064b\n", *block);
 		i++;
 	}
-
 	//*block = initial_perm(*block);
 	//	ft_printf("txt block:	%064b\n", *block);
 	//run initial permutation on textblock
@@ -528,7 +527,7 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 		stor[i / 8] = t;
 		i += 8;
 	}
-	ft_printf("total amt of bytes: %d\n", len);
+	//ft_printf("total amt of bytes: %d\n", len);
 	g_len = len;
 	return (ft_memdup(stor, len));
 }

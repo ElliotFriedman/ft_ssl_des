@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/24 00:17:07 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/24 12:15:11 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,7 +214,7 @@ void				removepadbytes(char *str)
 	size_t	hold;
 	
 	i = 7;
-	//ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
+	ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
 	hold = (size_t)(str[i] & 15);
 	if (hold == 0 || hold > 8)
 	{
@@ -230,7 +230,7 @@ void				removepadbytes(char *str)
 		str[i] = 0;
 		i--;
 	}
-	//ft_printf("updated g_len: %d, removing bytes %u\n", g_len, hold);
+	ft_printf("updated g_len: %d, removing bytes %u\n", g_len, hold);
 }
 
 void			checkbase64encode(char *str, size_t bytes)
