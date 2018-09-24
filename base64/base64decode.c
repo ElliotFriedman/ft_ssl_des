@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/24 01:25:01 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/24 01:46:39 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ unsigned char	*base64_decode(unsigned char *str, int len)
 		n[x + 1] = (tmp >> 16) & 255;
 		n[x + 2] = (tmp >> 8) & 255;
 		tmp = 0;
+		//Who's got the sauce???
 		if (i + 4 >= len && !n[x + 1] && !n[x + 2])
 			neg = 2;
 		else if (i + 4 >= len && !n[x + 2])
@@ -82,7 +83,5 @@ unsigned char	*base64_decode(unsigned char *str, int len)
 	//return the newly created string :)
 	g_b64 = x;
 	g_b64 -= neg;
-//
-	ft_printf("g_b64 %d\n", g_b64);
 	return (n);
 }
