@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/23 22:04:42 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/24 01:25:01 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,28 @@ int				find_chr(char c)
 unsigned char	*base64_decode(unsigned char *str, int len)
 {
 	int				x;
-	size_t			i;
+	int				i;
 	unsigned char	*n;
 	unsigned int	tmp;
+	static int		neg;
 
 	i = 0;
 	x = 0;
 	tmp = 0;
 	n = ft_memalloc(((len / 4) * 3) + 8);
+//	if (str[len - 1] == '=' && (g_ref[str[len - 2]] & 3) == 0)
+//		neg++;
+//	if ((str[len - 1] == '=' && str[len - 2] == '=' && (g_ref[str[len - 3]] & 3) == 0))
+//		neg++;
 	//convert from char to corresponding index in b64
+	//adjust length here based on if we have zero'd out bytes here
+	//that way our global variable will be adjusted properly
 	while ((int)i < len)
 	{
 		str[i] = find_chr(str[i]);
 		i++;
 	}
+
 	i = 0;
 	//put 4 char values into an unsigned int
 	//then transfer the values from the uint
@@ -64,13 +72,17 @@ unsigned char	*base64_decode(unsigned char *str, int len)
 		n[x + 1] = (tmp >> 16) & 255;
 		n[x + 2] = (tmp >> 8) & 255;
 		tmp = 0;
+		if (i + 4 >= len && !n[x + 1] && !n[x + 2])
+			neg = 2;
+		else if (i + 4 >= len && !n[x + 2])
+			neg = 1;
 		i += 4;
 		x += 3;
 	}
 	//return the newly created string :)
 	g_b64 = x;
-//	if (str[x - 3] == '=' && (g_ref[str[x - 2]] & 3) == 0)
-//		g_b64--;
+	g_b64 -= neg;
+//
 	ft_printf("g_b64 %d\n", g_b64);
 	return (n);
 }

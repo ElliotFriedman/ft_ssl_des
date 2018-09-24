@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/23 22:25:38 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/24 00:17:07 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,15 +214,15 @@ void				removepadbytes(char *str)
 	size_t	hold;
 	
 	i = 7;
-	ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
+	//ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
 	hold = (size_t)(str[i] & 15);
 	if (hold == 0 || hold > 8)
 	{
 		ft_printf("Bad byte pattern found in padding byte(s) ascii val %d found\n", str[i]);
 	//	exit(0);
 	}
-	ft_printf("g_len: %d, removing bytes %u\n", g_len, hold);
-	g_len -= (hold == 6 ? hold : hold * 2);
+	//ft_printf("g_len: %d, removing bytes %u\n", g_len, hold);
+	g_len -= hold;//(hold == 6 ? hold : hold * 2);
 	//zero out padding bytes
 	while (i < 8 && ((str[i] & 15) == (hold & 15)))
 	{
@@ -230,7 +230,7 @@ void				removepadbytes(char *str)
 		str[i] = 0;
 		i--;
 	}
-	ft_printf("updated g_len: %d, removing bytes %u\n", g_len, hold);
+	//ft_printf("updated g_len: %d, removing bytes %u\n", g_len, hold);
 }
 
 void			checkbase64encode(char *str, size_t bytes)
@@ -287,7 +287,7 @@ void				des(char **argv, int argc)
 			free(tmp1);
 //		This is to debug
 //		pbyte(h.data, g_b64);
-	//	if (g_cbc)
+//		if (g_cbc)
 		h.bytes = g_b64;
 	}
 	tmp = des_encrypt(key[0], h.data, h.bytes);
@@ -314,7 +314,7 @@ void				des(char **argv, int argc)
 //		ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
 		i++;
 	}
-	 ft_printf("glen is %d bytes\n", g_len);
+	 //ft_printf("glen is %d bytes\n", g_len);
 //	if (!g_decrypt && opt.a)
 //		ft_putstr("\n");
 }
