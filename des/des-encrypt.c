@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/23 02:10:32 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/23 21:58:45 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int							g_sbox[32][16] = {{14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 
 //32 rows, 16 values per row
 
 int							g_permute[64];
+int							g_nopad;
 
 extern unsigned int			g_decrypt;
 extern int					g_cbc;
@@ -508,7 +509,7 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	key = init_subkey(key);
 	//pad bytes so that it is a multple of 8
 	//as long as you aren't decrypting :)
-	if (!g_decrypt)
+	if (!g_decrypt)// && !g_nopad)
 	{
 		encrypt = des_pad(encrypt, len);
 		len = c_num(len);
@@ -527,7 +528,7 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 		stor[i / 8] = t;
 		i += 8;
 	}
-	//ft_printf("total amt of bytes: %d\n", len);
+	ft_printf("total amt of bytes: %d\n", len);
 	g_len = len;
 	return (ft_memdup(stor, len));
 }

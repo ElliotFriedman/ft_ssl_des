@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/23 21:28:33 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/23 22:25:38 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,19 +214,23 @@ void				removepadbytes(char *str)
 	size_t	hold;
 	
 	i = 7;
+	ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
 	hold = (size_t)(str[i] & 15);
 	if (hold == 0 || hold > 8)
 	{
 		ft_printf("Bad byte pattern found in padding byte(s) ascii val %d found\n", str[i]);
 	//	exit(0);
 	}
-	g_len -= hold & 15;
+	ft_printf("g_len: %d, removing bytes %u\n", g_len, hold);
+	g_len -= (hold == 6 ? hold : hold * 2);
 	//zero out padding bytes
 	while (i < 8 && ((str[i] & 15) == (hold & 15)))
 	{
+	//	g_len--;
 		str[i] = 0;
 		i--;
 	}
+	ft_printf("updated g_len: %d, removing bytes %u\n", g_len, hold);
 }
 
 void			checkbase64encode(char *str, size_t bytes)
@@ -310,6 +314,7 @@ void				des(char **argv, int argc)
 //		ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
 		i++;
 	}
+	 ft_printf("glen is %d bytes\n", g_len);
 //	if (!g_decrypt && opt.a)
 //		ft_putstr("\n");
 }
