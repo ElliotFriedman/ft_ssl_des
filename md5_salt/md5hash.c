@@ -6,36 +6,31 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 19:18:29 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/12 23:30:00 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/24 22:42:21 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
-const unsigned int g_ks[64];
+const unsigned int	g_ks[64];
 
-const int g_s[64];
+const int			g_s[64];
 
 unsigned long long	*handle_pass(t_val new)
 {
 	unsigned long long	*ret;
 
-	//turn the output into an array of 2 unsigned long longs
-	//this will be our salt
 	ret = ft_memalloc(sizeof(unsigned long long) * 2);
-	//00000000 00000000 00000000 00000000 | 11111111 11111111 11111111 11111111
 	ret[0] = new.b0;
 	ret[0] <<= 32;
-	//11111111 11111111 11111111 11111111 | 00000000 00000000 00000000 00000000
 	ret[0] += new.a0;
-	//11111111 11111111 11111111 11111111 | 11111111 11111111 11111111 11111111
 	ret[1] = new.d0;
 	ret[1] <<= 32;
 	ret[1] += new.c0;
 	return (ret);
 }
 
-void	init_v(t_val *new)
+void				init_v(t_val *new)
 {
 	new->a0 = 0x67452301;
 	new->b0 = 0xefcdab89;
@@ -43,7 +38,7 @@ void	init_v(t_val *new)
 	new->d0 = 0x10325476;
 }
 
-void	init_z(t_iter *z, t_val *new)
+void				init_z(t_iter *z, t_val *new)
 {
 	z->aa = new->a0;
 	z->bb = new->b0;
@@ -52,7 +47,7 @@ void	init_z(t_iter *z, t_val *new)
 	z->i = -1;
 }
 
-void	whilesalt(t_iter *z, t_hash *h, size_t ctr)
+void				whilesalt(t_iter *z, t_hash *h, size_t ctr)
 {
 	if (z->i <= 15)
 	{

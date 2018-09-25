@@ -14,7 +14,7 @@ echo "
    
 "
 
-openssl enc -des-ecb -pass pass:"${1}" -nosalt -in main.c -out testog
+openssl enc -des-ecb -pass pass:"${1}" -in main.c -out testog
 
 # openssl enc -des -pass pass:MYPASSWORD -P -S 2F6760E3D7713CBA
 

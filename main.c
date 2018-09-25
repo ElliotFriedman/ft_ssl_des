@@ -93,7 +93,7 @@ int		main(int argc, char **argv)
 		{
 			ft_printf("ft_ssl: Error: '%s' is an invalid command.\n", argv[1]);
 			ft_printf("\nStandard commands:\n\nMessage Digest commands:\nmd5\nsha256\n\n");
-			ft_putstr("Cipher commands:\nbase64\ndes\ndes-ecb\ndes-cbc\n");
+			ft_putstr("Cipher commands:\nbase64\ndes\ndes-ecb\ndes-cbc\n\n");
 		}
 		free_struct(s);
 	}

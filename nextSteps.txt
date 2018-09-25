@@ -1,0 +1,30 @@
+add options in for DES
+	-salt
+		-atoibase w/Padding
+	
+	-i
+		-readfile
+	
+	-o
+		-writefile
+	
+	-v iv
+		-atoibase w/Padding
+	
+	-k
+		-atoibase w/Padding
+	
+	-s salt
+		-atoibase w/Padding
+
+	function to aggregate all this data
+		-function will be called in function des
+		-function will determine if we were given a file to read from
+			-if not, function will check for input that is echo'd in
+			-if there is no echo'd in data, we read data in until
+			they send a keyboard interrupt
+
+	modify password based key derivation function to accomodate salt
+	and larger key size
+
+

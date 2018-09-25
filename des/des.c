@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/24 13:29:10 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/24 23:27:55 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ extern int	g_cbc;
 
 //boolean for whether or not we need to salt
 //doubles as a salt value if they specify salt. we convert their string to a ull and store here
+size_t		g_salt = 1;
 
-unsigned long long	g_salt;
 //if pass is provided store it here
 char		*g_pass = "hello";
 
@@ -95,29 +95,6 @@ unsigned long long	init_subkey(unsigned long long key)
 	return (ret);
 }
 
-int			_rand0(FILE *e)
-{
-	unsigned int	a;
-
-	a = (unsigned int)getc(e);
-	while ((a & 127) < 32)
-		a += (unsigned int)getc(e);
-	return ((int)a);
-}
-
-void		create_salt_8bytes(char *salt, FILE *e)
-{
-	int		i;
-
-	i = 0;
-	while (i < 8)
-	{
-		salt[i] = (char)_rand0(e) & 127;
-		i++;
-	}
-	salt[8] = 0;
-}
-
 void		swap_4bytes(int *data)
 {
 	int	a;
@@ -174,23 +151,98 @@ unsigned long long	sub_block(unsigned long long key)
 	return (ret);
 }
 
-char				*get_pass_salt(void)
+int			_rand0(FILE *e)
+{
+	unsigned int	a;
+
+	a = (unsigned int)getc(e);
+	while ((a & 127) < 32)
+		a += (unsigned int)getc(e);
+	return ((int)a);
+}
+
+void		create_salt_8bytes(char *salt, FILE *e)
+{
+	int		i;
+
+	i = 0;
+	while (i < 8)
+	{
+		salt[i] = (char)_rand0(e) & 127;
+		i++;
+	}
+	salt[8] = 0;
+}
+
+//Account for these with global boolean values
+
+//size_t				g_salt = 1;
+size_t				g_passlen;
+
+unsigned long long	*salt_from_file(char *str, size_t len)
+{
+	size_t			i;
+
+	i = 8;
+	if ((!str) || (len < 16))
+		return (0);
+	if (!ft_strncmp(str, "Salted__", 8))
+		return (0);
+	//duplicate 8 bytes of memory
+	return (ft_memdup((unsigned long long *)str, 8));
+}
+
+t_hash				*get_pass_salt(t_hash *file)
 {
 	FILE	*e;
 	char	salt[9];
 	char	*pass;
+	t_hash	*h;
+	unsigned long long	*tmp;
 
+	h = ft_memalloc(sizeof(t_hash));
 	e = fopen("/dev/urandom", "r");
+	tmp = 0;
 	if (!g_key)
 		pass = getpass("Enter your password:");
 	else
 		pass = g_pass;
-	if (!g_salt)
+	tmp = salt_from_file(file->data, file->bytes);
+	if (tmp)
+	{
+		pass = ft_strjoin(pass, (char*)tmp);
+	}
+	//data == password
+	h->data = ft_strdup(pass);
+	h->bytes = ft_strlen(h->data);
+	//g_salt will be 3 if we don't want to have added salt
+	if (g_salt != 3 && !g_decrypt)
+	{
 		create_salt_8bytes(salt, e);
+		h->data = ft_strjoin(h->data, salt);
+		h->bytes += 8;
+	}
+	
+/*	else if (g_decrypt && g_salt)
+	{
+
+		//get salt as a string from argv
+		//turn to an integer
+		//copy bytes from integer to the end of pass using memcpy
+		//set g_passlen
+		//set h->bytes & h->data
+	}
+	else if (g_decrypt)
+	{
+		//find salt from file
+		//need access to the file here
+		//copy salt bytes from file to end of password
+		//set g_passlen
+		//set h->bytes & h->data
+	}
+	*/
 	fclose(e);
-	return (ft_strdup(pass));
-	//uncomment this for later iterations
-//	return (ft_strjoin(pass, salt));
+	return (h);
 }
 
 void				pbyte(char *str, size_t len)
@@ -251,6 +303,15 @@ void			checkbase64encode(char *str, size_t bytes)
 	}
 }
 
+void				inputsanitycheck(t_hash *h)
+{
+	if (h->bytes % 8 != 0)
+	{
+		ft_putstr("Error, invalid byte amount in file staged for decryption\n");
+		exit(0);
+	}
+}
+
 void				des(char **argv, int argc)
 {
 	unsigned long long	*tmp;
@@ -259,15 +320,18 @@ void				des(char **argv, int argc)
 	static t_opt		opt;
 	
 	//this has been modified and it will return a constant value.
-	tmp = create_key(get_pass_salt());
-	key = tmp;
-	tmp++;
-	//try to read the last arg in to encrypt it
+		//try to read the last arg in to encrypt it
 //	ft_printf("key befor endian: %064b\n", key[0]);
+	
+	//make this architecture specific
+	//if we are dealing with big endian we will have to do this
 	//rev_8byte((char*)key, 8);
-	//ft_putstr("key=");
 	int i = 2;
+	
+	//get all options
+	//aggregate and make choice on where to read data
 	get_opt_loop(2, argc, argv, &opt);
+
 	tmp = 0;
 	int gbool = 0;
 	if (!ft_fread(argv[argc - 1], &h))
@@ -275,6 +339,7 @@ void				des(char **argv, int argc)
 		ft_printf("Error, file \'%s\' not found\n", argv[argc - 1]);
 		exit(0);
 	}
+	
 	if (opt.a && g_decrypt)
 	{
 		char *tmp1 = h.data;
@@ -285,11 +350,21 @@ void				des(char **argv, int argc)
 		h.data = (char*)base64_decode((unsigned char*)h.data, h.bytes);
 		if (!gbool)
 			free(tmp1);
-//		This is to debug
-//		pbyte(h.data, g_b64);
-//		if (g_cbc)
 		h.bytes = g_b64;
 	}
+	if (g_decrypt)
+	{
+		//sanity check here to make sure that the input file was not malformed
+		//this will need to be checked whether base64 encoded or not
+		inputsanitycheck(&h);
+	}
+	//now we find the salt in the file, OR,
+	//we generate our own depending on what
+	//the user specifies
+	//char *salt = find_salt();
+	tmp = create_key(get_pass_salt(&h));
+	key = tmp;
+	tmp++;
 	tmp = des_encrypt(key[0], h.data, h.bytes);
 	if (g_decrypt)
 	{
@@ -306,14 +381,11 @@ void				des(char **argv, int argc)
 	char	*str;
 	str = (char*)&tmp[(g_len / 8) - 1];
 	if (i < g_len && (!opt.a || g_decrypt))
-	//while ((i * 8) < g_len && (!opt.a || g_decrypt))
 	{
 		str = (char *)&tmp[0];
 		write(1, str, g_len); 
-//		str = (char*)&tmp[i];
-//		ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
-		i++;
 	}
+	free(tmp);
 	 //ft_printf("glen is %d bytes\n", g_len);
 //	if (!g_decrypt && opt.a)
 //		ft_putstr("\n");

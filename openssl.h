@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/16 23:01:44 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/24 22:45:11 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ typedef struct			s_sha
 	unsigned int		h7;
 }						t_sha;
 
-unsigned long long		*create_key(char *str);
+unsigned long long		*create_key(t_hash *h);
 unsigned long long		*hash_pass(t_hash *h);
 int						rstdin(t_hash *h);
 int						get_opt(int argc, char **argv, t_opt *new, int i);

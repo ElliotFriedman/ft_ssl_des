@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/19 22:42:42 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/24 22:46:13 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,20 @@
 
 unsigned long long   g_iv;
 
-unsigned long long	*passhash(char *str, t_hash *h)
+unsigned long long	*passhash(t_hash *h)
 {
-	h->data = str;
-	h->bytes = ft_strlen(h->data);
+//	h->data = str;
+//	h->bytes = ft_strlen(h->data);
 	h->ini = h->bytes;
 	epad(h);
 	h->arr = (unsigned int *)h->data;
 	return (hash_pass(h));
 }
 
-unsigned long long	*create_key(char *str)
+unsigned long long	*create_key(t_hash *h)
 {
-	t_hash				*h;
+	//pass this in instead of a string, and voilla
+	//t_hash				*h;
 	//dont delete this so that we can use old ported functions
 	//and change as little as possible
 	t_opt				*s;
@@ -35,8 +36,9 @@ unsigned long long	*create_key(char *str)
 
 	init_a(&h, &s, &file);
 	//strdup so that when we free in epad we don't free stack mem
-	hold = passhash(ft_strdup(str), h);
-	fstruct(s, h);
+	//we strdup'ed before we got here :)
+	hold = passhash(h);
+		//reverse endiannes
 	rev_8byte((char*)hold, 16);
 	//Delete this line in the future, this is only to avoid compiler errors
 	//str[0] = 0;
@@ -50,6 +52,8 @@ unsigned long long	*create_key(char *str)
 //		//	printf("%016llu\n", hold[0]);
 	g_iv = hold[1];
 //	printf("iv: %016llX\n", g_iv);
+
+	fstruct(s, h);
 
 	return (hold);
 }
