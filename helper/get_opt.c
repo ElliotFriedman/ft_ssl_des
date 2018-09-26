@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/25 22:20:00 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/25 23:10:34 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int					g_K = -1;
 unsigned long long	g_iv = 0;
 size_t				g_ivBool;
 //salt should be 8 bytes
-size_t				g_salt;
+unsigned long long	g_salt;
 
 int					g_key;
 int					g_passidx;
@@ -118,7 +118,6 @@ void	handle_iv(char **argv)
 		}
 		g_ivBool = 1;
 		g_iv = ft_atoibase16(tmp);
-		ft_printf("g_iv: %d\n", g_iv);
 		free(tmp);
 	}
 	else
@@ -144,7 +143,7 @@ void	get_opt_if(int argc, char **argv)
 		//this will indicate that our password was in the command line args
 		g_passidx = 1000000000;
 	}
-	if (g_ivIdx != -1 && g_ivIdx != argc)
+	if (!g_ivBool && g_ivIdx != -1 && g_ivIdx != argc)
 		handle_iv(argv);
 	else if (g_ivIdx == argc)
 	{
