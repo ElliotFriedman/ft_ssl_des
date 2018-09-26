@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/24 23:24:27 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/25 21:13:39 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	part2(char *argv, t_opt *new, int i)
 		new->s = 1;
 	if ((ft_strchr(argv, (int)'D') || ft_strchr(argv, (int)'d')) && ++g_bool && ++g_decrypt)
 		new->d = 1;
-	if (ft_strncmp(argv, "-a", 2) && ++g_bool)
+	if (!ft_strncmp(argv, "-a", 2) && ++g_bool)
 		new->a = 1;
 }
 
@@ -141,7 +141,7 @@ int		get_opt(int argc, char **argv, t_opt *new, int i)
 				ft_putstr("Error, no password specified\n");
 				exit(0);
 			}
-			if (g_passidx != 1000000000)
+			if (g_passidx && g_passidx != 1000000000)
 			{
 				g_pass = ft_strdup(argv[g_passidx]);
 				//this will indicate that our password was in the command line args

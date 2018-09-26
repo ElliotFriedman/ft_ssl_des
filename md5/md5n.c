@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/27 23:41:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/24 22:52:35 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/25 21:06:27 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ void	init_a(t_hash **h, t_opt **s, int *file)
 	*file = 0;
 	*s = ft_memalloc(sizeof(t_opt));
 	if (!*h)
+	{
 		*h = ft_memalloc(sizeof(t_hash));
+		ft_putstr("Malloc'd space for t_hash in init_a\n");
+	}
 	h[0]->i = 2;
 }
 

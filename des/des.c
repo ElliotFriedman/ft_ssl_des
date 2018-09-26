@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/24 23:27:55 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/25 21:04:42 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,13 +207,15 @@ t_hash				*get_pass_salt(t_hash *file)
 		pass = getpass("Enter your password:");
 	else
 		pass = g_pass;
-	tmp = salt_from_file(file->data, file->bytes);
+	//change this later
+	//tmp = salt_from_file(file->data, file->bytes);
 	if (tmp)
 	{
 		pass = ft_strjoin(pass, (char*)tmp);
 	}
 	//data == password
 	h->data = ft_strdup(pass);
+
 	h->bytes = ft_strlen(h->data);
 	//g_salt will be 3 if we don't want to have added salt
 	if (g_salt != 3 && !g_decrypt)
@@ -222,10 +224,8 @@ t_hash				*get_pass_salt(t_hash *file)
 		h->data = ft_strjoin(h->data, salt);
 		h->bytes += 8;
 	}
-	
 /*	else if (g_decrypt && g_salt)
 	{
-
 		//get salt as a string from argv
 		//turn to an integer
 		//copy bytes from integer to the end of pass using memcpy
@@ -241,6 +241,7 @@ t_hash				*get_pass_salt(t_hash *file)
 		//set h->bytes & h->data
 	}
 	*/
+	salt[0] = file->data[0];
 	fclose(e);
 	return (h);
 }
@@ -339,7 +340,6 @@ void				des(char **argv, int argc)
 		ft_printf("Error, file \'%s\' not found\n", argv[argc - 1]);
 		exit(0);
 	}
-	
 	if (opt.a && g_decrypt)
 	{
 		char *tmp1 = h.data;
