@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/25 21:04:42 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/25 21:32:48 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,8 @@ t_hash				*get_pass_salt(t_hash *file)
 		create_salt_8bytes(salt, e);
 		h->data = ft_strjoin(h->data, salt);
 		h->bytes += 8;
+		ft_putstr("Salted__");
+		write(1, salt, 8);
 	}
 /*	else if (g_decrypt && g_salt)
 	{
