@@ -6,13 +6,14 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/25 21:33:06 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/25 22:36:49 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
-unsigned long long   g_iv;
+unsigned long long	g_iv;
+extern size_t		g_ivBool;
 
 unsigned long long	*passhash(t_hash *h)
 {
@@ -49,7 +50,8 @@ unsigned long long	*create_key(t_hash *h)
 	//return tmp;
 //	printf("key: %016llX\n", hold[0]);
 //		//	printf("%016llu\n", hold[0]);
-	g_iv = hold[1];
+	if (!g_ivBool)
+		g_iv = hold[1];
 //	printf("iv: %016llX\n", g_iv);
 
 	fstruct(s, h);

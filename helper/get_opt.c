@@ -6,25 +6,27 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/25 21:13:39 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/25 22:20:00 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
-int		g_file;
-int		g_bool;
-int		g_fd;
-int		g_decrypt;
+int					g_file;
+int					g_bool;
+int					g_fd;
+int					g_decrypt;
 
-int		g_ivIdx = -1;
-int		g_K = -1;
-int		g_iv;
-size_t	g_salt;
+int					g_ivIdx = -1;
+int					g_K = -1;
+unsigned long long	g_iv = 0;
+size_t				g_ivBool;
+//salt should be 8 bytes
+size_t				g_salt;
 
-int		g_key;
-int		g_passidx;
-char	*g_pass;
+int					g_key;
+int					g_passidx;
+char				*g_pass;
 
 void	part2(char *argv, t_opt *new, int i)
 {
@@ -114,12 +116,41 @@ void	handle_iv(char **argv)
 			tmp = ft_strjoin(tmp, "0");
 			free(tfree);	
 		}
+		g_ivBool = 1;
 		g_iv = ft_atoibase16(tmp);
+		ft_printf("g_iv: %d\n", g_iv);
 		free(tmp);
 	}
 	else
 		g_iv = ft_atoibase16(argv[g_ivIdx]);
 	g_ivIdx = 0;
+}
+
+void	get_opt_if(int argc, char **argv)
+{
+	//set g_K to 99 to indicate that we have created our global key
+	//Make sure atoibase16 works
+	if (g_K != -1 && g_K != 99 && (g_K = 99))
+		g_key = ft_atoibase16(argv[g_K]);
+	//if our password index is beyond command line arguments and therefore non-existent
+	if (g_passidx == argc)
+	{
+		ft_putstr("Error, no password specified\n");
+		exit(0);
+	}
+	if (g_passidx && g_passidx != 1000000000)
+	{
+		g_pass = ft_strdup(argv[g_passidx]);
+		//this will indicate that our password was in the command line args
+		g_passidx = 1000000000;
+	}
+	if (g_ivIdx != -1 && g_ivIdx != argc)
+		handle_iv(argv);
+	else if (g_ivIdx == argc)
+	{
+		ft_putstr("Error, no iv specified\n");
+		exit(0);
+	}
 }
 
 int		get_opt(int argc, char **argv, t_opt *new, int i)
@@ -131,29 +162,7 @@ int		get_opt(int argc, char **argv, t_opt *new, int i)
 	{
 		if (argv[i][0] == '-' && (open(argv[i], O_RDONLY) == -1) && opt(argv[i], new, i))
 		{
-			//set g_K to 99 to indicate that we have created our global key
-			//Make sure atoibase16 works
-			if (g_K != -1 && g_K != 99 && (g_K = 99))
-				g_key = ft_atoibase16(argv[g_K]);
-			//if our password index is beyond command line arguments and therefore non-existent
-			if (g_passidx == argc)
-			{
-				ft_putstr("Error, no password specified\n");
-				exit(0);
-			}
-			if (g_passidx && g_passidx != 1000000000)
-			{
-				g_pass = ft_strdup(argv[g_passidx]);
-				//this will indicate that our password was in the command line args
-				g_passidx = 1000000000;
-			}
-			if (g_ivIdx != -1 && g_ivIdx != argc)
-				handle_iv(argv);
-			else if (g_ivIdx == argc)
-			{
-				ft_putstr("Error, no iv specified\n");
-				exit(0);
-			}
+			get_opt_if(argc, argv);
 			return (1);
 		}
 		else if (!g_fd && new->o && ((fd = (open(argv[i], O_RDONLY)) > 2)))

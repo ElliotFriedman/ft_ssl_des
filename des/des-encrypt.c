@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/24 12:25:52 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/25 23:07:02 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ unsigned int				g_lsubkey[16];
 
 unsigned long long			g_concatsubkeys[16];
 
-unsigned long long	g_iv;
+extern unsigned long long	g_iv;
 
 unsigned int				g_len;
 
@@ -271,8 +271,6 @@ void	create_subkeys(unsigned long long key)
 		g_rsubkey[i] <<= g_rotate[i];
 		g_lsubkey[i] += ltmp >> (g_rotate[i] == 1 ? 27 : 26);
 		g_rsubkey[i] += rtmp >> (g_rotate[i] == 1 ? 27 : 26);
-		//				ft_printf("\nrsubkey:         %032b\n", (size_t)g_rsubkey[i]);
-		//			   	ft_printf("lsubkey:         %032b\n", (size_t)g_lsubkey[i]);
 		i++;
 	}
 	concat_subkeys();
@@ -288,15 +286,10 @@ void	init_txtblock(unsigned long long *block, unsigned char *chrblock)
 	while (i < 8)
 	{
 		*block += chrblock[i];
-		//		ft_printf("\n%064b\n", *block);
 		if (i + 1 != 8)
 			*block <<= 8;
-		//		ft_printf("\nprint as we go:	%064b\n", *block);
 		i++;
 	}
-	//*block = initial_perm(*block);
-	//	ft_printf("txt block:	%064b\n", *block);
-	//run initial permutation on textblock
 }
 
 unsigned long long	sboxes(unsigned long long expandrside)
@@ -320,7 +313,6 @@ unsigned long long	sboxes(unsigned long long expandrside)
 		i += 4;
 	}
 	ret <<= 32;
-	//	ft_printf("sbox output: %064b\n", ret);
 	return (ret);
 }
 
@@ -399,12 +391,13 @@ char	*encrypted_des(char *data, unsigned long long key)
 	//do the initial permutation on the key
 	key = initialperm(key);
 	//	ft_printf("lside:	%064b\n", lside);
+	//	
 	//	ft_printf("rside:	%064b\n", rside);
 	while (i < 16)
 	{
 		aside_next = rside;
 		rside = permuterightside(rside);
-		//	ft_printf("g_k[%d] ^ rside: %064b\n", i, g_k[i] ^ rside);
+		//ft_printf("g_k[%d] ^ rside: %064b\n", i, g_k[i] ^ rside);
 		rside = sboxes(rside ^ g_k[i]);
 		//pbox permutation
 		rside = pperm(rside);
