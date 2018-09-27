@@ -48,15 +48,15 @@ openssl enc -des-ecb -pass pass:"${1}" -in main.c -out testog
 
 #		Flags I Have to be Concerned About
 
-# -a, decode/encode the input/output in base64, depending on the encrypt mode
+# DONE -a, decode/encode the input/output in base64, depending on the encrypt mode
 
-# -d, decrypt mode
+# DONE -d, decrypt mode
 
-# -e, encrypt mode (default)
+# DEFAULT -e, encrypt mode (default)
 
 # -i, input file for message
 
-# -k, key in hex is the next arguement.
+# NEED TO CHECK ENDIANNESS -k, key in hex is the next arguement.
 #	(Behave like openssl des -K not openssl des -k)
 #
 # -o, output file for message

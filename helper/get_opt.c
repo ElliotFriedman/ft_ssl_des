@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/25 23:10:34 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/26 22:31:57 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void	part2(char *argv, t_opt *new, int i)
 		new->d = 1;
 	if (!ft_strncmp(argv, "-a", 2) && ++g_bool)
 		new->a = 1;
+	if (!ft_strncmp(argv, "-p", 2) && ++g_bool)
+		g_passidx = i + 1;
 }
 
 int		opt(char *argv, t_opt *new, int i)
@@ -129,7 +131,7 @@ void	get_opt_if(int argc, char **argv)
 {
 	//set g_K to 99 to indicate that we have created our global key
 	//Make sure atoibase16 works
-	if (g_K != -1 && g_K != 99 && (g_K = 99))
+	if (g_K != -1 && g_K != 99999999 && (g_K = 99999999))
 		g_key = ft_atoibase16(argv[g_K]);
 	//if our password index is beyond command line arguments and therefore non-existent
 	if (g_passidx == argc)
@@ -142,6 +144,7 @@ void	get_opt_if(int argc, char **argv)
 		g_pass = ft_strdup(argv[g_passidx]);
 		//this will indicate that our password was in the command line args
 		g_passidx = 1000000000;
+		g_key = 1;
 	}
 	if (!g_ivBool && g_ivIdx != -1 && g_ivIdx != argc)
 		handle_iv(argv);

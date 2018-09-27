@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/25 22:36:49 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/26 22:10:31 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ unsigned long long	*create_key(t_hash *h)
 	int					file;
 	unsigned long long	*hold;
 
-	init_a(&h, &s, &file);
+	init_a_des(&h, &s, &file);
 	//strdup so that when we free in epad we don't free stack mem
 	//we strdup'ed before we got here :)
 	hold = passhash(h);

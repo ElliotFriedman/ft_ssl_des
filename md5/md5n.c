@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/27 23:41:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/25 21:33:16 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/26 22:05:47 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,18 @@ int		fstruct(t_opt *opt, t_hash *h)
 	return (1);
 }
 
+void	init_a_des(t_hash **h, t_opt **s, int *file)
+{
+	*file = 0;
+	*s = ft_memalloc(sizeof(t_opt));
+	h[0]->i = 2;
+}
+
 void	init_a(t_hash **h, t_opt **s, int *file)
 {
 	*file = 0;
 	*s = ft_memalloc(sizeof(t_opt));
-	if (!*h)
-		*h = ft_memalloc(sizeof(t_hash));
+	*h = ft_memalloc(sizeof(t_hash));
 	h[0]->i = 2;
 }
 

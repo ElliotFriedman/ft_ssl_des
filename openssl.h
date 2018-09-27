@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/24 22:45:11 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/26 22:06:07 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,5 +163,6 @@ unsigned long long		initial_perm(unsigned long long textblock);
 unsigned long long		pperm(unsigned long long txtblock);
 unsigned char			*base64_encode(unsigned char *str, int len);
 char					*_add_byte(char *data, size_t bytes);
+void					init_a_des(t_hash **h, t_opt **s, int *file);
 
 #endif

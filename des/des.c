@@ -6,14 +6,14 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/25 21:32:48 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/26 22:49:38 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
 // boolean for key provided
-int			g_key = 1;
+extern int	g_key;
 extern int	g_b64;
 extern int	g_decrypt;
 extern int	g_cbc;
@@ -204,7 +204,19 @@ t_hash				*get_pass_salt(t_hash *file)
 	e = fopen("/dev/urandom", "r");
 	tmp = 0;
 	if (!g_key)
-		pass = getpass("Enter your password:");
+	{
+		char *tmpa;
+		pass = ft_strdup(getpass("Enter your password:"));
+		tmpa = ft_strdup(getpass("Verifying - Enter your password:"));
+		//ft_printf("pass1: %s\npass2: %s\n", pass, tmpa);
+		if (ft_strcmp(pass, tmpa) != 0)
+		{
+			ft_putstr("Verify failure\nbad password read\n");
+			free(tmpa);
+			free(pass);
+			exit(0);
+		}
+	}
 	else
 		pass = g_pass;
 	//change this later
@@ -321,16 +333,16 @@ void				des(char **argv, int argc)
 	unsigned long long	*key;
 	static t_hash		h;
 	static t_opt		opt;
-	
+
 	//this has been modified and it will return a constant value.
 		//try to read the last arg in to encrypt it
 //	ft_printf("key befor endian: %064b\n", key[0]);
-	
+
 	//make this architecture specific
 	//if we are dealing with big endian we will have to do this
 	//rev_8byte((char*)key, 8);
 	int i = 2;
-	
+
 	//get all options
 	//aggregate and make choice on where to read data
 	get_opt_loop(2, argc, argv, &opt);
