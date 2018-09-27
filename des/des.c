@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/26 22:49:38 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/27 01:37:43 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ extern int	g_key;
 extern int	g_b64;
 extern int	g_decrypt;
 extern int	g_cbc;
-
+size_t		g_strlen;
 //boolean for whether or not we need to salt
 //doubles as a salt value if they specify salt. we convert their string to a ull and store here
 size_t		g_salt = 1;
@@ -189,7 +189,26 @@ unsigned long long	*salt_from_file(char *str, size_t len)
 	if (!ft_strncmp(str, "Salted__", 8))
 		return (0);
 	//duplicate 8 bytes of memory
+	ft_printf("Salt: %c%c%c%c%c%c%c%c\n", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]); 
 	return (ft_memdup((unsigned long long *)str, 8));
+}
+
+void				get_user_pass(char **pass, t_hash *file, unsigned long long *tmp)
+{
+	char *tmpa;
+
+	*pass = ft_strdup(getpass("Enter your password:"));
+	tmpa = ft_strdup(getpass("Verifying - Enter your password:"));
+	//ft_printf("pass1: %s\npass2: %s\n", pass, tmpa);
+	if (ft_strcmp(*pass, tmpa) != 0)
+	{
+		ft_putstr("Verify failure\nbad password read\n");
+		free(tmpa);
+		free(*pass);
+		free(tmp);
+		free(file->data);
+		exit(0);
+	}
 }
 
 t_hash				*get_pass_salt(t_hash *file)
@@ -203,19 +222,11 @@ t_hash				*get_pass_salt(t_hash *file)
 	h = ft_memalloc(sizeof(t_hash));
 	e = fopen("/dev/urandom", "r");
 	tmp = 0;
+	pass = 0;
 	if (!g_key)
 	{
-		char *tmpa;
-		pass = ft_strdup(getpass("Enter your password:"));
-		tmpa = ft_strdup(getpass("Verifying - Enter your password:"));
-		//ft_printf("pass1: %s\npass2: %s\n", pass, tmpa);
-		if (ft_strcmp(pass, tmpa) != 0)
-		{
-			ft_putstr("Verify failure\nbad password read\n");
-			free(tmpa);
-			free(pass);
-			exit(0);
-		}
+		get_user_pass(&pass, file, tmp);
+		g_pass = pass;
 	}
 	else
 		pass = g_pass;
@@ -233,7 +244,7 @@ t_hash				*get_pass_salt(t_hash *file)
 	if (g_salt != 3 && !g_decrypt)
 	{
 		create_salt_8bytes(salt, e);
-		h->data = ft_strjoin(h->data, salt);
+		h->data = ft_memjoin((void*)h->data, (void*)salt, ft_strlen(h->data), 8);
 		h->bytes += 8;
 		ft_putstr("Salted__");
 		write(1, salt, 8);
@@ -241,20 +252,35 @@ t_hash				*get_pass_salt(t_hash *file)
 /*	else if (g_decrypt && g_salt)
 	{
 		//get salt as a string from argv
+
 		//turn to an integer
 		//copy bytes from integer to the end of pass using memcpy
 		//set g_passlen
 		//set h->bytes & h->data
 	}
-	else if (g_decrypt)
+///	else if (g_decrypt)
 	{
+		char *n;
+		tmp = salt_from_file(file->data, file->bytes);
+		if (tmp)
+		{
+			g_salt = *tmp;
+			n = ft_memalloc(ft_strlen(g_pass) + 8);
+			pass = ft_strjoin(pass, (char*)tmp);
+			ft_strcpy(n, g_pass);
+			h->bytes = ft_strlen(g_pass);
+			ft_memcpy((void*)&n[ft_strlen(g_pass)], (void*)&g_salt, 8);
+			h->data = n;
+			h->bytes += 8;
+			g_strlen = 1;
+		}
 		//find salt from file
 		//need access to the file here
 		//copy salt bytes from file to end of password
 		//set g_passlen
 		//set h->bytes & h->data
 	}
-	*/
+*/
 	salt[0] = file->data[0];
 	fclose(e);
 	return (h);

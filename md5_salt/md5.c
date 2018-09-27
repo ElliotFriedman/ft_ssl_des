@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/26 22:10:31 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/27 00:26:20 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 
 unsigned long long	g_iv;
 extern size_t		g_ivBool;
+extern size_t		g_strlen;
 
 unsigned long long	*passhash(t_hash *h)
 {
-	h->bytes = ft_strlen(h->data);
+	if (g_strlen)
+		h->bytes = ft_strlen(h->data);
 	h->ini = h->bytes;
 	epad(h);
 	h->arr = (unsigned int *)h->data;

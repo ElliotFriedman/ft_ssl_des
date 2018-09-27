@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/26 22:31:57 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/27 01:31:02 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	part2(char *argv, t_opt *new, int i)
 		new->r = 1;
 	if (ft_strchr(argv, (int)'s') && ++g_bool)
 		new->s = 1;
-	if ((ft_strchr(argv, (int)'D') || ft_strchr(argv, (int)'d')) && ++g_bool && ++g_decrypt)
+	if (((!ft_strncmp(argv, "-D", 2)) || !ft_strncmp(argv, "-d", 2)) && ++g_bool && ++g_decrypt)
 		new->d = 1;
 	if (!ft_strncmp(argv, "-a", 2) && ++g_bool)
 		new->a = 1;
@@ -66,7 +66,7 @@ int		opt(char *argv, t_opt *new, int i)
 		g_ivIdx = i + 1;
 	if (!ft_strncmp(argv, "-k", 2) && ++g_bool)
 		g_K = i + 1;
-	part2(argv, new, i);	
+	part2(argv, new, i);
 	if (ft_strchr(argv, (int)'o') && ++g_bool)
 	{
 		new->o = 1;
