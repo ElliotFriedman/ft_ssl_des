@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/27 01:37:43 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/27 01:42:21 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,16 +249,7 @@ t_hash				*get_pass_salt(t_hash *file)
 		ft_putstr("Salted__");
 		write(1, salt, 8);
 	}
-/*	else if (g_decrypt && g_salt)
-	{
-		//get salt as a string from argv
-
-		//turn to an integer
-		//copy bytes from integer to the end of pass using memcpy
-		//set g_passlen
-		//set h->bytes & h->data
-	}
-///	else if (g_decrypt)
+/*//	else if (g_decrypt)
 	{
 		char *n;
 		tmp = salt_from_file(file->data, file->bytes);

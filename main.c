@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/06 15:34:21 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/27 00:38:27 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/27 01:45:50 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int		dispatch(t_type *t, int argc, char **argv)
 	if (!ft_strcmp(t->name, argv[1]))
 	{
 		x = (void (*)(char**, int))(t->ptr);
-		if (!ft_strcmp(t->name, "des-cbc") || !ft_strcmp(t->name, "des-cbc"))
+		if (!ft_strcmp(t->name, "des-cbc") || !ft_strcmp(t->name, "des"))
 			g_cbc = 1;
 		x(argv, argc);
 		return (1);
