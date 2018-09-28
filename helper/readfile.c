@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:51:40 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/17 23:57:54 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/28 12:27:52 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int		rkey(t_hash *h)
 	str = ft_strnew(0);
 	h->bytes = 0;
 	buf = ft_memalloc(2);
-	while (read(0, buf, 1) == 1)
+	while (read(0, buf, 1) == 1 && str[h->bytes] != 4)
 	{
 		tmp = str;
 		str = ft_strjoin(str, buf);

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/28 01:22:48 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/28 12:30:30 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -370,9 +370,11 @@ void				des(char **argv, int argc)
 
 	tmp = 0;
 	int gbool = 0;
-	if ((int)g_fileidx >= argc)
+	if (!g_fileidx)
+		rkey(&h);
+	else if ((int)g_fileidx >= argc)
 		err0r("Invalid file index\n");
-	if (!ft_fread(argv[g_fileidx], &h))
+	else if (!ft_fread(argv[g_fileidx], &h))
 	{
 		ft_printf("Error, file \'%s\' not found\n", argv[argc - 1]);
 		exit(0);
@@ -389,12 +391,8 @@ void				des(char **argv, int argc)
 			free(tmp1);
 		h.bytes = g_b64;
 	}
-	if (g_decrypt)
-	{
-		//sanity check here to make sure that the input file was not malformed
-		//this will need to be checked whether base64 encoded or not
+	if (g_decrypt) //sanity check here to make sure that the input file was not malformed//this will need to be checked whether base64 encoded or not
 		inputsanitycheck(&h);
-	}
 	//now we find the salt in the file, OR,
 	//we generate our own depending on what
 	//the user specifies
