@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/27 22:56:03 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/28 00:02:29 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void	part2(char *argv, t_opt *new, int i)
 		new->d = 1;
 	if (!ft_strncmp(argv, "-a", 2) && ++g_bool)
 		new->a = 1;
-	if (!ft_strncmp(argv, "-p", 2) && ++g_bool)
-		g_passidx = i + 1;
+//	if (!ft_strncmp(argv, "-p", 2) && ++g_bool)
+//		g_passidx = i + 1;
 }
 
 int		opt(char *argv, t_opt *new, int i)
@@ -126,7 +126,7 @@ void	handle_iv(char **argv)
 		g_ivBool = 1;
 		g_iv = ft_atoibase16(tmpa);
 		//rev_8byte((char*)&g_iv, 16);
-		printf("\n\nFound IV %016llX in CL argument\n\n\n\n", g_iv);
+		//printf("\n\nFound IV %016llX in CL argument\n\n\n\n", g_iv);
 		free(tmpa);
 	}
 	else

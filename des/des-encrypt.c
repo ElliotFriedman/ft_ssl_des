@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/27 02:26:12 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/28 00:04:03 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -409,8 +409,8 @@ char	*encrypted_des(char *data, unsigned long long key)
 	}
 	//perform final permutation on lside and rside merged
 	//merge right and then left, due to final key arrangement process
-	if (g_decrypt)
-		printf("g_iv: %016llx\n", g_iv);
+//	if (g_decrypt)
+//		printf("g_iv: %016llx\n", g_iv);
 	if (g_cbc && !g_decrypt)
 		g_iv = final_permutate(rside | (lside >> 32));
 	else if (g_cbc && g_decrypt)

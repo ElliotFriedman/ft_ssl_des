@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/27 22:30:19 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/28 00:03:02 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ unsigned long long	*create_key(t_hash *h)
 //		//	printf("%016llu\n", hold[0]);
 	if (!g_ivBool)
 		g_iv = hold[1];
-	else //if (g_decrypt)
-		printf("iv supplied in cl arg: %llx\n", g_iv);
+//	else //if (g_decrypt)
+//`		printf("iv supplied in cl arg: %llx\n", g_iv);
 //	printf("iv: %016llX\n", g_iv);
 	fstruct(s, h);
 	return (hold);
