@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/28 00:36:35 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/28 01:22:48 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ int							g_K;
 size_t						g_ivBool;
 //boolean for whether or not we need to salt
 //doubles as a salt value if they specify salt. we convert their string to a ull and store here
-size_t			g_salt = 1;
+size_t						g_salt = 1;
 
 //if pass is provided store it here
-char			*g_pass = "hello";
-
+char						*g_pass = "hello";
+size_t						g_fileidx;
 //this is for key permutation
 //
 //Turns key from 64 bits to 56 bits.
@@ -370,7 +370,9 @@ void				des(char **argv, int argc)
 
 	tmp = 0;
 	int gbool = 0;
-	if (!ft_fread(argv[argc - 1], &h))
+	if ((int)g_fileidx >= argc)
+		err0r("Invalid file index\n");
+	if (!ft_fread(argv[g_fileidx], &h))
 	{
 		ft_printf("Error, file \'%s\' not found\n", argv[argc - 1]);
 		exit(0);

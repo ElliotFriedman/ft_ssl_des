@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/28 01:02:07 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/28 01:21:01 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ unsigned long long	g_key;
 int					g_passidx;
 char				*g_pass;
 
-size_t				g_file;
 size_t				g_fileidx;
 
 void	err0r(char *msg)
