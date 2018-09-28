@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/27 21:23:17 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/28 00:20:03 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -407,6 +407,7 @@ void				des(char **argv, int argc)
 	else
 		tmp = &g_key;
 	key = tmp;
+	printf("key provided %016llX\n", *key);
 	tmp++;
 	tmp = des_encrypt(key[0], h.data, h.bytes);
 	if (g_decrypt)

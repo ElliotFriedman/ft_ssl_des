@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/28 00:02:29 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/28 00:26:27 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void	handle_iv(char **argv)
 		}
 		g_ivBool = 1;
 		g_iv = ft_atoibase16(tmpa);
-		//rev_8byte((char*)&g_iv, 16);
+		//rev_8byte((char*)&g_iv, 8);
 		//printf("\n\nFound IV %016llX in CL argument\n\n\n\n", g_iv);
 		free(tmpa);
 	}
@@ -134,14 +134,46 @@ void	handle_iv(char **argv)
 	g_ivIdx = 0;
 }
 
+void	handle_k(char **argv)
+{
+	char	*tmp;
+	char	*tfree;
+
+	tfree = 0;
+	tmp = 0;
+	checkbase16(argv[g_K], "key");
+	if (ft_strlen(argv[g_K]) >= 28)
+	{
+		ft_putstr("hex string is too long\ninvalid hex key value\n");
+		exit(0);
+	}
+	if (ft_strlen(argv[g_K]) != 16)
+	{
+		char *tmpa = ft_strdup(argv[g_K]);
+		while (ft_strlen(tmpa) < 16)
+		{
+			tfree = tmpa;
+			tmpa = ft_strjoin(tmpa, "0");
+			free(tfree);
+		}
+		g_key = ft_atoibase16(tmpa);
+		free(tmpa);
+	}
+	else
+		g_key = ft_atoibase16(argv[g_K]);
+	g_K = 99999999;
+}
+
 void	get_opt_if(int argc, char **argv)
 {
 	//set g_K to 99 to indicate that we have created our global key
 	//Make sure atoibase16 works
 	if (g_K != -1 && g_K != 99999999)// && (g_K = 99999999))
 	{
-		g_key = ft_atoibase16(argv[g_K]);
-		g_K = 99999999;
+		handle_k(argv);
+//		g_key = ft_atoibase16(argv[g_K]);
+		printf("key provided %016llX\n", g_key);
+		//g_K = 99999999;
 	}
 	//if our password index is beyond command line arguments and therefore non-existent
 	if (g_passidx == argc)
@@ -152,6 +184,7 @@ void	get_opt_if(int argc, char **argv)
 	if (g_passidx && g_passidx != 1000000000)
 	{
 		g_pass = ft_strdup(argv[g_passidx]);
+
 		//this will indicate that our password was in the command line args
 		g_passidx = 1000000000;
 		g_key = 1;
