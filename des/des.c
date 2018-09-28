@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/28 13:12:28 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/28 14:54:14 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ unsigned long long	*salt_from_file(char *str, size_t len)
 	i = 8;
 	if ((!str) || (len < 16))
 		return (0);
-	if (!ft_strncmp(str, "Salted__", 8))
+	if (ft_strncmp(str, "Salted__", 8))
 		return (0);
 	//duplicate 8 bytes of memory
 //	ft_printf("Salt: %c%c%c%c%c%c%c%c\n", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]); 
@@ -235,11 +235,6 @@ t_hash				*get_pass_salt(t_hash *file)
 		pass = g_pass;
 	//change this later
 	//tmp = salt_from_file(file->data, file->bytes);
-	if (tmp)
-	{
-		pass = ft_strjoin(pass, (char*)tmp);
-	}
-	//data == password
 	h->data = ft_strdup(pass);
 
 	h->bytes = ft_strlen(h->data);
@@ -258,6 +253,7 @@ t_hash				*get_pass_salt(t_hash *file)
 		tmp = salt_from_file(file->data, file->bytes);
 		if (tmp)
 		{
+			ft_putstr("\n\n\n\n\n\n\n\n\n\n\n\nFound salt in file\n\n\n\n\n\n\n\n");
 			g_salt = *tmp;
 			n = ft_memalloc(ft_strlen(g_pass) + 8);
 			pass = ft_strjoin(pass, (char*)tmp);
@@ -361,6 +357,20 @@ int					archBigEndian(void)
 	return (1);
 }
 
+void				handle_b64decrypt(t_hash *h)
+{
+	char *tmp1;
+
+	tmp1 = h->data;
+	removewhitespace(h->data);
+	h->bytes = ft_strlen(h->data);
+	ft_printf("Data is %d bytes\n", h->bytes);
+	checkbase64encode(h->data, h->bytes);
+	h->data = (char*)base64_decode((unsigned char*)h->data, h->bytes);
+	free(tmp1);
+	h->bytes = g_b64;
+}
+
 void				des(char **argv, int argc)
 {
 	unsigned long long	*tmp;
@@ -378,7 +388,6 @@ void				des(char **argv, int argc)
 	get_opt_loop(2, argc, argv, &opt);
 
 	tmp = 0;
-	int gbool = 0;
 	if (!g_fileidx)
 		rkey(&h);
 	else if ((int)g_fileidx >= argc)
@@ -390,13 +399,13 @@ void				des(char **argv, int argc)
 	}
 	if (opt.a && g_decrypt)
 	{
+//		handle_b64decrypt(&h);
 		char *tmp1 = h.data;
 		removewhitespace(h.data);
 		h.bytes = ft_strlen(h.data);
 		ft_printf("Data is %d bytes\n", h.bytes);
 		checkbase64encode(h.data, h.bytes);
 		h.data = (char*)base64_decode((unsigned char*)h.data, h.bytes);
-		if (!gbool)
 			free(tmp1);
 		h.bytes = g_b64;
 	}
@@ -417,8 +426,8 @@ void				des(char **argv, int argc)
 	key = tmp;
 	//make this architecture specific
 	//if we are dealing with big endian we will have to reverse this key
-	if (archBigEndian())
-		rev_8byte((char*)key, 8);
+//	if (archBigEndian())
+//		rev_8byte((char*)key, 8);
 //	printf("key provided %016llX\n", *key);
 	tmp++;
 	tmp = des_encrypt(key[0], h.data, h.bytes);
