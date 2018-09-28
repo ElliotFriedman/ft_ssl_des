@@ -6,24 +6,27 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/27 01:42:21 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/27 21:23:17 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
 // boolean for key provided
-extern int	g_key;
-extern int	g_b64;
-extern int	g_decrypt;
-extern int	g_cbc;
-size_t		g_strlen;
+extern unsigned long long	g_key;
+extern int					g_b64;
+extern int					g_decrypt;
+extern int					g_cbc;
+size_t						g_strlen;
+extern size_t				g_saltbool;
+int							g_K;
+size_t						g_ivBool;
 //boolean for whether or not we need to salt
 //doubles as a salt value if they specify salt. we convert their string to a ull and store here
-size_t		g_salt = 1;
+size_t			g_salt = 1;
 
 //if pass is provided store it here
-char		*g_pass = "hello";
+char			*g_pass = "hello";
 
 //this is for key permutation
 //
@@ -35,7 +38,7 @@ char		*g_pass = "hello";
 //
 //16 rounds per 64 bit block
 
-int			g_grab[56] = {57, 49, 41, 33, 25, 17, 9,
+int				g_grab[56] = {57, 49, 41, 33, 25, 17, 9,
 	1, 58, 50, 42, 34, 26, 18,
 	10, 2, 59, 51, 43, 35, 27,
 	19, 11, 3, 60, 52, 44, 36,
@@ -47,7 +50,7 @@ int			g_grab[56] = {57, 49, 41, 33, 25, 17, 9,
 
 //This is the initial Permutation done on plaintext
 
-int			g_permute[64];/* = {58, 50, 42, 34, 26, 18, 10,
+int				g_permute[64];/* = {58, 50, 42, 34, 26, 18, 10,
 	2, 60, 52, 44, 36, 28, 20,
 	12, 4, 62, 54, 46, 38, 30,
 	22, 14, 6, 64, 56, 48, 40,
@@ -57,8 +60,8 @@ int			g_permute[64];/* = {58, 50, 42, 34, 26, 18, 10,
 	53, 45, 37, 29, 21, 13, 5,
 	63, 55, 47, 39, 31, 23, 15, 7};*/
 
-int		g_len;
-int		g_rotate[16];
+int				g_len;
+int				g_rotate[16];
 
 unsigned long long	pow2(size_t amt)
 {
@@ -189,7 +192,7 @@ unsigned long long	*salt_from_file(char *str, size_t len)
 	if (!ft_strncmp(str, "Salted__", 8))
 		return (0);
 	//duplicate 8 bytes of memory
-	ft_printf("Salt: %c%c%c%c%c%c%c%c\n", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]); 
+//	ft_printf("Salt: %c%c%c%c%c%c%c%c\n", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]); 
 	return (ft_memdup((unsigned long long *)str, 8));
 }
 
@@ -241,7 +244,7 @@ t_hash				*get_pass_salt(t_hash *file)
 
 	h->bytes = ft_strlen(h->data);
 	//g_salt will be 3 if we don't want to have added salt
-	if (g_salt != 3 && !g_decrypt)
+	if (g_salt != 3 && !g_decrypt && !g_saltbool)
 	{
 		create_salt_8bytes(salt, e);
 		h->data = ft_memjoin((void*)h->data, (void*)salt, ft_strlen(h->data), 8);
@@ -344,6 +347,8 @@ void				inputsanitycheck(t_hash *h)
 	}
 }
 
+int					g_KEY;
+
 void				des(char **argv, int argc)
 {
 	unsigned long long	*tmp;
@@ -359,7 +364,6 @@ void				des(char **argv, int argc)
 	//if we are dealing with big endian we will have to do this
 	//rev_8byte((char*)key, 8);
 	int i = 2;
-
 	//get all options
 	//aggregate and make choice on where to read data
 	get_opt_loop(2, argc, argv, &opt);
@@ -393,7 +397,15 @@ void				des(char **argv, int argc)
 	//we generate our own depending on what
 	//the user specifies
 	//char *salt = find_salt();
-	tmp = create_key(get_pass_salt(&h));
+	if (g_K != 99999999)
+		tmp = create_key(get_pass_salt(&h));
+	else if (g_K == 99999999 && g_ivBool != 1)
+	{
+		ft_putstr("Error, no iv specified\n");
+		exit(0);
+	}
+	else
+		tmp = &g_key;
 	key = tmp;
 	tmp++;
 	tmp = des_encrypt(key[0], h.data, h.bytes);

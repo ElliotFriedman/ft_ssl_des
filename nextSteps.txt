@@ -1,6 +1,6 @@
 add options in for DES
-	-salt
-		-atoibase w/Padding
+	-salt 
+		-atoibase w/Padding, needs to be done
 	
 	-i
 		-readfile

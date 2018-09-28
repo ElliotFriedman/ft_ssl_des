@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/25 23:07:02 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/27 02:26:12 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -404,12 +404,13 @@ char	*encrypted_des(char *data, unsigned long long key)
 		//after you have done all logic in iteration x, reassign aside to bside b4 modification
 		rside = lside ^ rside;
 		//left side equals previous right side
-		//		ft_printf("Rside after manipulation: %064b\n", rside);
-		lside = aside_next;
+				lside = aside_next;
 		i++;
 	}
 	//perform final permutation on lside and rside merged
 	//merge right and then left, due to final key arrangement process
+	if (g_decrypt)
+		printf("g_iv: %016llx\n", g_iv);
 	if (g_cbc && !g_decrypt)
 		g_iv = final_permutate(rside | (lside >> 32));
 	else if (g_cbc && g_decrypt)

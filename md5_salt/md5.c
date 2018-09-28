@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/27 00:26:20 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/27 22:30:19 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,17 @@ unsigned long long	*create_key(t_hash *h)
 	rev_8byte((char*)hold, 16);
 	//Delete this line in the future, this is only to avoid compiler errors
 	//str[0] = 0;
-	
 	//unsigned long long	*tmp = ft_memalloc(16);
 	//tmp[0] = 1383827165325090801;
-
 	//ft_printf("key             = %064b\n", tmp[0]);
 	//return tmp;
 //	printf("key: %016llX\n", hold[0]);
 //		//	printf("%016llu\n", hold[0]);
 	if (!g_ivBool)
 		g_iv = hold[1];
+	else //if (g_decrypt)
+		printf("iv supplied in cl arg: %llx\n", g_iv);
 //	printf("iv: %016llX\n", g_iv);
-
 	fstruct(s, h);
-
 	return (hold);
 }

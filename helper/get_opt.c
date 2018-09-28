@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/27 01:31:02 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/27 22:56:03 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,14 @@ int					g_decrypt;
 
 int					g_ivIdx = -1;
 int					g_K = -1;
-unsigned long long	g_iv = 0;
-size_t				g_ivBool;
+unsigned long long	g_iv;
+size_t				g_ivBool = 0;
 //salt should be 8 bytes
 unsigned long long	g_salt;
+size_t				g_saltidx;
+size_t				g_saltbool;
 
-int					g_key;
+unsigned long long	g_key;
 int					g_passidx;
 char				*g_pass;
 
@@ -48,7 +50,8 @@ void	part2(char *argv, t_opt *new, int i)
 		new->r = 1;
 	if (ft_strchr(argv, (int)'s') && ++g_bool)
 		new->s = 1;
-	if (((!ft_strncmp(argv, "-D", 2)) || !ft_strncmp(argv, "-d", 2)) && ++g_bool && ++g_decrypt)
+	if (((!ft_strncmp(argv, "-D", 2)) ||
+				!ft_strncmp(argv, "-d", 2)) && ++g_bool && ++g_decrypt)
 		new->d = 1;
 	if (!ft_strncmp(argv, "-a", 2) && ++g_bool)
 		new->a = 1;
@@ -62,10 +65,12 @@ int		opt(char *argv, t_opt *new, int i)
 	//g_salt = 3, indicates we don't need salt
 	if (!ft_strncmp(argv, "-nosalt", 7))
 		g_salt = 3;
-	if (!ft_strncmp(argv, "-iv", 3) && ++g_bool)
+	if (!ft_strncmp(argv, "-v", 3) && ++g_bool)
 		g_ivIdx = i + 1;
 	if (!ft_strncmp(argv, "-k", 2) && ++g_bool)
 		g_K = i + 1;
+	if (!ft_strncmp(argv, "-s", 2))
+		g_saltidx = i + 1;
 	part2(argv, new, i);
 	if (ft_strchr(argv, (int)'o') && ++g_bool)
 	{
@@ -111,16 +116,18 @@ void	handle_iv(char **argv)
 	}
 	if (ft_strlen(argv[g_ivIdx]) != 16)
 	{
-		char *tmp = ft_strdup(argv[g_ivIdx]);
-		while (ft_strlen(tmp) < 16)
+		char *tmpa = ft_strdup(argv[g_ivIdx]);
+		while (ft_strlen(tmpa) < 16)
 		{
-			tfree = tmp;
-			tmp = ft_strjoin(tmp, "0");
-			free(tfree);	
+			tfree = tmpa;
+			tmpa = ft_strjoin(tmpa, "0");
+			free(tfree);
 		}
 		g_ivBool = 1;
-		g_iv = ft_atoibase16(tmp);
-		free(tmp);
+		g_iv = ft_atoibase16(tmpa);
+		//rev_8byte((char*)&g_iv, 16);
+		printf("\n\nFound IV %016llX in CL argument\n\n\n\n", g_iv);
+		free(tmpa);
 	}
 	else
 		g_iv = ft_atoibase16(argv[g_ivIdx]);
@@ -131,8 +138,11 @@ void	get_opt_if(int argc, char **argv)
 {
 	//set g_K to 99 to indicate that we have created our global key
 	//Make sure atoibase16 works
-	if (g_K != -1 && g_K != 99999999 && (g_K = 99999999))
+	if (g_K != -1 && g_K != 99999999)// && (g_K = 99999999))
+	{
 		g_key = ft_atoibase16(argv[g_K]);
+		g_K = 99999999;
+	}
 	//if our password index is beyond command line arguments and therefore non-existent
 	if (g_passidx == argc)
 	{
@@ -152,6 +162,17 @@ void	get_opt_if(int argc, char **argv)
 	{
 		ft_putstr("Error, no iv specified\n");
 		exit(0);
+	}
+	if ((int)g_saltidx == argc)
+	{
+		ft_putstr("Error, no salt specified\n");
+		exit(0);
+	}
+	else if (g_saltidx)
+	{
+		g_salt = ft_atoibase16(argv[g_saltidx]);
+		g_saltidx = 0;
+		g_saltbool = 1;
 	}
 }
 
