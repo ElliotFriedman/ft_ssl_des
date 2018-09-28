@@ -9,10 +9,11 @@ add options in for DES
 		-writefile
 	
 	-v iv
-		-atoibase w/Padding
+		-atoibase w/Padding DONE
 	
 	-k
-		-atoibase w/Padding
+		-atoibase w/Padding DONE
+		If you provide a key, there will be no salt
 	
 	-s salt
 		-atoibase w/Padding

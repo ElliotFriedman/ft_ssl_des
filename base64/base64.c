@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/23 21:05:40 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/28 00:52:08 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void			choice01(unsigned char *h, t_hash *stor)
 	fd_putstr("\n", 1, 1);
 }
 
-void			err0r(char error)
+void			err0rr(char error)
 {
 	ft_printf("base64: option requires an argument -- %c\n", error);
 	ft_putstr("Usage:	base64 [-hvD] [-b num] [-i in_file] [-o out_file]\n");
@@ -117,7 +117,7 @@ void			find_options(char **argv, int argc, t_hash *stor, t_opt *opt)
 		{
 			opt->i = 1;
 			if (i + 1 == argc)
-				err0r('i');
+				err0rr('i');
 			else if (!ft_fread(argv[i + 1], stor))
 			{
 				ft_printf("Unable to open '%s': No such file or directory\n", argv[i + 1]);
@@ -139,7 +139,7 @@ void			find_options(char **argv, int argc, t_hash *stor, t_opt *opt)
 		if (ft_strnstr(argv[i], "-o", 2))
 		{
 			if (i + 1 == argc)
-				err0r('o');
+				err0rr('o');
 			fd = open(argv[i + 1], O_WRONLY | O_CREAT);
 			if (!opt->i)
 			{

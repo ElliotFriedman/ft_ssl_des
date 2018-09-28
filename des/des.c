@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/28 00:20:03 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/28 00:36:35 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -399,7 +399,7 @@ void				des(char **argv, int argc)
 	//char *salt = find_salt();
 	if (g_K != 99999999)
 		tmp = create_key(get_pass_salt(&h));
-	else if (g_K == 99999999 && g_ivBool != 1)
+	else if (g_K == 99999999 && g_ivBool != 1 && !g_decrypt)
 	{
 		ft_putstr("Error, no iv specified\n");
 		exit(0);
@@ -407,7 +407,7 @@ void				des(char **argv, int argc)
 	else
 		tmp = &g_key;
 	key = tmp;
-	printf("key provided %016llX\n", *key);
+//	printf("key provided %016llX\n", *key);
 	tmp++;
 	tmp = des_encrypt(key[0], h.data, h.bytes);
 	if (g_decrypt)
