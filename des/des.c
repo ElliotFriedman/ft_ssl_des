@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/28 12:30:30 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/28 13:12:28 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,7 @@ t_hash				*get_pass_salt(t_hash *file)
 		ft_putstr("Salted__");
 		write(1, salt, 8);
 	}
-/*//	else if (g_decrypt)
+	else if (g_decrypt)
 	{
 		char *n;
 		tmp = salt_from_file(file->data, file->bytes);
@@ -274,7 +274,7 @@ t_hash				*get_pass_salt(t_hash *file)
 		//set g_passlen
 		//set h->bytes & h->data
 	}
-*/
+
 	salt[0] = file->data[0];
 	fclose(e);
 	return (h);
@@ -349,6 +349,18 @@ void				inputsanitycheck(t_hash *h)
 
 int					g_KEY;
 
+int					archBigEndian(void)
+{
+	int				a;
+	char			*b;
+
+	a = 1;
+	b = (char*)&a;
+	if (*b == 1)
+		return (0);
+	return (1);
+}
+
 void				des(char **argv, int argc)
 {
 	unsigned long long	*tmp;
@@ -360,9 +372,6 @@ void				des(char **argv, int argc)
 		//try to read the last arg in to encrypt it
 //	ft_printf("key befor endian: %064b\n", key[0]);
 
-	//make this architecture specific
-	//if we are dealing with big endian we will have to do this
-	//rev_8byte((char*)key, 8);
 	int i = 2;
 	//get all options
 	//aggregate and make choice on where to read data
@@ -396,7 +405,6 @@ void				des(char **argv, int argc)
 	//now we find the salt in the file, OR,
 	//we generate our own depending on what
 	//the user specifies
-	//char *salt = find_salt();
 	if (g_K != 99999999)
 		tmp = create_key(get_pass_salt(&h));
 	else if (g_K == 99999999 && g_ivBool != 1 && !g_decrypt)
@@ -407,6 +415,10 @@ void				des(char **argv, int argc)
 	else
 		tmp = &g_key;
 	key = tmp;
+	//make this architecture specific
+	//if we are dealing with big endian we will have to reverse this key
+	if (archBigEndian())
+		rev_8byte((char*)key, 8);
 //	printf("key provided %016llX\n", *key);
 	tmp++;
 	tmp = des_encrypt(key[0], h.data, h.bytes);
