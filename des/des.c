@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/28 14:54:14 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/09/28 17:08:18 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,16 @@ void				get_user_pass(char **pass, t_hash *file, unsigned long long *tmp)
 	}
 }
 
+void				getsalt(t_hash *h, FILE *e, char *salt)
+{
+	create_salt_8bytes(salt, e);
+	h->data = ft_memjoin((void*)h->data, (void*)salt, ft_strlen(h->data), 8);
+	h->bytes += 8;
+	ft_putstr("Salted__");
+	write(1, salt, 8);
+//	print_bytes((unsigned long long*)salt, 8);
+}
+
 t_hash				*get_pass_salt(t_hash *file)
 {
 	FILE	*e;
@@ -240,20 +250,14 @@ t_hash				*get_pass_salt(t_hash *file)
 	h->bytes = ft_strlen(h->data);
 	//g_salt will be 3 if we don't want to have added salt
 	if (g_salt != 3 && !g_decrypt && !g_saltbool)
-	{
-		create_salt_8bytes(salt, e);
-		h->data = ft_memjoin((void*)h->data, (void*)salt, ft_strlen(h->data), 8);
-		h->bytes += 8;
-		ft_putstr("Salted__");
-		write(1, salt, 8);
-	}
+		getsalt(h, e, salt);
 	else if (g_decrypt)
 	{
 		char *n;
 		tmp = salt_from_file(file->data, file->bytes);
 		if (tmp)
 		{
-			ft_putstr("\n\n\n\n\n\n\n\n\n\n\n\nFound salt in file\n\n\n\n\n\n\n\n");
+			printf("\n\n\n\n\n\n\n\n\n\n\n\nFound salt in file: %016llX\n\n\n\n\n\n\n\n", *tmp);
 			g_salt = *tmp;
 			n = ft_memalloc(ft_strlen(g_pass) + 8);
 			pass = ft_strjoin(pass, (char*)tmp);
