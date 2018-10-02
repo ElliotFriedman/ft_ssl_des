@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/01 23:25:53 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/01 23:37:28 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -432,9 +432,11 @@ void				des(char **argv, int argc)
 	tmp = des_encrypt(key[0], h.data, h.bytes);
 	if (g_saltcharbool)
 	{
-		tmp = (unsigned long long *)ft_memjoin(g_saltchars, tmp, 16, h.bytes);
-		h.bytes += 16;
-		g_len += 16;
+//		ft_putstr(g_saltchars);
+//		ft_putstr("\n");
+		tmp = (unsigned long long *)ft_memjoin(g_saltchars, tmp, 16, g_len);
+		//h.bytes += 16;
+		g_len += 15;
 	}
 	if (g_decrypt)
 	{

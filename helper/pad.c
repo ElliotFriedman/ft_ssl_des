@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 14:17:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/01 22:43:27 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/01 23:28:55 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,6 @@ void		epad(t_hash *h)
 	buf = ft_umalset(1, 128);
 	tmp = h->bytes;
 	dif = (h->bytes * 8) % 512;
-	ft_printf("Address of h->data: %p\n", &h->data);
-	ft_printf("Data of h->data: %s\n", h->data);
-	ft_printf("Bytes of h->data: %d\n", h->bytes);
 	ft_memcpy(&h->data[h->bytes], buf, 1);
 	h->bytes++;
 	dif += 8;
