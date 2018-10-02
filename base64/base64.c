@@ -6,11 +6,13 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/28 00:52:08 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/01 16:54:47 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
+
+int			g_argc;
 
 const char	g_ref[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 int			g_pad;
@@ -61,7 +63,7 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 	}
 
 	g_b64 = (int)ft_strlen((char*)n);
-//	ft_printf("%d\n", g_b64);
+	//	ft_printf("%d\n", g_b64);
 	return (n);
 }
 
@@ -72,10 +74,10 @@ void			choice00(unsigned char *h, t_hash *stor)
 {
 	if (!rstdin(stor))
 		rkey(stor);
-	removewhitespace(stor->data);
 	h = (unsigned char *)stor->data;
 	h = base64_encode((unsigned char*)stor->data, ft_strlen((char*)h));
-	ft_printf("%s\n", (char*)h);
+	ft_putstr((char*)h);
+	ft_putstr("\n");
 }
 
 void	fd_putstr(char *str, int fd, int len)
@@ -90,7 +92,7 @@ void			choice01(unsigned char *h, t_hash *stor)
 	h = (unsigned char *)stor->data;
 	h = base64_decode((unsigned char*)stor->data, ft_strlen((char*)h));
 	fd_putstr((char*)h, 1, g_b64);
-	fd_putstr("\n", 1, 1);
+//	fd_putstr("\n", 1, 1);
 }
 
 void			err0rr(char error)
@@ -102,62 +104,79 @@ void			err0rr(char error)
 	exit(0);
 }
 
+unsigned char	*handle_i(char **argv, t_hash *stor, t_opt *opt, size_t i)
+{
+	unsigned char	*h;
+
+	opt->i = 1;
+	if (i + 1 == (size_t)g_argc)
+		err0rr('i');
+	else if (!ft_fread(argv[i + 1], stor))
+	{
+		ft_printf("Unable to open '%s': No such file or directory\n", argv[i + 1]);
+		exit(0);
+	}
+	h = (unsigned char *)stor->data;
+	if (!opt->d)
+		h = base64_encode((unsigned char*)stor->data, stor->bytes);
+	else
+	{
+		removewhitespace(stor->data);
+		h = base64_decode((unsigned char*)stor->data, ft_strlen(stor->data));
+	}
+	return (h);
+}
+
+unsigned char   *handle_o(t_hash *stor, t_opt *opt)
+{
+	unsigned char	*h;
+
+//	h = 0;
+//	if (!opt->i)
+//	{
+//	rkey(stor);
+	h = (unsigned char *)stor->data;
+	if (opt->d)
+		h = base64_decode((unsigned char*)stor->data, ft_strlen((char*)h));
+	else
+		h = base64_encode((unsigned char*)stor->data, stor->bytes);
+//	}
+	return (h);
+}
+
+
 void			find_options(char **argv, int argc, t_hash *stor, t_opt *opt)
 {
 	int				i;
 	unsigned char	*h;
 	int				fd;
+	unsigned char	*h2;
 
-	fd = 0;
+	fd = 1;
 	i = -1;
 	h = 0;
+	h2 = 0;
 	while (++i < argc)
 	{
-		if (ft_strnstr(argv[i], "-i", 2))
-		{
-			opt->i = 1;
+		if (!ft_strncmp(argv[i], "-i", 2))
+			h = (unsigned char*)handle_i(argv, stor, opt, i);
+		if (!ft_strncmp(argv[i], "-o", 2))
+		{ 
 			if (i + 1 == argc)
-				err0rr('i');
-			else if (!ft_fread(argv[i + 1], stor))
-			{
-				ft_printf("Unable to open '%s': No such file or directory\n", argv[i + 1]);
-				exit(0);
-			}
-			//read in all data
-			h = (unsigned char *)stor->data;
-			//if we aren't decoding, we are encoding
-			if (!opt->d)
-				h = base64_encode((unsigned char*)stor->data, stor->bytes);
-			else
-			{
-				//if we are decoding, remove all whitespaces
-				removewhitespace(stor->data);
-				//now decode
-				h = base64_decode((unsigned char*)stor->data, ft_strlen(stor->data));
-			}
-		}
-		if (ft_strnstr(argv[i], "-o", 2))
-		{
-			if (i + 1 == argc)
-				err0rr('o');
+					err0rr('o');
 			fd = open(argv[i + 1], O_WRONLY | O_CREAT);
-			if (!opt->i)
-			{
-				rkey(stor);
-				h = (unsigned char *)stor->data;
-				if (opt->d)
-					h = base64_decode((unsigned char*)stor->data, ft_strlen((char*)h));
-				else
-					h = base64_encode((unsigned char*)stor->data, stor->bytes);
-			}
-			fd_putstr((char*)h, fd, g_b64);
+			ft_printf("FD: %d\n", fd);
+			h2 = (unsigned char*)handle_o(stor, opt);
+			write(fd, (char*)h2, g_b64);
 			fd_putstr("\n", fd, 1);
 			close(fd);
+			free(h2);
 			return ;
 		}
 	}
 	fd_putstr((char*)h, 1, g_b64);
-	fd_putstr("\n", 1, fd);
+	if (!opt->d)
+		fd_putstr("\n", 1, fd);
 }
 
 void			base64start(char **argv, int argc)
@@ -171,6 +190,7 @@ void			base64start(char **argv, int argc)
 	//				 -i input file
 	//				 -o output file
 	h = 0;
+	g_argc = argc;
 	get_opt_loop(1, argc, argv, &opt);
 	if (argc == 2)
 		choice00(h, &stor);
@@ -181,8 +201,7 @@ void			base64start(char **argv, int argc)
 	else
 	{
 		h = base64_encode((unsigned char *)argv[argc - 1], ft_strlen(argv[argc - 1]));
-		//print_spec((char*)h, g_b64);
 		ft_printf("%s\n", (char*)h);
+		free(h);
 	}
-	free(h);
 }

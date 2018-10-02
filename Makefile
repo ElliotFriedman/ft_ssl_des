@@ -6,15 +6,14 @@
 #    By: efriedma <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/01 16:05:56 by efriedma          #+#    #+#              #
-#    Updated: 2018/09/28 15:00:39 by efriedma         ###   ########.fr        #
+#    Updated: 2018/10/01 14:55:11 by efriedma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
 
 GARBAGE = ft_dprintf/libftdprintf.a ft_dprintf/libftdprintf.a 
 
 DEBUG_FLAGS = -g -fsanitize=address
-CFLAGS = -g -Werror -Wall -Wextra -I ft_printf/libft -I ft_printf/includes
+CFLAGS = -Werror -Wall -Wextra -I ft_printf/libft -I ft_printf/includes
 
 NAME = ft_ssl
 

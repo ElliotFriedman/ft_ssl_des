@@ -54,14 +54,15 @@ openssl enc -des-ecb -pass pass:"${1}" -in main.c -out testog
 
 # DEFAULT -e, encrypt mode (default)
 
-# -i, input file for message
+# DONE -i, input file for message
 
-# NEED TO CHECK ENDIANNESS -k, key in hex is the next arguement.
+# DONE -k, key in hex is the next arguement.
 #	(Behave like openssl des -K not openssl des -k)
 #
+#	IN PROGRESS
 # -o, output file for message
 
-# -p, password in ascii is the next argument.
+# DONE -s, password in ascii is the next argument.
 #(Behave like a modifiedd openssl des -pass not like openssl des -p or -P) (A verbose explanation is given in the next section)
 
 # -s, the salt in hex is the next argument. (Behave like openssl des -S)

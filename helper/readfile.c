@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:51:40 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/28 12:27:52 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/01 15:15:56 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int		ft_fread(char *str, t_hash *h)
 		h->bytes = h->ini;
 		close(fd);
 		h->arr = (unsigned int *)h->data;
-//		ft_printf("read %d bytes in ft_fread\n", h->bytes);
 		return (1);
 	}
 	return (0);
@@ -63,11 +62,11 @@ int		rkey(t_hash *h)
 
 	str = ft_strnew(0);
 	h->bytes = 0;
-	buf = ft_memalloc(2);
-	while (read(0, buf, 1) == 1 && str[h->bytes] != 4)
+	buf = ft_memalloc(2);		//why cant we byte #4?
+	while (read(0, buf, 1) == 1)// && str[h->bytes] != 4)
 	{
 		tmp = str;
-		str = ft_strjoin(str, buf);
+		str = ft_memjoin(str, buf, h->bytes, 1);
 		h->bytes++;
 		free(tmp);
 	}

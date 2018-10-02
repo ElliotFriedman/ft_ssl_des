@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/28 17:08:18 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/01 19:58:44 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ size_t						g_ivBool;
 //boolean for whether or not we need to salt
 //doubles as a salt value if they specify salt. we convert their string to a ull and store here
 size_t						g_salt = 1;
-
+extern size_t				g_nosalt;
 //if pass is provided store it here
-char						*g_pass = "hello";
+char						*g_pass;// = "hello";
 size_t						g_fileidx;
 //this is for key permutation
 //
@@ -249,7 +249,7 @@ t_hash				*get_pass_salt(t_hash *file)
 
 	h->bytes = ft_strlen(h->data);
 	//g_salt will be 3 if we don't want to have added salt
-	if (g_salt != 3 && !g_decrypt && !g_saltbool)
+	if (!g_nosalt && !g_decrypt && !g_saltbool)
 		getsalt(h, e, salt);
 	else if (g_decrypt)
 	{
@@ -313,7 +313,6 @@ void				removepadbytes(char *str)
 	//zero out padding bytes
 	while (i < 8 && ((str[i] & 15) == (hold & 15)))
 	{
-	//	g_len--;
 		str[i] = 0;
 		i--;
 	}
@@ -368,7 +367,7 @@ void				handle_b64decrypt(t_hash *h)
 	tmp1 = h->data;
 	removewhitespace(h->data);
 	h->bytes = ft_strlen(h->data);
-	ft_printf("Data is %d bytes\n", h->bytes);
+//	ft_printf("Data is %d bytes\n", h->bytes);
 	checkbase64encode(h->data, h->bytes);
 	h->data = (char*)base64_decode((unsigned char*)h->data, h->bytes);
 	free(tmp1);
@@ -428,10 +427,8 @@ void				des(char **argv, int argc)
 	else
 		tmp = &g_key;
 	key = tmp;
-	//make this architecture specific
-	//if we are dealing with big endian we will have to reverse this key
-//	if (archBigEndian())
-//		rev_8byte((char*)key, 8);
+	if (archBigEndian())
+		rev_8byte((char*)key, 8);
 //	printf("key provided %016llX\n", *key);
 	tmp++;
 	tmp = des_encrypt(key[0], h.data, h.bytes);

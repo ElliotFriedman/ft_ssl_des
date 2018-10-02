@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/28 01:21:01 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/01 19:57:47 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ size_t				g_ivBool = 0;
 unsigned long long	g_salt;
 size_t				g_saltidx;
 size_t				g_saltbool;
+size_t				g_nosalt;
 
 unsigned long long	g_key;
 int					g_passidx;
@@ -32,11 +33,21 @@ char				*g_pass;
 
 size_t				g_fileidx;
 
+int					g_out;
+int					g_outbool;
+
 void	err0r(char *msg)
 {
 	ft_putstr(msg);
 	exit(0);
 }
+
+//void	part3(char *argv, t_opt *new, int i)
+//{
+	
+
+
+//}
 
 void	part2(char *argv, t_opt *new, int i)
 {
@@ -60,21 +71,22 @@ void	part2(char *argv, t_opt *new, int i)
 		new->d = 1;
 	if (!ft_strncmp(argv, "-a", 2) && ++g_bool)
 		new->a = 1;
+	if (!ft_strncmp(argv, "-o", 2))
+		g_out = i + 1;
+//	part3(argv, new, i);
 }
 
 int		opt(char *argv, t_opt *new, int i)
 {
 	g_bool = 0;
 	if (!ft_strncmp(argv, "-nosalt", 7))
-		g_salt = 3;
+		g_nosalt = 1;
 	if (!ft_strncmp(argv, "-v", 3) && ++g_bool)
 		g_ivIdx = i + 1;
 	if (!ft_strncmp(argv, "-k", 2) && ++g_bool)
 		g_K = i + 1;
 	if (!ft_strncmp(argv, "-s", 2))
 		g_saltidx = i + 1;
-	//figure out how to handle this
-	//what struct will we store this data in?
 	if (!ft_strncmp(argv, "-i", 2))
 		g_fileidx = 1 + i;
 	part2(argv, new, i);
@@ -191,6 +203,10 @@ void	get_opt_if(int argc, char **argv)
 		err0r("Error, no salt specified\n");
 	else if (g_saltidx)
 		handle_salt(argv);
+	if (g_out == argc)
+		err0r("Error, no out file specified\n");
+	else if (g_out && !g_outbool && ++g_outbool)
+		g_out = open(argv[g_out], O_RDWR | O_CREAT | O_APPEND);
 }
 
 int		get_opt(int argc, char **argv, t_opt *new, int i)
