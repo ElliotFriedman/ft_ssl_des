@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/01 16:54:47 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/01 20:15:53 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ void			find_options(char **argv, int argc, t_hash *stor, t_opt *opt)
 		if (!ft_strncmp(argv[i], "-i", 2))
 			h = (unsigned char*)handle_i(argv, stor, opt, i);
 		if (!ft_strncmp(argv[i], "-o", 2))
-		{ 
+		{
 			if (i + 1 == argc)
 					err0rr('o');
 			fd = open(argv[i + 1], O_WRONLY | O_CREAT);

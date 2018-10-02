@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/01 19:58:44 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/01 23:25:53 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,20 +182,6 @@ void		create_salt_8bytes(char *salt, FILE *e)
 //size_t				g_salt = 1;
 size_t				g_passlen;
 
-unsigned long long	*salt_from_file(char *str, size_t len)
-{
-	size_t			i;
-
-	i = 8;
-	if ((!str) || (len < 16))
-		return (0);
-	if (ft_strncmp(str, "Salted__", 8))
-		return (0);
-	//duplicate 8 bytes of memory
-//	ft_printf("Salt: %c%c%c%c%c%c%c%c\n", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]); 
-	return (ft_memdup((unsigned long long *)str, 8));
-}
-
 void				get_user_pass(char **pass, t_hash *file, unsigned long long *tmp)
 {
 	char *tmpa;
@@ -214,17 +200,41 @@ void				get_user_pass(char **pass, t_hash *file, unsigned long long *tmp)
 	}
 }
 
-void				getsalt(t_hash *h, FILE *e, char *salt)
+char				*getsalt(t_hash *h, FILE *e, char *salt)//, t_opt *opt)
 {
+	char			*tmp;
+
+	tmp = 0;
 	create_salt_8bytes(salt, e);
 	h->data = ft_memjoin((void*)h->data, (void*)salt, ft_strlen(h->data), 8);
+	
 	h->bytes += 8;
-	ft_putstr("Salted__");
-	write(1, salt, 8);
+	if (!g_decrypt)
+	{
+		tmp = ft_strjoin("Salted__", salt);
+		//h->data = ft_memjoin(h->data, tmp, h->bytes, 16);
+
+        //ft_printf("Salted beginning of string %s\n", h->data);
+	//	h->bytes += 16;
+//		ft_putstr("Salted__");
+//		write(1, salt, 8);
+	}
+/*	else if (opt->a && !g_decrypt)
+	{
+		h->data = ft_strjoin(ft_strdup("Salted__"), salt);
+		ft_printf("Salted beginning of string %s\n", h->data);
+		h->bytes += 16;
+	}
+	*/
+	//this is the thing that needs to go at the top of the file
+	return (tmp);
 //	print_bytes((unsigned long long*)salt, 8);
 }
 
-t_hash				*get_pass_salt(t_hash *file)
+char				*g_saltchars;
+int					g_saltcharbool;
+
+t_hash				*get_pass_salt(t_hash *file, t_opt *opt)
 {
 	FILE	*e;
 	char	salt[9];
@@ -236,46 +246,35 @@ t_hash				*get_pass_salt(t_hash *file)
 	e = fopen("/dev/urandom", "r");
 	tmp = 0;
 	pass = 0;
+	opt->on = 1; 
 	if (!g_key)
 	{
 		get_user_pass(&pass, file, tmp);
 		g_pass = pass;
 	}
 	else
-		pass = g_pass;
-	//change this later
-	//tmp = salt_from_file(file->data, file->bytes);
-	h->data = ft_strdup(pass);
-
-	h->bytes = ft_strlen(h->data);
-	//g_salt will be 3 if we don't want to have added salt
-	if (!g_nosalt && !g_decrypt && !g_saltbool)
-		getsalt(h, e, salt);
-	else if (g_decrypt)
 	{
-		char *n;
-		tmp = salt_from_file(file->data, file->bytes);
-		if (tmp)
-		{
-			printf("\n\n\n\n\n\n\n\n\n\n\n\nFound salt in file: %016llX\n\n\n\n\n\n\n\n", *tmp);
-			g_salt = *tmp;
-			n = ft_memalloc(ft_strlen(g_pass) + 8);
-			pass = ft_strjoin(pass, (char*)tmp);
-			ft_strcpy(n, g_pass);
-			h->bytes = ft_strlen(g_pass);
-			ft_memcpy((void*)&n[ft_strlen(g_pass)], (void*)&g_salt, 8);
-			h->data = n;
-			h->bytes += 8;
-			g_strlen = 1;
-		}
-		//find salt from file
-		//need access to the file here
-		//copy salt bytes from file to end of password
-		//set g_passlen
-		//set h->bytes & h->data
+		pass = g_pass;
+		h->data = ft_strdup(pass);
+		h->bytes = ft_strlen(h->data);
 	}
+	//if no salt has been provided, get your own salt
+	if (!g_nosalt && !g_decrypt && !g_saltbool)
+	{
+		g_saltchars = getsalt(h, e, salt);
+		g_saltcharbool = 1;
+	}
+	//otherwise, join salt you already have with password
+	else if (g_nosalt && g_saltbool)// && !g_decrypt)
+	{
+		char *ftmp;
 
-	salt[0] = file->data[0];
+		ftmp = h->data;
+		h->data = ft_memjoin(h->data, &g_salt, h->bytes, 8);
+		h->bytes += 8;
+		free(ftmp);
+	}
+	//salt[0] = file->data[0];
 	fclose(e);
 	return (h);
 }
@@ -301,22 +300,19 @@ void				removepadbytes(char *str)
 	size_t	hold;
 	
 	i = 7;
-	//ft_printf("%c%c%c%c%c%c%c%c", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
 	hold = (size_t)(str[i] & 15);
 	if (hold == 0 || hold > 8)
 	{
 		ft_printf("Bad byte pattern found in padding byte(s) ascii val %d found\n", str[i]);
-	//	exit(0);
+		exit(0);
 	}
-	//ft_printf("g_len: %d, removing bytes %u\n", g_len, hold);
-	g_len -= hold;//(hold == 6 ? hold : hold * 2);
+	g_len -= hold;
 	//zero out padding bytes
 	while (i < 8 && ((str[i] & 15) == (hold & 15)))
 	{
 		str[i] = 0;
 		i--;
 	}
-	//ft_printf("updated g_len: %d, removing bytes %u\n", g_len, hold);
 }
 
 void			checkbase64encode(char *str, size_t bytes)
@@ -331,7 +327,7 @@ void			checkbase64encode(char *str, size_t bytes)
 		if (((!ft_strchr(g_ref, str[i]) && str[i] != '=') || bytes % 4 != 0) && str[i] != '\n')
 		{
 			ft_putstr("Error, invalid byte sequence detected in base64 encoded string\n");
-			//exit(0);
+			exit(0);
 		}
 		i++;
 	}
@@ -391,6 +387,8 @@ void				des(char **argv, int argc)
 	get_opt_loop(2, argc, argv, &opt);
 
 	tmp = 0;
+	if (g_K != 99999999)
+		tmp = create_key(get_pass_salt(&h, &opt));
 	if (!g_fileidx)
 		rkey(&h);
 	else if ((int)g_fileidx >= argc)
@@ -409,7 +407,7 @@ void				des(char **argv, int argc)
 		ft_printf("Data is %d bytes\n", h.bytes);
 		checkbase64encode(h.data, h.bytes);
 		h.data = (char*)base64_decode((unsigned char*)h.data, h.bytes);
-			free(tmp1);
+		free(tmp1);
 		h.bytes = g_b64;
 	}
 	if (g_decrypt) //sanity check here to make sure that the input file was not malformed//this will need to be checked whether base64 encoded or not
@@ -417,8 +415,8 @@ void				des(char **argv, int argc)
 	//now we find the salt in the file, OR,
 	//we generate our own depending on what
 	//the user specifies
-	if (g_K != 99999999)
-		tmp = create_key(get_pass_salt(&h));
+//	if (g_K != 99999999)
+//		tmp = create_key(get_pass_salt(&h, &opt));
 	else if (g_K == 99999999 && g_ivBool != 1 && !g_decrypt)
 	{
 		ft_putstr("Error, no iv specified\n");
@@ -432,6 +430,12 @@ void				des(char **argv, int argc)
 //	printf("key provided %016llX\n", *key);
 	tmp++;
 	tmp = des_encrypt(key[0], h.data, h.bytes);
+	if (g_saltcharbool)
+	{
+		tmp = (unsigned long long *)ft_memjoin(g_saltchars, tmp, 16, h.bytes);
+		h.bytes += 16;
+		g_len += 16;
+	}
 	if (g_decrypt)
 	{
 		char *n = (char *)&tmp[(g_len / 8) - 1];
