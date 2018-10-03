@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/02 22:17:11 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/02 23:03:05 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char				*g_pass;
 
 size_t				g_fileidx;
 
-int					g_out;
+int					g_out = 1;
 int					g_outbool;
 
 void	err0r(char *msg)
@@ -72,7 +72,7 @@ void	part2(char *argv, t_opt *new, int i)
 	if (!ft_strncmp(argv, "-a", 2) && ++g_bool)
 		new->a = 1;
 	if (!ft_strncmp(argv, "-o", 2))
-		g_out = i + 1;
+		g_outbool = i + 1;
 //	part3(argv, new, i);
 }
 
@@ -202,12 +202,15 @@ void	get_opt_if(int argc, char **argv)
 		err0r("Error, no iv specified\n");
 	if ((int)g_saltidx == argc)
 		err0r("Error, no salt specified\n");
-	else if (g_saltidx)
+	if (g_saltidx)
 		handle_salt(argv);
 	if (g_out == argc)
 		err0r("Error, no out file specified\n");
-	else if (g_out && !g_outbool && ++g_outbool)
-		g_out = open(argv[g_out], O_RDWR | O_CREAT | O_APPEND);
+	else if (g_outbool && g_out == 1)
+	{
+		g_out = open(argv[g_outbool], O_RDWR | O_CREAT);
+		g_outbool = 0;
+	}
 }
 
 int		get_opt(int argc, char **argv, t_opt *new, int i)

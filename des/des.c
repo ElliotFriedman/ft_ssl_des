@@ -6,16 +6,19 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/02 21:25:43 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/02 23:00:26 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
 extern unsigned long long	g_key;
+char						*g_saltchars;
+int							g_saltcharbool;
 extern int					g_b64;
 extern int					g_decrypt;
 extern int					g_cbc;
+extern int					g_out;
 size_t						g_strlen;
 extern size_t				g_saltbool;
 int							g_K;
@@ -183,9 +186,6 @@ char						*getsalt(t_hash *h, char *salt)
 	return (tmp);
 }
 
-char						*g_saltchars;
-int							g_saltcharbool;
-
 void						handle_salt_add(t_hash *h)
 {
 	char					*ftmp;
@@ -216,14 +216,14 @@ t_hash						*get_pass_salt(t_hash *file)
 		get_user_pass(&pass, file);//, tmp);
 		g_pass = pass;
 	}
-	//otherwise, get the current password
+	//otherwise, use the current password
 	else
 	{
 		pass = g_pass;
 		h->data = ft_strdup(pass);
 		h->bytes = ft_strlen(h->data);
 	}
-	//if no salt has been provided, and you are not decrypting, get your own salt
+	//if no salt has been provided, we haven't said nosalt, and you are not decrypting, get your own salt
 	if (!g_nosalt && !g_decrypt && !g_saltbool)
 		create_salt(h, salt);
 	//otherwise, join salt you already have with password
@@ -377,8 +377,12 @@ void						des(char **argv, int argc)
 	g_tmp = (char*)&tmp[(g_len / 8) - 1];
 	if (g_len && (!opt.a || g_decrypt))
 	{
+		ft_printf("g_out: %dg_len: %d\n", g_out, g_len);
+		
 		g_tmp = (char *)&tmp[0];
-		write(1, g_tmp, g_len); 
+		write(1, g_tmp, g_len);
+		write(g_out, g_tmp, g_len);
+		close(g_out);
 	}
 	free(g_tmp);
 }
