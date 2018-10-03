@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/02 23:35:55 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/03 00:23:33 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -351,14 +351,28 @@ void						printouta(unsigned long long *tmp)
 	g_tmp = (char*)base64_encode((unsigned char*)tmp, g_len);
 	ft_putstr_fd(g_tmp, g_out);
 	ft_putstr_fd("\n", g_out);
+	fchmod(g_out, 00000700);
+	if (g_out != 1)
+		close(g_out);
 	free(g_tmp);
 	exit(0);
+}
+
+void						iverror(void)
+{
+	ft_putstr("Error, no iv specified\n");
+	exit(0);
+}
+
+void						decryptremovepad(unsigned long long *tmp)
+{
+	g_tmp = (char *)&tmp[(g_len / 8) - 1];
+	removepadbytes(g_tmp);
 }
 
 void						des(char **argv, int argc)
 {
 	unsigned long long		*tmp;
-	unsigned long long		*key;
 	static t_hash			h;
 	static t_opt			opt;
 
@@ -368,20 +382,12 @@ void						des(char **argv, int argc)
 	if (g_K != 99999999)
 		tmp = create_key(get_pass_salt(&h));
 	else if (g_K == 99999999 && g_ivBool != 1 && !g_decrypt)
-	{
-		ft_putstr("Error, no iv specified\n");
-		exit(0);
-	}
+		iverror();
 	else
 		tmp = &g_key;
-	key = tmp;
-	tmp++;
-	tmp = des_encrypt(key[0], h.data, h.bytes);
+	tmp = des_encrypt(*tmp, h.data, h.bytes);
 	if (g_decrypt)
-	{
-		g_tmp = (char *)&tmp[(g_len / 8) - 1];
-		removepadbytes(g_tmp);
-	}
+		decryptremovepad(tmp);
 	if (opt.a && !g_decrypt)
 		printouta(tmp);
 	g_tmp = (char*)&tmp[(g_len / 8) - 1];

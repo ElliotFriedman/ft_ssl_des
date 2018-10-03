@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/02 23:03:05 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/03 00:30:38 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	err0r(char *msg)
 
 //void	part3(char *argv, t_opt *new, int i)
 //{
-	
+
 
 
 //}
@@ -73,7 +73,7 @@ void	part2(char *argv, t_opt *new, int i)
 		new->a = 1;
 	if (!ft_strncmp(argv, "-o", 2))
 		g_outbool = i + 1;
-//	part3(argv, new, i);
+	//	part3(argv, new, i);
 }
 
 int		opt(char *argv, t_opt *new, int i)
@@ -178,8 +178,29 @@ void	handle_k(char **argv)
 
 void	handle_salt(char **argv)
 {
+	char	*tmpa;
+	char	*tfree;
+
+	tmpa = 0;
+	tfree = 0;
 	checkbase16(argv[g_saltidx], "salt");
-	g_salt = ft_atoibase16(argv[g_saltidx]);
+	if (ft_strlen(argv[g_saltidx]) >= 28)
+		err0r("hex string is too long\ninvalid hex salt value\n");
+	if ((ft_strlen(argv[g_saltidx]) != 16))
+	{
+		tmpa = ft_strdup(argv[g_saltidx]);
+		while (ft_strlen(tmpa) < 16)
+		{
+			tfree = tmpa;
+			tmpa = ft_strjoin(tmpa, "0");
+			free(tfree);
+		}
+		g_salt = ft_atoibase16(tmpa);
+		free(tmpa);
+	}
+	else
+		g_salt = ft_atoibase16(argv[g_saltidx]);
+	rev_8byte((char*)&g_salt, 8);	
 	g_saltidx = 0;
 	g_saltbool = 1;
 }

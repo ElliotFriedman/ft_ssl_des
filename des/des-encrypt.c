@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/02 21:31:12 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/03 00:30:45 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,7 +315,6 @@ char	*encrypted_des(char *data, unsigned long long key)
 		textblock ^= g_iv;
 	else if (g_cbc && g_decrypt)
 		ciphertext = textblock;
-
 	textblock = initial_perm(textblock);
 	lside = textblock >> 32;
 	lside <<= 32;
