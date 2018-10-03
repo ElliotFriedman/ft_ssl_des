@@ -6,12 +6,13 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/02 23:11:14 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/02 23:35:55 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
+char						*g_tmp;
 extern unsigned long long	g_key;
 char						*g_saltchars;
 int							g_saltcharbool;
@@ -337,7 +338,22 @@ void						checkfile(int argc, char **argv, t_hash *h, t_opt *opt)
 		inputsanitycheck(h);
 }
 
-char						*g_tmp;
+void						printout(unsigned long long *tmp)
+{
+	g_tmp = (char *)&tmp[0];
+	write(g_out, g_tmp, g_len);
+	fchmod(g_out, 00000700);	
+	close(g_out);
+}
+
+void						printouta(unsigned long long *tmp)
+{
+	g_tmp = (char*)base64_encode((unsigned char*)tmp, g_len);
+	ft_putstr_fd(g_tmp, g_out);
+	ft_putstr_fd("\n", g_out);
+	free(g_tmp);
+	exit(0);
+}
 
 void						des(char **argv, int argc)
 {
@@ -367,23 +383,9 @@ void						des(char **argv, int argc)
 		removepadbytes(g_tmp);
 	}
 	if (opt.a && !g_decrypt)
-	{
-		g_tmp = (char*)base64_encode((unsigned char*)tmp, g_len);
-		ft_putstr(g_tmp);
-		ft_putstr("\n");
-		free(g_tmp);
-		exit(0);
-	}
+		printouta(tmp);
 	g_tmp = (char*)&tmp[(g_len / 8) - 1];
 	if (g_len && (!opt.a || g_decrypt))
-	{
-//		ft_printf("g_out: %dg_len: %d\n", g_out, g_len);
-		
-		g_tmp = (char *)&tmp[0];
-//		write(1, g_tmp, g_len);
-		write(g_out, g_tmp, g_len);
-		fchmod(g_out, 00000700);	
-		close(g_out);
-	}
+		printout(tmp);
 	free(g_tmp);
 }
