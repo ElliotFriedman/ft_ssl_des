@@ -60,14 +60,13 @@ openssl enc -des-ecb -pass pass:"${1}" -in main.c -out testog
 #	(Behave like openssl des -K not openssl des -k)
 #
 #	IN PROGRESS
-# -o, output file for message
+# DONE -o, output file for message
 
-# DONE -s, password in ascii is the next argument.
+# DONE -p, password in ascii is the next argument.
 #(Behave like a modifiedd openssl des -pass not like openssl des -p or -P) (A verbose explanation is given in the next section)
 
-# -s, the salt in hex is the next argument. (Behave like openssl des -S)
 
-# -v, initialization vector in hex is the next argument. (Behave like openssl des -iv not openssl des -v)
+# DONE -v, initialization vector in hex is the next argument. (Behave like openssl des -iv not openssl des -v)
 
 
 #Make a function to grab all arguments
