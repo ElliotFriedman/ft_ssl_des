@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/01 23:37:28 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/02 20:40:17 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,35 +206,23 @@ char				*getsalt(t_hash *h, FILE *e, char *salt)//, t_opt *opt)
 
 	tmp = 0;
 	create_salt_8bytes(salt, e);
-	h->data = ft_memjoin((void*)h->data, (void*)salt, ft_strlen(h->data), 8);
-	
-	h->bytes += 8;
+	if (!g_nosalt)
+	{
+		h->data = ft_memjoin((void*)h->data, (void*)salt, ft_strlen(h->data), 8);
+		h->bytes += 8;
+	}
 	if (!g_decrypt)
 	{
 		tmp = ft_strjoin("Salted__", salt);
-		//h->data = ft_memjoin(h->data, tmp, h->bytes, 16);
-
-        //ft_printf("Salted beginning of string %s\n", h->data);
-	//	h->bytes += 16;
-//		ft_putstr("Salted__");
-//		write(1, salt, 8);
 	}
-/*	else if (opt->a && !g_decrypt)
-	{
-		h->data = ft_strjoin(ft_strdup("Salted__"), salt);
-		ft_printf("Salted beginning of string %s\n", h->data);
-		h->bytes += 16;
-	}
-	*/
-	//this is the thing that needs to go at the top of the file
+	fclose(e);
 	return (tmp);
-//	print_bytes((unsigned long long*)salt, 8);
 }
 
 char				*g_saltchars;
 int					g_saltcharbool;
 
-t_hash				*get_pass_salt(t_hash *file, t_opt *opt)
+t_hash				*get_pass_salt(t_hash *file)//, t_opt *opt)
 {
 	FILE	*e;
 	char	salt[9];
@@ -246,26 +234,28 @@ t_hash				*get_pass_salt(t_hash *file, t_opt *opt)
 	e = fopen("/dev/urandom", "r");
 	tmp = 0;
 	pass = 0;
-	opt->on = 1; 
+	//if we don't have a password or key, go get one
 	if (!g_key)
 	{
 		get_user_pass(&pass, file, tmp);
 		g_pass = pass;
 	}
+	//otherwise, get the current password
 	else
 	{
 		pass = g_pass;
 		h->data = ft_strdup(pass);
 		h->bytes = ft_strlen(h->data);
 	}
-	//if no salt has been provided, get your own salt
+	//if no salt has been provided, and you are not decrypting, get your own salt
 	if (!g_nosalt && !g_decrypt && !g_saltbool)
 	{
 		g_saltchars = getsalt(h, e, salt);
 		g_saltcharbool = 1;
 	}
 	//otherwise, join salt you already have with password
-	else if (g_nosalt && g_saltbool)// && !g_decrypt)
+	//we don't want to be getting salt while we are decrypting
+	else if (!g_nosalt && g_saltbool)
 	{
 		char *ftmp;
 
@@ -274,8 +264,6 @@ t_hash				*get_pass_salt(t_hash *file, t_opt *opt)
 		h->bytes += 8;
 		free(ftmp);
 	}
-	//salt[0] = file->data[0];
-	fclose(e);
 	return (h);
 }
 
@@ -307,7 +295,6 @@ void				removepadbytes(char *str)
 		exit(0);
 	}
 	g_len -= hold;
-	//zero out padding bytes
 	while (i < 8 && ((str[i] & 15) == (hold & 15)))
 	{
 		str[i] = 0;
@@ -327,7 +314,7 @@ void			checkbase64encode(char *str, size_t bytes)
 		if (((!ft_strchr(g_ref, str[i]) && str[i] != '=') || bytes % 4 != 0) && str[i] != '\n')
 		{
 			ft_putstr("Error, invalid byte sequence detected in base64 encoded string\n");
-			exit(0);
+			//exit(0);
 		}
 		i++;
 	}
@@ -363,11 +350,28 @@ void				handle_b64decrypt(t_hash *h)
 	tmp1 = h->data;
 	removewhitespace(h->data);
 	h->bytes = ft_strlen(h->data);
-//	ft_printf("Data is %d bytes\n", h->bytes);
+	ft_printf("Data is %d bytes\n", h->bytes);
 	checkbase64encode(h->data, h->bytes);
 	h->data = (char*)base64_decode((unsigned char*)h->data, h->bytes);
 	free(tmp1);
 	h->bytes = g_b64;
+}
+
+void				checkfile(int argc, char **argv, t_hash *h, t_opt *opt)
+{
+	if (!g_fileidx)
+		rkey(h);
+	else if ((int)g_fileidx >= argc)
+		err0r("Invalid file index\n");
+	else if (!ft_fread(argv[g_fileidx], h))
+	{
+		ft_printf("Error, file \'%s\' not found\n", argv[argc - 1]);
+		exit(0);
+	}
+	if (opt->a && g_decrypt)
+		handle_b64decrypt(h);
+	if (g_decrypt)
+		inputsanitycheck(h);
 }
 
 void				des(char **argv, int argc)
@@ -377,46 +381,12 @@ void				des(char **argv, int argc)
 	static t_hash		h;
 	static t_opt		opt;
 
-	//this has been modified and it will return a constant value.
-		//try to read the last arg in to encrypt it
-//	ft_printf("key befor endian: %064b\n", key[0]);
-
 	int i = 2;
-	//get all options
-	//aggregate and make choice on where to read data
 	get_opt_loop(2, argc, argv, &opt);
-
 	tmp = 0;
+	checkfile(argc, argv, &h, &opt);
 	if (g_K != 99999999)
-		tmp = create_key(get_pass_salt(&h, &opt));
-	if (!g_fileidx)
-		rkey(&h);
-	else if ((int)g_fileidx >= argc)
-		err0r("Invalid file index\n");
-	else if (!ft_fread(argv[g_fileidx], &h))
-	{
-		ft_printf("Error, file \'%s\' not found\n", argv[argc - 1]);
-		exit(0);
-	}
-	if (opt.a && g_decrypt)
-	{
-//		handle_b64decrypt(&h);
-		char *tmp1 = h.data;
-		removewhitespace(h.data);
-		h.bytes = ft_strlen(h.data);
-		ft_printf("Data is %d bytes\n", h.bytes);
-		checkbase64encode(h.data, h.bytes);
-		h.data = (char*)base64_decode((unsigned char*)h.data, h.bytes);
-		free(tmp1);
-		h.bytes = g_b64;
-	}
-	if (g_decrypt) //sanity check here to make sure that the input file was not malformed//this will need to be checked whether base64 encoded or not
-		inputsanitycheck(&h);
-	//now we find the salt in the file, OR,
-	//we generate our own depending on what
-	//the user specifies
-//	if (g_K != 99999999)
-//		tmp = create_key(get_pass_salt(&h, &opt));
+		tmp = create_key(get_pass_salt(&h));
 	else if (g_K == 99999999 && g_ivBool != 1 && !g_decrypt)
 	{
 		ft_putstr("Error, no iv specified\n");
@@ -425,29 +395,18 @@ void				des(char **argv, int argc)
 	else
 		tmp = &g_key;
 	key = tmp;
-	if (archBigEndian())
-		rev_8byte((char*)key, 8);
-//	printf("key provided %016llX\n", *key);
 	tmp++;
 	tmp = des_encrypt(key[0], h.data, h.bytes);
-	if (g_saltcharbool)
-	{
-//		ft_putstr(g_saltchars);
-//		ft_putstr("\n");
-		tmp = (unsigned long long *)ft_memjoin(g_saltchars, tmp, 16, g_len);
-		//h.bytes += 16;
-		g_len += 15;
-	}
 	if (g_decrypt)
 	{
 		char *n = (char *)&tmp[(g_len / 8) - 1];
 		removepadbytes(n);
 	}
-	char *out = 0;
 	if (opt.a && !g_decrypt)
 	{
-		out = (char*)base64_encode((unsigned char*)tmp, g_len);
+		char *out = (char*)base64_encode((unsigned char*)tmp, g_len);
 		ft_printf("%s\n", out);
+		free(out);
 	}
 	i = 0;
 	char	*str;
@@ -458,7 +417,4 @@ void				des(char **argv, int argc)
 		write(1, str, g_len); 
 	}
 	free(tmp);
-	 //ft_printf("glen is %d bytes\n", g_len);
-//	if (!g_decrypt && opt.a)
-//		ft_putstr("\n");
 }
