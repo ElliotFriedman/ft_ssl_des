@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/03 00:23:33 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/03 00:43:43 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,23 +211,19 @@ t_hash						*get_pass_salt(t_hash *file)
 
 	h = ft_memalloc(sizeof(t_hash));
 	pass = 0;
-	//if we don't have a password or key, go get one
 	if (!g_key)
 	{
-		get_user_pass(&pass, file);//, tmp);
+		get_user_pass(&pass, file);
 		g_pass = pass;
 	}
-	//otherwise, use the current password
 	else
 	{
 		pass = g_pass;
 		h->data = ft_strdup(pass);
 		h->bytes = ft_strlen(h->data);
 	}
-	//if no salt has been provided, we haven't said nosalt, and you are not decrypting, get your own salt
 	if (!g_nosalt && !g_decrypt && !g_saltbool)
 		create_salt(h, salt);
-	//otherwise, join salt you already have with password
 	else if (!g_nosalt && g_saltbool)
 		handle_salt_add(h);
 	return (h);
