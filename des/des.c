@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/02 20:40:17 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/02 20:52:26 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ void		create_salt_8bytes(char *salt, FILE *e)
 //size_t				g_salt = 1;
 size_t				g_passlen;
 
-void				get_user_pass(char **pass, t_hash *file, unsigned long long *tmp)
+void				get_user_pass(char **pass, t_hash *file)//, unsigned long long *tmp)
 {
 	char *tmpa;
 
@@ -194,17 +194,19 @@ void				get_user_pass(char **pass, t_hash *file, unsigned long long *tmp)
 		ft_putstr("Verify failure\nbad password read\n");
 		free(tmpa);
 		free(*pass);
-		free(tmp);
+//		free(tmp);
 		free(file->data);
 		exit(0);
 	}
 }
 
-char				*getsalt(t_hash *h, FILE *e, char *salt)//, t_opt *opt)
+char				*getsalt(t_hash *h, char *salt)//, t_opt *opt)
 {
 	char			*tmp;
+	FILE			*e;
 
 	tmp = 0;
+	e = fopen("/dev/urandom", "r");
 	create_salt_8bytes(salt, e);
 	if (!g_nosalt)
 	{
@@ -222,22 +224,33 @@ char				*getsalt(t_hash *h, FILE *e, char *salt)//, t_opt *opt)
 char				*g_saltchars;
 int					g_saltcharbool;
 
+void				handle_salt_add(t_hash *h)
+{
+	char *ftmp;
+		ftmp = h->data;
+		h->data = ft_memjoin(h->data, &g_salt, h->bytes, 8);
+		h->bytes += 8;
+		free(ftmp);
+}
+
+void				create_salt(t_hash *h, char *salt)
+{
+	g_saltchars = getsalt(h, salt);
+	g_saltcharbool = 1;
+}
+
 t_hash				*get_pass_salt(t_hash *file)//, t_opt *opt)
 {
-	FILE	*e;
 	char	salt[9];
 	char	*pass;
 	t_hash	*h;
-	unsigned long long	*tmp;
 
 	h = ft_memalloc(sizeof(t_hash));
-	e = fopen("/dev/urandom", "r");
-	tmp = 0;
 	pass = 0;
 	//if we don't have a password or key, go get one
 	if (!g_key)
 	{
-		get_user_pass(&pass, file, tmp);
+		get_user_pass(&pass, file);//, tmp);
 		g_pass = pass;
 	}
 	//otherwise, get the current password
@@ -249,21 +262,10 @@ t_hash				*get_pass_salt(t_hash *file)//, t_opt *opt)
 	}
 	//if no salt has been provided, and you are not decrypting, get your own salt
 	if (!g_nosalt && !g_decrypt && !g_saltbool)
-	{
-		g_saltchars = getsalt(h, e, salt);
-		g_saltcharbool = 1;
-	}
+		create_salt(h, salt);
 	//otherwise, join salt you already have with password
-	//we don't want to be getting salt while we are decrypting
 	else if (!g_nosalt && g_saltbool)
-	{
-		char *ftmp;
-
-		ftmp = h->data;
-		h->data = ft_memjoin(h->data, &g_salt, h->bytes, 8);
-		h->bytes += 8;
-		free(ftmp);
-	}
+		handle_salt_add(h);
 	return (h);
 }
 
