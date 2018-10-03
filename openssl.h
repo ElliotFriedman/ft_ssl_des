@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/28 01:21:15 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/02 23:07:45 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <stdlib.h>
 # include <pwd.h>
 # include <unistd.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 # define RR(a, shift) ((a >> shift) | (a << (32 - shift)))
 # define RN(a, shift) (a >> shift)

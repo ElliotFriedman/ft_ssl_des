@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/02 23:00:26 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/02 23:11:14 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,11 +377,12 @@ void						des(char **argv, int argc)
 	g_tmp = (char*)&tmp[(g_len / 8) - 1];
 	if (g_len && (!opt.a || g_decrypt))
 	{
-		ft_printf("g_out: %dg_len: %d\n", g_out, g_len);
+//		ft_printf("g_out: %dg_len: %d\n", g_out, g_len);
 		
 		g_tmp = (char *)&tmp[0];
-		write(1, g_tmp, g_len);
+//		write(1, g_tmp, g_len);
 		write(g_out, g_tmp, g_len);
+		fchmod(g_out, 00000700);	
 		close(g_out);
 	}
 	free(g_tmp);
