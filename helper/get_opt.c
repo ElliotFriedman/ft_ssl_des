@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/01 19:57:47 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/02 22:17:11 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	err0r(char *msg)
 
 void	part2(char *argv, t_opt *new, int i)
 {
-	if (!ft_strncmp(argv, "-p", 2) && ++g_bool)
+	if (!ft_strncmp(argv, "-p", 2) && ++g_bool && !g_passidx)
 	{
 		if (g_passidx)
 			err0r("Error, you can only specify a password once\n");
@@ -178,6 +178,7 @@ void	handle_k(char **argv)
 
 void	handle_salt(char **argv)
 {
+	checkbase16(argv[g_saltidx], "salt");
 	g_salt = ft_atoibase16(argv[g_saltidx]);
 	g_saltidx = 0;
 	g_saltbool = 1;
@@ -216,7 +217,8 @@ int		get_opt(int argc, char **argv, t_opt *new, int i)
 	fd = 0;
 	while (i < argc)
 	{
-		if (argv[i][0] == '-' && (open(argv[i], O_RDONLY) == -1) && opt(argv[i], new, i))
+		if (argv[i][0] == '-' && (open(argv[i], O_RDONLY) == -1)
+				&& opt(argv[i], new, i))
 		{
 			get_opt_if(argc, argv);
 			return (1);
