@@ -6,13 +6,12 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/02 20:52:26 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/02 21:25:43 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
-// boolean for key provided
 extern unsigned long long	g_key;
 extern int					g_b64;
 extern int					g_decrypt;
@@ -21,49 +20,23 @@ size_t						g_strlen;
 extern size_t				g_saltbool;
 int							g_K;
 size_t						g_ivBool;
-//boolean for whether or not we need to salt
-//doubles as a salt value if they specify salt. we convert their string to a ull and store here
 size_t						g_salt = 1;
 extern size_t				g_nosalt;
-//if pass is provided store it here
-char						*g_pass;// = "hello";
+char						*g_pass;
 size_t						g_fileidx;
-//this is for key permutation
-//
-//Turns key from 64 bits to 56 bits.
-//
-//Since there is no data type that is 56 bits, we will ignore the least significant byte which will be all 0's
-//
-//This permuted key will be divided into 2 28 bit halves that will be permuted once per round
-//
-//16 rounds per 64 bit block
-
-int				g_grab[56] = {57, 49, 41, 33, 25, 17, 9,
+int							g_grab[56] = {57, 49, 41, 33, 25, 17, 9,
 	1, 58, 50, 42, 34, 26, 18,
 	10, 2, 59, 51, 43, 35, 27,
 	19, 11, 3, 60, 52, 44, 36,
-	63, 55, 47, 39, 31, 23, 15, //value: 23, index: 33
+	63, 55, 47, 39, 31, 23, 15,
 	7, 62, 54, 46, 38, 30, 22,
 	14, 6, 61, 53, 45, 37, 29,
 	21, 13, 5, 28, 20, 12, 4};
+int							g_permute[64];
+int							g_len;
+int							g_rotate[16];
 
-
-//This is the initial Permutation done on plaintext
-
-int				g_permute[64];/* = {58, 50, 42, 34, 26, 18, 10,
-	2, 60, 52, 44, 36, 28, 20,
-	12, 4, 62, 54, 46, 38, 30,
-	22, 14, 6, 64, 56, 48, 40,
-	32, 24, 16, 8, 57, 49, 41,
-	33, 25, 17, 9, 1, 59, 51,
-	43, 35, 27, 19, 11, 3, 61,
-	53, 45, 37, 29, 21, 13, 5,
-	63, 55, 47, 39, 31, 23, 15, 7};*/
-
-int				g_len;
-int				g_rotate[16];
-
-unsigned long long	pow2(size_t amt)
+unsigned long long			pow2(size_t amt)
 {
 	unsigned long long int	ret;
 
@@ -73,9 +46,8 @@ unsigned long long	pow2(size_t amt)
 	return (ret);
 }
 
-unsigned long long	init_subkey(unsigned long long key)
+unsigned long long			init_subkey(unsigned long long key)
 {
-	//This is to extract the 56 bit key from 64 bits
 	unsigned long long	ret;
 	size_t				i;
 	unsigned long long	tmp;
@@ -85,7 +57,7 @@ unsigned long long	init_subkey(unsigned long long key)
 	while (i < 56)
 	{
 		tmp = 0;
-		 tmp = (pow2(g_grab[i] - 1) & key);
+		tmp = (pow2(g_grab[i] - 1) & key);
 		if ((g_grab[i] + 1) > (int)i)
 			tmp <<= (g_grab[i] - i - 1);
 		else
@@ -93,29 +65,25 @@ unsigned long long	init_subkey(unsigned long long key)
 		ret += (tmp);
 		i++;
 	}
-	//least significant 8 bits should be empty
-	//ft_printf("\ninit_subkey = %064b\n", ret);
 	return (ret);
 }
 
-void		swap_4bytes(int *data)
+void						swap_4bytes(int *data)
 {
 	int	a;
 
 	a = data[0];
-
 	data[0] = data[1];
 	data[1] = a;
 }
 
-void		print_bytes(unsigned long long *data, int len)
+void						print_bytes(unsigned long long *data, int len)
 {
-	size_t	i = 0;
+	size_t				i = 0;
 	unsigned long long	use;
 	unsigned char		*print;
 
 	use = *data;
-
 	print = (unsigned char *)&use;
 	while ((int)i < len)
 	{
@@ -125,7 +93,7 @@ void		print_bytes(unsigned long long *data, int len)
 	ft_putstr("\n");
 }
 
-unsigned int		*split_subkey(unsigned long long key)
+unsigned int				*split_subkey(unsigned long long key)
 {
 	unsigned int	*ret;
 
@@ -135,12 +103,11 @@ unsigned int		*split_subkey(unsigned long long key)
 	return (ret);
 }
 
-unsigned long long	sub_block(unsigned long long key)
+unsigned long long			sub_block(unsigned long long key)
 {
-	//This is to permute the 64 bit block of text that is passed in
-	unsigned long long	ret;
-	size_t				i;
-	size_t				tmp;
+	unsigned long long		ret;
+	size_t					i;
+	size_t					tmp;
 
 	i = 0;
 	ret = 0;
@@ -154,9 +121,9 @@ unsigned long long	sub_block(unsigned long long key)
 	return (ret);
 }
 
-int			_rand0(FILE *e)
+int							char_rand0(FILE *e)
 {
-	unsigned int	a;
+	unsigned int			a;
 
 	a = (unsigned int)getc(e);
 	while ((a & 127) < 32)
@@ -164,53 +131,48 @@ int			_rand0(FILE *e)
 	return ((int)a);
 }
 
-void		create_salt_8bytes(char *salt, FILE *e)
+void						create_salt_8bytes(char *salt, FILE *e)
 {
 	int		i;
 
 	i = 0;
 	while (i < 8)
 	{
-		salt[i] = (char)_rand0(e) & 127;
+		salt[i] = (char)char_rand0(e) & 127;
 		i++;
 	}
 	salt[8] = 0;
 }
 
-//Account for these with global boolean values
+size_t						g_passlen;
 
-//size_t				g_salt = 1;
-size_t				g_passlen;
-
-void				get_user_pass(char **pass, t_hash *file)//, unsigned long long *tmp)
+void						get_user_pass(char **pass, t_hash *file)
 {
-	char *tmpa;
+	char					*tmpa;
 
 	*pass = ft_strdup(getpass("Enter your password:"));
 	tmpa = ft_strdup(getpass("Verifying - Enter your password:"));
-	//ft_printf("pass1: %s\npass2: %s\n", pass, tmpa);
 	if (ft_strcmp(*pass, tmpa) != 0)
 	{
 		ft_putstr("Verify failure\nbad password read\n");
 		free(tmpa);
 		free(*pass);
-//		free(tmp);
 		free(file->data);
 		exit(0);
 	}
 }
 
-char				*getsalt(t_hash *h, char *salt)//, t_opt *opt)
+char						*getsalt(t_hash *h, char *salt)
 {
-	char			*tmp;
-	FILE			*e;
+	char					*tmp;
+	FILE					*e;
 
 	tmp = 0;
 	e = fopen("/dev/urandom", "r");
 	create_salt_8bytes(salt, e);
 	if (!g_nosalt)
 	{
-		h->data = ft_memjoin((void*)h->data, (void*)salt, ft_strlen(h->data), 8);
+		h->data = ft_memjoin(h->data, salt, ft_strlen(h->data), 8);
 		h->bytes += 8;
 	}
 	if (!g_decrypt)
@@ -221,29 +183,30 @@ char				*getsalt(t_hash *h, char *salt)//, t_opt *opt)
 	return (tmp);
 }
 
-char				*g_saltchars;
-int					g_saltcharbool;
+char						*g_saltchars;
+int							g_saltcharbool;
 
-void				handle_salt_add(t_hash *h)
+void						handle_salt_add(t_hash *h)
 {
-	char *ftmp;
-		ftmp = h->data;
-		h->data = ft_memjoin(h->data, &g_salt, h->bytes, 8);
-		h->bytes += 8;
-		free(ftmp);
+	char					*ftmp;
+
+	ftmp = h->data;
+	h->data = ft_memjoin(h->data, &g_salt, h->bytes, 8);
+	h->bytes += 8;
+	free(ftmp);
 }
 
-void				create_salt(t_hash *h, char *salt)
+void						create_salt(t_hash *h, char *salt)
 {
 	g_saltchars = getsalt(h, salt);
 	g_saltcharbool = 1;
 }
 
-t_hash				*get_pass_salt(t_hash *file)//, t_opt *opt)
+t_hash						*get_pass_salt(t_hash *file)
 {
-	char	salt[9];
-	char	*pass;
-	t_hash	*h;
+	char					salt[9];
+	char					*pass;
+	t_hash					*h;
 
 	h = ft_memalloc(sizeof(t_hash));
 	pass = 0;
@@ -269,9 +232,9 @@ t_hash				*get_pass_salt(t_hash *file)//, t_opt *opt)
 	return (h);
 }
 
-void				pbyte(char *str, size_t len)
+void						pbyte(char *str, size_t len)
 {
-	size_t			i;
+	size_t					i;
 
 	i = 0;
 	while (i < len)
@@ -282,18 +245,17 @@ void				pbyte(char *str, size_t len)
 	ft_putstr("\n");
 }
 
-void    print_spec(char *str, size_t bytes);
-
-void				removepadbytes(char *str)
+void						removepadbytes(char *str)
 {
-	size_t	i;
-	size_t	hold;
-	
+	size_t					i;
+	size_t					hold;
+
 	i = 7;
 	hold = (size_t)(str[i] & 15);
 	if (hold == 0 || hold > 8)
 	{
-		ft_printf("Bad byte pattern found in padding byte(s) ascii val %d found\n", str[i]);
+		ft_putstr("Bad byte pattern found in padding byte(s)");
+		ft_printf(" ascii val %d found\n", str[i]);
 		exit(0);
 	}
 	g_len -= hold;
@@ -304,9 +266,9 @@ void				removepadbytes(char *str)
 	}
 }
 
-void			checkbase64encode(char *str, size_t bytes)
+void						checkbase64encode(char *str, size_t bytes)
 {
-	size_t			i;
+	size_t					i;
 
 	i = 0;
 	if (str[bytes - 1] == '\n')
@@ -316,13 +278,13 @@ void			checkbase64encode(char *str, size_t bytes)
 		if (((!ft_strchr(g_ref, str[i]) && str[i] != '=') || bytes % 4 != 0) && str[i] != '\n')
 		{
 			ft_putstr("Error, invalid byte sequence detected in base64 encoded string\n");
-			//exit(0);
+			exit(0);
 		}
 		i++;
 	}
 }
 
-void				inputsanitycheck(t_hash *h)
+void						inputsanitycheck(t_hash *h)
 {
 	if (h->bytes % 8 != 0)
 	{
@@ -331,12 +293,12 @@ void				inputsanitycheck(t_hash *h)
 	}
 }
 
-int					g_KEY;
+int							g_KEY;
 
-int					archBigEndian(void)
+int							archbigendian(void)
 {
-	int				a;
-	char			*b;
+	int						a;
+	char					*b;
 
 	a = 1;
 	b = (char*)&a;
@@ -345,21 +307,20 @@ int					archBigEndian(void)
 	return (1);
 }
 
-void				handle_b64decrypt(t_hash *h)
+void						handle_b64decrypt(t_hash *h)
 {
-	char *tmp1;
+	char					*tmp1;
 
 	tmp1 = h->data;
 	removewhitespace(h->data);
 	h->bytes = ft_strlen(h->data);
-	ft_printf("Data is %d bytes\n", h->bytes);
 	checkbase64encode(h->data, h->bytes);
 	h->data = (char*)base64_decode((unsigned char*)h->data, h->bytes);
 	free(tmp1);
 	h->bytes = g_b64;
 }
 
-void				checkfile(int argc, char **argv, t_hash *h, t_opt *opt)
+void						checkfile(int argc, char **argv, t_hash *h, t_opt *opt)
 {
 	if (!g_fileidx)
 		rkey(h);
@@ -376,14 +337,15 @@ void				checkfile(int argc, char **argv, t_hash *h, t_opt *opt)
 		inputsanitycheck(h);
 }
 
-void				des(char **argv, int argc)
-{
-	unsigned long long	*tmp;
-	unsigned long long	*key;
-	static t_hash		h;
-	static t_opt		opt;
+char						*g_tmp;
 
-	int i = 2;
+void						des(char **argv, int argc)
+{
+	unsigned long long		*tmp;
+	unsigned long long		*key;
+	static t_hash			h;
+	static t_opt			opt;
+
 	get_opt_loop(2, argc, argv, &opt);
 	tmp = 0;
 	checkfile(argc, argv, &h, &opt);
@@ -401,22 +363,22 @@ void				des(char **argv, int argc)
 	tmp = des_encrypt(key[0], h.data, h.bytes);
 	if (g_decrypt)
 	{
-		char *n = (char *)&tmp[(g_len / 8) - 1];
-		removepadbytes(n);
+		g_tmp = (char *)&tmp[(g_len / 8) - 1];
+		removepadbytes(g_tmp);
 	}
 	if (opt.a && !g_decrypt)
 	{
-		char *out = (char*)base64_encode((unsigned char*)tmp, g_len);
-		ft_printf("%s\n", out);
-		free(out);
+		g_tmp = (char*)base64_encode((unsigned char*)tmp, g_len);
+		ft_putstr(g_tmp);
+		ft_putstr("\n");
+		free(g_tmp);
+		exit(0);
 	}
-	i = 0;
-	char	*str;
-	str = (char*)&tmp[(g_len / 8) - 1];
-	if (i < g_len && (!opt.a || g_decrypt))
+	g_tmp = (char*)&tmp[(g_len / 8) - 1];
+	if (g_len && (!opt.a || g_decrypt))
 	{
-		str = (char *)&tmp[0];
-		write(1, str, g_len); 
+		g_tmp = (char *)&tmp[0];
+		write(1, g_tmp, g_len); 
 	}
-	free(tmp);
+	free(g_tmp);
 }
