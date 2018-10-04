@@ -93,7 +93,8 @@ SRC = ft_atoi.c \
 	  ft_memjoin.c \
 	  ft_memdup.c \
 	  ft_atoibase16.c \
-	  ft_removewhitespace.c
+	  ft_removewhitespace.c \
+	  ft_strndup.c
 
 OBJ = $(SRC:.c=.o)
 

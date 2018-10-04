@@ -6,12 +6,13 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/03 00:43:43 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/04 01:46:14 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
+size_t						g_passlen;
 char						*g_tmp;
 extern unsigned long long	g_key;
 char						*g_saltchars;
@@ -72,31 +73,6 @@ unsigned long long			init_subkey(unsigned long long key)
 	return (ret);
 }
 
-void						swap_4bytes(int *data)
-{
-	int	a;
-
-	a = data[0];
-	data[0] = data[1];
-	data[1] = a;
-}
-
-void						print_bytes(unsigned long long *data, int len)
-{
-	size_t				i = 0;
-	unsigned long long	use;
-	unsigned char		*print;
-
-	use = *data;
-	print = (unsigned char *)&use;
-	while ((int)i < len)
-	{
-		ft_printf("%02X", print[i]);
-		i++;
-	}
-	ft_putstr("\n");
-}
-
 unsigned int				*split_subkey(unsigned long long key)
 {
 	unsigned int	*ret;
@@ -147,8 +123,6 @@ void						create_salt_8bytes(char *salt, FILE *e)
 	}
 	salt[8] = 0;
 }
-
-size_t						g_passlen;
 
 void						get_user_pass(char **pass, t_hash *file)
 {
@@ -229,19 +203,6 @@ t_hash						*get_pass_salt(t_hash *file)
 	return (h);
 }
 
-void						pbyte(char *str, size_t len)
-{
-	size_t					i;
-
-	i = 0;
-	while (i < len)
-	{
-		ft_putchar(str[i]);
-		i++;
-	}
-	ft_putstr("\n");
-}
-
 void						removepadbytes(char *str)
 {
 	size_t					i;
@@ -252,7 +213,7 @@ void						removepadbytes(char *str)
 	if (hold == 0 || hold > 8)
 	{
 		ft_putstr("Bad byte pattern found in padding byte(s)");
-		ft_printf(" ascii val %d found\n", str[i]);
+		ft_printf(" ascii val %d found\n", hold);
 		exit(0);
 	}
 	g_len -= hold;
@@ -317,6 +278,21 @@ void						handle_b64decrypt(t_hash *h)
 	h->bytes = g_b64;
 }
 
+void						checksalt(t_hash *h)
+{
+	if (h->bytes >= 16)
+	{
+		if (!ft_strncmp(h->data, "Salted__", 8))
+		{
+			h->data = &h->data[16];
+			g_saltbool = 1;
+			g_nosalt = 0;
+			h->bytes -= 16;
+			g_len -= 16;
+		}
+	}
+}
+
 void						checkfile(int argc, char **argv, t_hash *h, t_opt *opt)
 {
 	if (!g_fileidx)
@@ -331,7 +307,10 @@ void						checkfile(int argc, char **argv, t_hash *h, t_opt *opt)
 	if (opt->a && g_decrypt)
 		handle_b64decrypt(h);
 	if (g_decrypt)
+	{
 		inputsanitycheck(h);
+		checksalt(h);
+	}
 }
 
 void						printout(unsigned long long *tmp)
@@ -362,6 +341,8 @@ void						iverror(void)
 
 void						decryptremovepad(unsigned long long *tmp)
 {
+	if (!g_len)
+		g_len = 8;
 	g_tmp = (char *)&tmp[(g_len / 8) - 1];
 	removepadbytes(g_tmp);
 }
@@ -386,7 +367,7 @@ void						des(char **argv, int argc)
 		decryptremovepad(tmp);
 	if (opt.a && !g_decrypt)
 		printouta(tmp);
-	g_tmp = (char*)&tmp[(g_len / 8) - 1];
+	g_tmp = (char*)&tmp[((!g_len ? 8 : g_len) / 8) - 1];
 	if (g_len && (!opt.a || g_decrypt))
 		printout(tmp);
 	free(g_tmp);
