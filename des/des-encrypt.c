@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/03 00:30:45 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/04 02:32:34 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ extern unsigned long long	g_iv;
 unsigned int				g_len;
 unsigned long long			g_k[16];
 unsigned long long			lmax = 0xFFFFFFFFFFFFFFFF;
+size_t				g_i;
+unsigned long long	g_ciphertext;
 
 size_t						c_num(size_t num)
 {
@@ -299,44 +301,58 @@ char	*l_bytes(unsigned long long aside)
 
 void	pbyte(char *str, size_t len);
 
+void	loopinner(
+		unsigned long long *rside,
+		unsigned long long *lside,
+		unsigned long long *aside_next)
+{
+	*aside_next = *rside;
+	*rside = permuterightside(*rside);
+	*rside = sboxes(*rside ^ g_k[g_i]);
+	*rside = pperm(*rside);
+	*rside = *lside ^ *rside;
+	*lside = *aside_next;
+	g_i++;
+}
+
+void	initvar(
+		unsigned long long *textblock,
+		unsigned long long *lside,
+		unsigned long long *rside,
+		unsigned long long *key)
+{
+	*textblock = initial_perm(*textblock);
+	*lside = *textblock >> 32;
+	*lside <<= 32;
+	*rside = (0xFFFFFFFF & *textblock) << 32;
+	*key = initialperm(*key);
+	g_i = 0;
+	if (!g_cbc && !g_decrypt)
+		g_ciphertext = 0;
+}
+
 char	*encrypted_des(char *data, unsigned long long key)
 {
-	size_t				i;
 	unsigned long long	lside;
 	unsigned long long	rside;
 	unsigned long long	aside_next;
 	unsigned long long	textblock;
-	unsigned long long	ciphertext;
 
-	i = 0;
-	ciphertext = 0;
 	init_txtblock(&textblock, (unsigned char*)data);
 	if (g_cbc && !g_decrypt)
 		textblock ^= g_iv;
 	else if (g_cbc && g_decrypt)
-		ciphertext = textblock;
-	textblock = initial_perm(textblock);
-	lside = textblock >> 32;
-	lside <<= 32;
-	rside = (0xFFFFFFFF & textblock) << 32;
-	key = initialperm(key);
-	while (i < 16)
-	{
-		aside_next = rside;
-		rside = permuterightside(rside);
-		rside = sboxes(rside ^ g_k[i]);
-		rside = pperm(rside);
-		rside = lside ^ rside;
-		lside = aside_next;
-		i++;
-	}
+		g_ciphertext = textblock;
+	initvar(&textblock, &lside, &rside, &key);
+	while (g_i < 16)
+		loopinner(&rside, &lside, &aside_next);
 	if (g_cbc && !g_decrypt)
 		g_iv = final_permutate(rside | (lside >> 32));
 	else if (g_cbc && g_decrypt)
 	{
 		unsigned long long ret = final_permutate(rside | (lside >> 32));
 		ret ^= g_iv;
-		g_iv = ciphertext;
+		g_iv = g_ciphertext;
 		return (l_bytes(ret));
 	}
 	return l_bytes(((final_permutate(rside | (lside >> 32)))));
@@ -405,6 +421,13 @@ unsigned long long	char2long(unsigned long long *block, unsigned char *chrblock)
 	return (*block);
 }
 
+void				helpencrypt(char **encrypt, size_t *len)
+{
+	encrypt[0] = des_pad(encrypt[0], *len);
+	*len = c_num(*len);
+	g_len = *len;
+}
+
 unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t len)
 {
 	char				*print;
@@ -417,10 +440,7 @@ unsigned long long	*des_encrypt(unsigned long long key, char *encrypt, size_t le
 	print = ft_memalloc(len);
 	key = init_subkey(key);
 	if (!g_decrypt)
-	{
-		encrypt = des_pad(encrypt, len);
-		len = c_num(len);
-	}
+		helpencrypt(&encrypt, &len);
 	create_subkeys(key);
 	while (i < len)
 	{
