@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/01 20:15:53 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/04 02:47:56 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,19 +131,13 @@ unsigned char   *handle_o(t_hash *stor, t_opt *opt)
 {
 	unsigned char	*h;
 
-//	h = 0;
-//	if (!opt->i)
-//	{
-//	rkey(stor);
 	h = (unsigned char *)stor->data;
 	if (opt->d)
 		h = base64_decode((unsigned char*)stor->data, ft_strlen((char*)h));
 	else
 		h = base64_encode((unsigned char*)stor->data, stor->bytes);
-//	}
 	return (h);
 }
-
 
 void			find_options(char **argv, int argc, t_hash *stor, t_opt *opt)
 {
@@ -185,10 +179,6 @@ void			base64start(char **argv, int argc)
 	unsigned char	*h;
 	static t_hash	stor;
 
-	//Handle options -d decode
-	//				 -e encode
-	//				 -i input file
-	//				 -o output file
 	h = 0;
 	g_argc = argc;
 	get_opt_loop(1, argc, argv, &opt);
