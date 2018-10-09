@@ -4,235 +4,34 @@ Norme: ./desDemo.sh
 Warning: Not a valid file
 Norme: ./normErrors
 Warning: Not a valid file
-Norme: ./ft_ssl.dSYM/Contents/Resources/DWARF/ft_ssl
-Warning: Not a valid file
-Norme: ./ft_ssl.dSYM/Contents/Info.plist
-Warning: Not a valid file
 Norme: ./Makefile
 Warning: Not a valid file
 Norme: ./author
 Warning: Not a valid file
-Norme: ./ft_ssl
-Warning: Not a valid file
 Norme: ./git.sh
-Warning: Not a valid file
-Norme: ./ft_printf/handle/ft_parse.o
-Warning: Not a valid file
-Norme: ./ft_printf/handle/handle_flags.o
-Warning: Not a valid file
-Norme: ./ft_printf/print/ft_print3.o
-Warning: Not a valid file
-Norme: ./ft_printf/print/ft_print2.o
-Warning: Not a valid file
-Norme: ./ft_printf/print/ft_mputstr.o
-Warning: Not a valid file
-Norme: ./ft_printf/print/ft_printint.o
-Warning: Not a valid file
-Norme: ./ft_printf/print/ft_print_addy.o
-Warning: Not a valid file
-Norme: ./ft_printf/print/ft_printf.o
-Warning: Not a valid file
-Norme: ./ft_printf/print/ft_print_octal.o
 Warning: Not a valid file
 Norme: ./ft_printf/Makefile
 Warning: Not a valid file
 Norme: ./ft_printf/author
 Warning: Not a valid file
-Norme: ./ft_printf/libftprintf.a
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_lstnew.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strnew.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_lstadd.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_wstrlen.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_memjoin.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strmapi.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strjoin.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_putnbr_fd.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_lstdelone.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strncpy.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strdup.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_memmove.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strchr.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_putendl_fd.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_atoi.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_memchr.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_make_pre.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_lstdel.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_nwputstr.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_memdup.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_isalpha.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_init.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strdel.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_lstmap.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_putendl.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_isascii.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_memcmp.o
-Warning: Not a valid file
 Norme: ./ft_printf/libft/Makefile
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strcat.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_memset.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_isprint.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_putwchar.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_lstiter.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_putnbr.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_make_pad.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_uitoabase.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_removewhitespace.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_memccpy.o
 Warning: Not a valid file
 Norme: ./ft_printf/libft/author
 Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_upper.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_isalnum.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_putstr.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strrchr.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_memalloc.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strclr.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strlcat.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strsub.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strstr.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strmap.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_isdigit.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strncmp.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_putchar.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_wputstr.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strndup.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_atoibase16.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_toupper.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_wstrdup.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_striteri.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_umalset.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_memdel.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strsplit.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_bzero.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strlen.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_striter.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_tolower.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_putchar_fd.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_itoabase.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_malset.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_prep_x.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strncat.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strequ.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/libft.a
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_putstr_fd.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strcmp.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strnequ.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_memcpy.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strcpy.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strtrim.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_matoi.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_strnstr.o
-Warning: Not a valid file
-Norme: ./ft_printf/libft/ft_findlen.o
-Warning: Not a valid file
-Norme: ./ft_printf/chars/ft_printwchr.o
-Warning: Not a valid file
-Norme: ./ft_printf/chars/ft_printchr.o
-Warning: Not a valid file
 Norme: ./des/encrypt64bits.c
 Norme: ./des/pbox.c
-Error (line 18, col 3): bad character after ,
 Norme: ./openssl.h
 Error (line 152): comment not well formatted
 Error (line 156): line has 89 characters
 Error (line 166, col 10): _add_byte not unixcase
 Norme: ./main.c
-Error (line 88): line has 92 characters
-Error (line 95): 2 instructions
-Error (line 95): bad indentation
-Error (line 95): missing newline after while
+Error (line 91): 2 instructions
+Error (line 91): bad indentation
+Error (line 91): missing newline after while
+Norme: ./helper/error.c
 Norme: ./helper/pad.c
-Norme: ./helper/readfile.c
-Error (line 29): function ft_fread has 26 lines
 Norme: ./helper/sha256help.c
-Norme: ./helper/des_pad.c
-Error: global scope bad aligned
-Error (line 15): C++ comment
-Error (line 17): C++ comment
-Error (line 18): bad spacing before rev8
-Error (line 18): bad spacing after rev8
-Error (line 40): multiple empty lines
-Error (line 41): bad spacing before rev_8byte
-Error (line 52): spaces at the end of line
-Error (line 52, col 1): no newline after block
-Error (line 58, col 0): _add_byte not unixcase
+Norme: ./helper/readfile.c
 Norme: ./des/des.c
 Error: 23 functions in the file
 Error (line 27, col 10): g_K not unixcase
@@ -256,9 +55,20 @@ Norme: ./sha256/sha256n2.c
 Norme: ./sha256/sha256n.c
 Norme: ./sha256/sha256hash.c
 Norme: ./sha256/sha256.c
+Norme: ./helper/get_opt.c
+Error: 9 functions in the file
+Error (line 19, col 8): g_ivIdx not unixcase
+Error (line 20, col 8): g_K not unixcase
+Error (line 22, col 10): g_ivBool not unixcase
+Error (line 109): declarations in handle_iv must be at the top of the function
+Error (line 109): declarations must be followed by one empty line in handle_iv
+Error (line 121, col 8): tmpa is instanciated during declaration
+Error (line 137): declarations in handle_k must be at the top of the function
+Error (line 137): declarations must be followed by one empty line in handle_k
+Error (line 149, col 8): tmpa is instanciated during declaration
 Norme: ./ft_printf/handle/handle_flags.c
 Norme: ./ft_printf/handle/ft_parse.c
-Norme: ./ft_printf/print/ft_print_addy.c
+Norme: ./ft_printf/print/ft_print3.c
 Norme: ./ft_printf/print/ft_printf.c
 Error (line 15): multiple empty lines
 Error (line 16): bad spacing before chkX
@@ -268,9 +78,6 @@ Norme: ./ft_printf/print/ft_print_octal.c
 Norme: ./ft_printf/print/ft_mputstr.c
 Norme: ./ft_printf/print/ft_printint.c
 Norme: ./ft_printf/libft/ft_strrchr.c
-Norme: ./ft_printf/libft/ft_putstr.c
-Norme: ./ft_printf/libft/ft_strcmp.c
-Norme: ./ft_printf/libft/ft_capitalize.c
 Norme: ./des/des-encrypt.c
 Error: global scope bad aligned
 Error: bad filename : des-encrypt.c
@@ -278,47 +85,8 @@ Error: 20 functions in the file
 Error (line 15): wrong number of spaces in preprocessor indentation
 Error (line 15): preprocessor block must be followed by one empty line
 Error (line 24): line has 102 characters
-Error (line 60): line has 87 characters
-Error (line 60, col 35): bad spacing
-Error (line 60, col 42): bad spacing
-Error (line 60, col 48): bad spacing
-Error (line 60, col 55): bad spacing
-Error (line 60, col 62): bad spacing
 Error (line 61, col 3): bad spacing
-Error (line 61, col 11): bad spacing
-Error (line 61, col 17): bad spacing
-Error (line 61, col 24): bad spacing
-Error (line 61, col 31): bad spacing
-Error (line 62, col 4): bad spacing
-Error (line 62, col 11): bad spacing
-Error (line 62, col 17): bad spacing
-Error (line 62, col 24): bad spacing
-Error (line 62, col 31): bad spacing
-Error (line 63, col 4): bad spacing
-Error (line 63, col 11): bad spacing
-Error (line 63, col 17): bad spacing
-Error (line 63, col 24): bad spacing
-Error (line 63, col 31): bad spacing
 Error (line 64, col 4): bad spacing
-Error (line 64, col 11): bad spacing
-Error (line 64, col 17): bad spacing
-Error (line 64, col 24): bad spacing
-Error (line 64, col 31): bad spacing
-Error (line 65, col 4): bad spacing
-Error (line 65, col 11): bad spacing
-Error (line 65, col 17): bad spacing
-Error (line 65, col 24): bad spacing
-Error (line 65, col 31): bad spacing
-Error (line 66, col 4): bad spacing
-Error (line 66, col 11): bad spacing
-Error (line 66, col 17): bad spacing
-Error (line 66, col 24): bad spacing
-Error (line 66, col 31): bad spacing
-Error (line 67, col 4): bad spacing
-Error (line 67, col 11): bad spacing
-Error (line 67, col 17): bad spacing
-Error (line 67, col 24): bad spacing
-Error (line 67, col 31): bad spacing
 Error (line 68): line has 92 characters
 Error (line 83, col 21): global named lmax is not well prefixed
 Error (line 107): line has 91 characters
@@ -356,38 +124,39 @@ Error (line 453): spaces at the end of line
 Error (line 456): spaces at the end of line
 Error (line 457, col 21): t is instanciated during declaration
 Error (line 464): C++ comment
+Norme: ./ft_printf/libft/ft_strcmp.c
+Norme: ./ft_printf/libft/ft_capitalize.c
+Norme: ./helper/des_pad.c
+Error: global scope bad aligned
+Error (line 15): C++ comment
+Error (line 17): C++ comment
+Error (line 18): bad spacing before rev8
+Error (line 18): bad spacing after rev8
+Error (line 40): multiple empty lines
+Error (line 41): bad spacing before rev_8byte
+Error (line 52): spaces at the end of line
+Error (line 52, col 1): no newline after block
+Error (line 58, col 0): _add_byte not unixcase
+Norme: ./ft_printf/libft/ft_atoibase16.c
 Norme: ./ft_printf/libft/ft_strlcat.c
 Norme: ./ft_printf/libft/ft_malset.c
 Norme: ./ft_printf/libft/ft_memcpy.c
 Norme: ./ft_printf/libft/ft_memmove.c
-Norme: ./ft_printf/libft/ft_strsplit.c
+Norme: ./ft_printf/print/ft_print_addy.c
+Norme: ./ft_printf/libft/ft_putstr.c
+Norme: ./ft_printf/libft/ft_getnextline.c
 Norme: ./ft_printf/libft/ft_strncpy.c
 Norme: ./ft_printf/libft/ft_make_pre.c
-Norme: ./helper/get_opt.c
-Error: 9 functions in the file
-Error (line 19, col 8): g_ivIdx not unixcase
-Error (line 20, col 8): g_K not unixcase
-Error (line 22, col 10): g_ivBool not unixcase
-Error (line 109): declarations in handle_iv must be at the top of the function
-Error (line 109): declarations must be followed by one empty line in handle_iv
-Error (line 121, col 8): tmpa is instanciated during declaration
-Error (line 137): declarations in handle_k must be at the top of the function
-Error (line 137): declarations must be followed by one empty line in handle_k
-Error (line 149, col 8): tmpa is instanciated during declaration
-Error (line 190): spaces at the end of line
-Error (line 190, col 29): bad character after ;
 Norme: ./ft_printf/libft/ft_wordcount.c
-Norme: ./ft_printf/print/ft_print3.c
 Norme: ./ft_printf/libft/ft_lstmap.c
-Norme: ./ft_printf/libft/ft_atoibase16.c
-Norme: ./ft_printf/libft/ft_getnextline.c
 Norme: ./ft_printf/libft/ft_memjoin.c
+Norme: ./ft_printf/libft/ft_strsplit.c
 Norme: ./ft_printf/libft/ft_lstadd.c
 Norme: ./ft_printf/libft/ft_striter.c
 Norme: ./ft_printf/libft/ft_strstr.c
 Norme: ./ft_printf/libft/ft_isdigit.c
-Norme: ./ft_printf/libft/ft_putnbr.c
 Norme: ./ft_printf/libft/ft_strdel.c
+Norme: ./ft_printf/libft/ft_putnbr.c
 Norme: ./ft_printf/libft/ft_memccpy.c
 Norme: ./ft_printf/libft/ft_memchr.c
 Norme: ./ft_printf/libft/ft_bzero.c
@@ -402,16 +171,13 @@ Norme: ./ft_printf/libft/ft_lstiter.c
 Norme: ./ft_printf/libft/ft_lstdelone.c
 Norme: ./ft_printf/libft/ft_strcpy.c
 Norme: ./ft_printf/libft/ft_strndup.c
-Norme: ./ft_printf/libft/libft.h
-Norme: ./ft_printf/libft/ft_toupper.c
 Norme: ./ft_printf/libft/ft_lstnew.c
 Norme: ./ft_printf/libft/ft_multiply.c
+Norme: ./ft_printf/libft/libft.h
+Norme: ./ft_printf/libft/ft_toupper.c
 Norme: ./ft_printf/libft/ft_strdup.c
-Error (line 27): comment not well formatted
-Error (line 27): comment not well placed
-Error (line 34, col 1): no empty line before block
-Norme: ./ft_printf/libft/ft_striteri.c
 Norme: ./ft_printf/libft/ft_putnbr_fd.c
+Norme: ./ft_printf/libft/ft_striteri.c
 Norme: ./ft_printf/libft/ft_memdup.c
 Norme: ./ft_printf/libft/ft_putendl_fd.c
 Norme: ./ft_printf/libft/ft_strmap.c
@@ -419,47 +185,46 @@ Norme: ./ft_printf/libft/ft_nwputstr.c
 Norme: ./ft_printf/libft/ft_prep_x.c
 Norme: ./ft_printf/libft/ft_memdel.c
 Norme: ./ft_printf/libft/ft_putchar.c
-Norme: ./ft_printf/libft/ft_isascii.c
 Norme: ./ft_printf/libft/ft_strnstr.c
+Norme: ./ft_printf/libft/ft_isascii.c
 Norme: ./ft_printf/libft/ft_strlen.c
 Norme: ./ft_printf/libft/ft_strnew.c
-Norme: ./ft_printf/libft/ft_strsub.c
-Norme: ./ft_printf/libft/ft_subtract.c
 Norme: ./ft_printf/libft/ft_memalloc.c
+Norme: ./ft_printf/libft/ft_subtract.c
+Norme: ./ft_printf/libft/ft_strsub.c
 Norme: ./ft_printf/libft/ft_putendl.c
 Norme: ./ft_printf/libft/ft_strncat.c
-Norme: ./ft_printf/libft/ft_wstrdup.c
 Norme: ./ft_printf/libft/ft_strncmp.c
-Norme: ./ft_printf/libft/ft_strequ.c
+Norme: ./ft_printf/libft/ft_wstrdup.c
 Norme: ./ft_printf/libft/ft_memcmp.c
+Norme: ./ft_printf/libft/ft_strequ.c
 Norme: ./ft_printf/libft/ft_itoabase.c
 Norme: ./ft_printf/libft/ft_strtrim.c
 Norme: ./ft_printf/libft/ft_putchar_fd.c
 Norme: ./ft_printf/libft/ft_memset.c
 Norme: ./ft_printf/libft/ft_isalpha.c
 Norme: ./ft_printf/libft/ft_init.c
-Norme: ./ft_printf/libft/ft_tolower.c
 Norme: ./ft_printf/libft/ft_strcat.c
+Norme: ./ft_printf/libft/ft_tolower.c
 Norme: ./ft_printf/libft/ft_strnequ.c
 Norme: ./ft_printf/libft/ft_umalset.c
-Norme: ./ft_printf/libft/ft_strclr.c
 Norme: ./ft_printf/libft/ft_strjoin.c
+Norme: ./ft_printf/libft/ft_strclr.c
 Norme: ./ft_printf/libft/ft_removewhitespace.c
-Error (line 30): spaces at the end of line
-Norme: ./ft_printf/libft/ft_atoi.c
 Norme: ./ft_printf/libft/ft_add.c
+Norme: ./ft_printf/libft/ft_atoi.c
 Norme: ./ft_printf/libft/ft_upper.c
 Norme: ./ft_printf/libft/ft_isprint.c
+Norme: ./ft_printf/libft/ft_lstdel.c
 Norme: ./ft_printf/libft/ft_strmapi.c
 Norme: ./ft_printf/libft/ft_wputstr.c
-Norme: ./ft_printf/libft/ft_lstdel.c
 Norme: ./ft_printf/libft/ft_strchr.c
-Norme: ./ft_printf/libft/ft_uitoabase.c
 Norme: ./ft_printf/libft/ft_make_pad.c
+Norme: ./ft_printf/libft/ft_uitoabase.c
 Norme: ./ft_printf/includes/ft_printf.h
+Norme: ./ft_printf/chars/ft_printwchr.c
 Norme: ./base64/base64decode.c
 Error (line 31): function base64_decode has 40 lines
-Norme: ./ft_printf/chars/ft_printwchr.c
 Norme: ./ft_printf/chars/ft_printchr.c
 Norme: ./md5_salt/md5.c
 Error (line 16, col 15): g_ivBool not unixcase

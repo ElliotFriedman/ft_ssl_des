@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/08 22:23:25 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/09 01:13:30 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -321,7 +321,6 @@ void						printout(unsigned long long *tmp)
 	write(g_out, g_tmp, g_len);
 	fchmod(g_out, 00700);
 	close(g_out);
-//	free(tmp);
 }
 
 void						printouta(unsigned long long *tmp)
@@ -335,9 +334,7 @@ void						printouta(unsigned long long *tmp)
 	fchmod(g_out, 00700);
 	if (g_out != 1)
 		close(g_out);
-	free(g_tmp);
-	exit(0);
-	//free(tfree);
+	free(tmp);
 }
 
 void						iverror(void)
@@ -378,12 +375,12 @@ void						des(char **argv, int argc)
 	//grab the data before we send it into the encryption function
 	ftmp = h.data;
 	tmp = des_encrypt(g_key, h.data, h.bytes);
-	//free(ftmp);
+	//remove padding if we are decrypting
 	if (g_decrypt)
 		decryptremovepad(tmp);
 	if (opt.a && !g_decrypt)
 		printouta(tmp);
-	g_tmp = (char*)&tmp[((!g_len ? 8 : g_len) / 8) - 1];
+	//g_tmp = (char*)&tmp[((!g_len ? 8 : g_len) / 8) - 1];
 	if (g_len && (!opt.a || g_decrypt))
 		printout(tmp);
 //	free(h.data);

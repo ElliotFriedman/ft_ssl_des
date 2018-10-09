@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/04 02:47:56 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/09 01:28:47 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,18 @@ int	findb_len(int len)
 	return ((t_bits / 3) * 4);
 }
 
+void			add2bytes(unsigned char **str, int len)
+{
+	unsigned char	*tmp;
+
+	tmp = *str;
+	*str = (unsigned char*)ft_memjoin((void*)*str, 0, len, 0);
+	free(tmp);
+	tmp = *str;
+	*str = (unsigned char*)ft_memjoin((void*)*str, 0, ++len, 0);
+	free(tmp);
+}
+
 unsigned char	*base64_encode(unsigned char *str, int len)
 {
 	int				bit_len;
@@ -44,8 +56,9 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 	n = ft_memalloc(bit_len + 8);
 	i = 0;
 	m = 0;
-	str = (unsigned char*)ft_memjoin((void*)str, 0, len, 0);
-	str = (unsigned char*)ft_memjoin((void*)str, 0, ++len, 0);
+	add2bytes(&str, len);
+//	str = (unsigned char*)ft_memjoin((void*)str, 0, len, 0);
+//	str = (unsigned char*)ft_memjoin((void*)str, 0, ++len, 0);
 	while ((int)i < bit_len)
 	{
 		n[i] = g_ref[(str[m] & 252) >> 2];

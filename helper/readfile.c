@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:51:40 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/08 23:46:59 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/09 01:07:24 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int		ft_fread(char *str, t_hash *h)
 		h->bytes += chk;
 		close(fd);
 		h->arr = (unsigned int *)h->data;
+		free(afile);
 		return (1);
 	}
 	return (0);
