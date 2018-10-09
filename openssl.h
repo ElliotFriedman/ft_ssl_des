@@ -6,14 +6,13 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/03 22:47:33 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/08 23:39:29 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef OPENSSL_H
 # define OPENSSL_H
 # include "ft_printf/includes/ft_printf.h"
-# include "ft_dprintf/includes/ft_dprintf.h"
 # include "ft_printf/libft/libft.h"
 # include <fcntl.h>
 # include <sys/types.h>
@@ -167,5 +166,6 @@ unsigned char			*base64_encode(unsigned char *str, int len);
 char					*_add_byte(char *data, size_t bytes);
 void					init_a_des(t_hash **h, t_opt **s, int *file);
 void					err0r(char *msg);
+void					printcommands(char *str);
 
 #endif

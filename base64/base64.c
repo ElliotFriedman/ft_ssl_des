@@ -12,13 +12,15 @@
 
 #include "../openssl.h"
 
-int			g_argc;
+int							g_argc;
+extern int			g_out;
 
-const char	g_ref[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-int			g_pad;
-int			g_fd;
-int			g_len;
-int			g_b64;
+const char			g_ref[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+int							g_pad;
+int							g_fd;
+int							g_len;
+int							g_b64;
+extern size_t		g_fileidx;
 
 int	findb_len(int len)
 {
@@ -42,7 +44,6 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 	n = ft_memalloc(bit_len + 8);
 	i = 0;
 	m = 0;
-	//add 2 bytes to string
 	str = (unsigned char*)ft_memjoin((void*)str, 0, len, 0);
 	str = (unsigned char*)ft_memjoin((void*)str, 0, ++len, 0);
 	while ((int)i < bit_len)
@@ -61,9 +62,7 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 		i++;
 		g_pad--;
 	}
-
 	g_b64 = (int)ft_strlen((char*)n);
-	//	ft_printf("%d\n", g_b64);
 	return (n);
 }
 
@@ -92,7 +91,6 @@ void			choice01(unsigned char *h, t_hash *stor)
 	h = (unsigned char *)stor->data;
 	h = base64_decode((unsigned char*)stor->data, ft_strlen((char*)h));
 	fd_putstr((char*)h, 1, g_b64);
-//	fd_putstr("\n", 1, 1);
 }
 
 void			err0rr(char error)
@@ -100,7 +98,7 @@ void			err0rr(char error)
 	ft_printf("base64: option requires an argument -- %c\n", error);
 	ft_putstr("Usage:	base64 [-hvD] [-b num] [-i in_file] [-o out_file]\n");
 	ft_putstr("	-d, --decode   decodes input\n  -i, --input    input file ");
-	ft_putstr("(default: \"-\" for stdin)\n  -o, --output   output file (default: \"-\" for stdout)\n");
+	ft_putstr("(default: stdin)\n  -o, --output   output file (default: stdout)\n");
 	exit(0);
 }
 
@@ -109,9 +107,14 @@ unsigned char	*handle_i(char **argv, t_hash *stor, t_opt *opt, size_t i)
 	unsigned char	*h;
 
 	opt->i = 1;
+	if (!i && !rstdin(stor))
+	{
+		ft_putstr("Error, no input\n");
+		exit(0);
+	}
 	if (i + 1 == (size_t)g_argc)
 		err0rr('i');
-	else if (!ft_fread(argv[i + 1], stor))
+	else if (!ft_fread(argv[i], stor))
 	{
 		ft_printf("Unable to open '%s': No such file or directory\n", argv[i + 1]);
 		exit(0);
@@ -139,38 +142,46 @@ unsigned char   *handle_o(t_hash *stor, t_opt *opt)
 	return (h);
 }
 
+void     	handle_printing(unsigned char *h, t_opt *opt)
+{
+	fd_putstr((char*)h, 1, g_b64);
+	if (!opt->d)
+		fd_putstr("\n", 1, g_out);
+}
+
+void 			initvarsb64(int *i, unsigned char **h, unsigned char **h2)
+{
+		*i = -1;
+		*h = 0;
+		*h2 = 0;
+}
+
 void			find_options(char **argv, int argc, t_hash *stor, t_opt *opt)
 {
-	int				i;
+	int						i;
 	unsigned char	*h;
-	int				fd;
 	unsigned char	*h2;
 
-	fd = 1;
-	i = -1;
-	h = 0;
-	h2 = 0;
-	while (++i < argc)
-	{
-		if (!ft_strncmp(argv[i], "-i", 2))
-			h = (unsigned char*)handle_i(argv, stor, opt, i);
-		if (!ft_strncmp(argv[i], "-o", 2))
+	initvarsb64(&i, &h, &h2);
+	//	if (!ft_strncmp(argv[i], "-i", 2))
+		//{
+			h = (unsigned char*)handle_i(argv, stor, opt, g_fileidx);
+			ft_printf("stor->data: %s\n", stor->data);
+	//	}
+		if (g_out != 1)
 		{
 			if (i + 1 == argc)
 					err0rr('o');
-			fd = open(argv[i + 1], O_WRONLY | O_CREAT);
-			ft_printf("FD: %d\n", fd);
-			h2 = (unsigned char*)handle_o(stor, opt);
-			write(fd, (char*)h2, g_b64);
-			fd_putstr("\n", fd, 1);
-			close(fd);
+			fchmod(g_out, 00000700);
+			//h2 = (unsigned char*)handle_o(stor, opt);
+			write(g_out, stor->data, g_b64);
+			fd_putstr("\n", g_out, 1);
+			close(g_out);
 			free(h2);
 			return ;
 		}
-	}
-	fd_putstr((char*)h, 1, g_b64);
-	if (!opt->d)
-		fd_putstr("\n", 1, fd);
+
+	handle_printing(h, opt);
 }
 
 void			base64start(char **argv, int argc)

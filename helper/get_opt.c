@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/03 00:41:15 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/08 23:47:42 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,18 @@ int					g_file;
 int					g_bool;
 int					g_fd;
 int					g_decrypt;
-
 int					g_ivIdx = -1;
 int					g_K = -1;
 unsigned long long	g_iv;
 size_t				g_ivBool = 0;
-//salt should be 8 bytes
 unsigned long long	g_salt;
 size_t				g_saltidx;
 size_t				g_saltbool;
 size_t				g_nosalt;
-
 unsigned long long	g_key;
 int					g_passidx;
 char				*g_pass;
-
 size_t				g_fileidx;
-
 int					g_out = 1;
 int					g_outbool;
 
@@ -41,13 +36,6 @@ void	err0r(char *msg)
 	ft_putstr(msg);
 	exit(0);
 }
-
-//void	part3(char *argv, t_opt *new, int i)
-//{
-
-
-
-//}
 
 void	part2(char *argv, t_opt *new, int i)
 {
@@ -73,7 +61,6 @@ void	part2(char *argv, t_opt *new, int i)
 		new->a = 1;
 	if (!ft_strncmp(argv, "-o", 2))
 		g_outbool = i + 1;
-	//	part3(argv, new, i);
 }
 
 int		opt(char *argv, t_opt *new, int i)
@@ -200,7 +187,7 @@ void	handle_salt(char **argv)
 	}
 	else
 		g_salt = ft_atoibase16(argv[g_saltidx]);
-	rev_8byte((char*)&g_salt, 8);	
+	rev_8byte((char*)&g_salt, 8);
 	g_saltidx = 0;
 	g_saltbool = 1;
 }
@@ -241,8 +228,7 @@ int		get_opt(int argc, char **argv, t_opt *new, int i)
 	fd = 0;
 	while (i < argc)
 	{
-		if (argv[i][0] == '-' && (open(argv[i], O_RDONLY) == -1)
-				&& opt(argv[i], new, i))
+		if (argv[i][0] == '-' && opt(argv[i], new, i))
 		{
 			get_opt_if(argc, argv);
 			return (1);

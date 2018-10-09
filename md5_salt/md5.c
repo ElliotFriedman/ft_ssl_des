@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/04 02:46:02 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/08 21:58:54 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ unsigned long long	*create_key(t_hash *h)
 	rev_8byte((char*)hold, 16);
 	if (!g_ivBool)
 		g_iv = hold[1];
+	//free the provided password
+	free(h->data);
+	//free the struct
 	fstruct(s, h);
 	return (hold);
 }

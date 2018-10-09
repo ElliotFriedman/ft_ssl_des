@@ -1,18 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_subtract.c                                      :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/07 14:53:12 by efriedma          #+#    #+#             */
-/*   Updated: 2018/03/07 14:53:41 by efriedma         ###   ########.fr       */
+/*   Created: 2018/10/08 23:22:38 by efriedma          #+#    #+#             */
+/*   Updated: 2018/10/08 23:38:55 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../openssl.h"
 
-int		ft_subtract(int a, int b)
+void	printcommands(char *str)
 {
-	return (a - b);
+	ft_printf("ft_ssl: Error: '%s' is an invalid command.\n", str);
+	ft_printf("\nStandard commands:\n\nMessage Digest commands:\nmd5");
+	ft_putstr("\nsha256\n\n");
+	ft_putstr("Cipher commands:\nbase64\ndes\ndes-ecb\ndes-cbc\n\n");
 }

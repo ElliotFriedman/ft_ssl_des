@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/14 23:35:01 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/23 22:17:06 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/08 23:48:36 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	removewhitespace(char *str)
 			i = 0;
 			while (str[x])
 			{
-				str[x] = str[x + 1]; 
+				str[x] = str[x + 1];
 				x++;
 			}
 		}

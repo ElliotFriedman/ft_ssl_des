@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/04 01:46:14 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/08 22:23:25 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 size_t						g_passlen;
 char						*g_tmp;
 extern unsigned long long	g_key;
+
 char						*g_saltchars;
 int							g_saltcharbool;
 extern int					g_b64;
@@ -138,6 +139,7 @@ void						get_user_pass(char **pass, t_hash *file)
 		free(file->data);
 		exit(0);
 	}
+	free(tmpa);
 }
 
 char						*getsalt(t_hash *h, char *salt)
@@ -317,20 +319,25 @@ void						printout(unsigned long long *tmp)
 {
 	g_tmp = (char *)&tmp[0];
 	write(g_out, g_tmp, g_len);
-	fchmod(g_out, 00000700);	
+	fchmod(g_out, 00700);
 	close(g_out);
+//	free(tmp);
 }
 
 void						printouta(unsigned long long *tmp)
 {
+	unsigned long long		*tfree;
+
+	tfree = tmp;
 	g_tmp = (char*)base64_encode((unsigned char*)tmp, g_len);
 	ft_putstr_fd(g_tmp, g_out);
 	ft_putstr_fd("\n", g_out);
-	fchmod(g_out, 00000700);
+	fchmod(g_out, 00700);
 	if (g_out != 1)
 		close(g_out);
 	free(g_tmp);
 	exit(0);
+	//free(tfree);
 }
 
 void						iverror(void)
@@ -352,7 +359,9 @@ void						des(char **argv, int argc)
 	unsigned long long		*tmp;
 	static t_hash			h;
 	static t_opt			opt;
+	char					*ftmp;
 
+	//do we handle all memory here appropriately?
 	get_opt_loop(2, argc, argv, &opt);
 	tmp = 0;
 	checkfile(argc, argv, &h, &opt);
@@ -362,7 +371,14 @@ void						des(char **argv, int argc)
 		iverror();
 	else
 		tmp = &g_key;
-	tmp = des_encrypt(*tmp, h.data, h.bytes);
+	//grab the key value before freeing
+	g_key = *tmp;
+	//free the key that was returned
+	free(tmp);
+	//grab the data before we send it into the encryption function
+	ftmp = h.data;
+	tmp = des_encrypt(g_key, h.data, h.bytes);
+	//free(ftmp);
 	if (g_decrypt)
 		decryptremovepad(tmp);
 	if (opt.a && !g_decrypt)
@@ -370,5 +386,6 @@ void						des(char **argv, int argc)
 	g_tmp = (char*)&tmp[((!g_len ? 8 : g_len) / 8) - 1];
 	if (g_len && (!opt.a || g_decrypt))
 		printout(tmp);
+//	free(h.data);
 	free(g_tmp);
 }
