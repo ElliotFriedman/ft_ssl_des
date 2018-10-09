@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 16:06:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/09 01:13:30 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/09 10:03:42 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ void						create_salt(t_hash *h, char *salt)
 	g_saltcharbool = 1;
 }
 
-t_hash						*get_pass_salt(t_hash *file)
+t_hash						*get_pass_salt(void)
 {
 	char					salt[9];
 	char					*pass;
@@ -189,13 +189,15 @@ t_hash						*get_pass_salt(t_hash *file)
 	pass = 0;
 	if (!g_key)
 	{
-		get_user_pass(&pass, file);
+		get_user_pass(&pass, h);
 		g_pass = pass;
+		h->data = pass;
+		h->bytes = ft_strlen(pass);
 	}
 	else
 	{
 		pass = g_pass;
-		h->data = ft_strdup(pass);
+		h->data = pass;
 		h->bytes = ft_strlen(h->data);
 	}
 	if (!g_nosalt && !g_decrypt && !g_saltbool)
@@ -334,7 +336,8 @@ void						printouta(unsigned long long *tmp)
 	fchmod(g_out, 00700);
 	if (g_out != 1)
 		close(g_out);
-	free(tmp);
+	free(g_tmp);
+	g_tmp = (char*)tmp;
 }
 
 void						iverror(void)
@@ -363,7 +366,7 @@ void						des(char **argv, int argc)
 	tmp = 0;
 	checkfile(argc, argv, &h, &opt);
 	if (g_K != 99999999)
-		tmp = create_key(get_pass_salt(&h));
+		tmp = create_key(get_pass_salt());
 	else if (g_K == 99999999 && g_ivBool != 1 && !g_decrypt)
 		iverror();
 	else

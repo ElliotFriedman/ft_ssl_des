@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 13:29:03 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/09 01:28:47 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/09 09:57:15 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ unsigned char	*base64_encode(unsigned char *str, int len)
 	i = 0;
 	m = 0;
 	add2bytes(&str, len);
-//	str = (unsigned char*)ft_memjoin((void*)str, 0, len, 0);
-//	str = (unsigned char*)ft_memjoin((void*)str, 0, ++len, 0);
 	while ((int)i < bit_len)
 	{
 		n[i] = g_ref[(str[m] & 252) >> 2];
