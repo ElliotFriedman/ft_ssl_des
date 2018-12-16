@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/09 22:36:28 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/16 22:10:13 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/12/15 22:00:48 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void						checksalt(t_hash *h)
 	dup = 0;
 	if (h->bytes >= 16)
 	{
-		if (!ft_strncmp(h->data, "Salted__", 8) && !g_saltbool)
+		if (!ft_strncmp(h->data, "Salted__", 8))
 		{
 			tmp = h->data;
 			dup = ft_memalloc(9);

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 18:20:16 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/10 03:14:05 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/12/15 22:00:19 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,40 +86,6 @@ size_t						g_i;
 unsigned long long			g_ciphertext;
 size_t						g_x = 0;
 unsigned long long			g_ret;
-
-void				swaplong_endian(char *encrypt)
-{
-	char	b[8];
-
-	b[0] = encrypt[0];
-	b[1] = encrypt[1];
-	b[2] = encrypt[2];
-	b[3] = encrypt[3];
-	b[4] = encrypt[4];
-	b[5] = encrypt[5];
-	b[6] = encrypt[6];
-	b[7] = encrypt[7];
-	encrypt[0] = b[7];
-	encrypt[1] = b[6];
-	encrypt[2] = b[5];
-	encrypt[3] = b[4];
-	encrypt[4] = b[3];
-	encrypt[5] = b[2];
-	encrypt[6] = b[1];
-	encrypt[7] = b[0];
-}
-
-void				swap_long_endian(char *encrypt, size_t bytes)
-{
-	size_t			i;
-
-	i = 0;
-	while (i < (bytes / 8))
-	{
-		swaplong_endian(&encrypt[i]);
-		i++;
-	}
-}
 
 unsigned long long	char2long(unsigned long long *block,
 		unsigned char *chrblock)

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 16:02:27 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/15 17:02:55 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/12/15 21:59:13 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	get_opt_if(int argc, char **argv)
 		err0r("Error, no out file specified\n");
 	else if (g_outbool && g_out == 1)
 	{
-		g_out = open(argv[g_outbool], O_RDWR | O_CREAT);
+		g_out = open(argv[g_outbool], O_TRUNC | O_RDWR | O_CREAT);
 		g_outbool = 0;
 	}
 }
