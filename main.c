@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/06 15:34:21 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/08 23:45:38 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/16 00:32:23 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,10 @@ int		main(int argc, char **argv)
 		while (i < g_total && ft_strcmp(s[i]->name, argv[1]))
 			i++;
 		if (i == g_total || !dispatch(s[i], argc, argv))
-			printcommands(argv[argc - 1]);
+			printcommands(argv[1]);
 		free_struct(s);
 	}
 	else
 		ft_putstr("usage: ft_ssl command [command opts] [command args]\n");
-	while (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 17:04:26 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 23:58:32 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/16 22:05:04 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,13 @@ int				f256hash(char *hash1, t_hash *h, t_opt *s, int *file)
 	return (1);
 }
 
+size_t			get_opt_hash_loop(size_t i, int a, char **av, t_opt *s)
+{
+	while (get_hash_opt(a, av, s, i))
+		i++;
+	return (i);
+}
+
 void			sha256start(char **argv, int argc)
 {
 	t_hash	*h;
@@ -56,14 +63,14 @@ void			sha256start(char **argv, int argc)
 
 	s = ft_memalloc(sizeof(t_opt));
 	h = ft_memalloc(sizeof(t_hash));
-	h->i = get_opt_loop(2, argc, argv, s);
+	h->i = get_opt_hash_loop(2, argc, argv, s);
 	if (!do_one(s, h, &file) && (((int)h->i == argc) && (s->p || rstdin(h))))
 		s256hash(h->data, h, s);
 	else if (!one_two(argc, s, h) && (argc == (int)h->i && rstdin(h)))
 		set_n_run(h, s);
 	while ((int)h->i < argc)
 	{
-		while (!file && get_opt(argc, argv, s, h->i) && (int)h->i < argc)
+		while (!file && get_hash_opt(argc, argv, s, h->i) && (int)h->i < argc)
 			h->i++;
 		if (!file && s->on && s->s)
 			s256hash(argv[h->i], h, s);

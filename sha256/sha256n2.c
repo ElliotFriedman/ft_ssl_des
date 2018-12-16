@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/27 23:52:32 by efriedma          #+#    #+#             */
-/*   Updated: 2018/06/27 23:53:55 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/15 20:37:02 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,7 @@ void			ffstruct(t_opt *opt, t_hash *h)
 void			zer0h(t_opt *h, t_hash *hash)
 {
 	hash->pipe = 0;
+	hash->bytes = 0;
+	hash->ini = 0;
 	h->s = 0;
 }

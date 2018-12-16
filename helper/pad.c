@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 14:17:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/01 23:28:55 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/10 02:18:04 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,11 @@ void		epad(t_hash *h)
 	}
 	free(buf);
 	block_end(h);
+}
+
+int			seta(t_hash *h, t_opt *s)
+{
+	h->pipe = 1;
+	s->p = 1;
+	return (1);
 }

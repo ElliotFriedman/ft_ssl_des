@@ -6,15 +6,12 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/02 18:02:38 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/08 22:31:47 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/09 21:53:59 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../openssl.h"
 
-//void    print_bytes(char *str, int len);
-
-//rev endianness of bytes, 8 bytes at a time
 void		rev8(char *data)
 {
 	t_sha	n;
@@ -37,7 +34,6 @@ void		rev8(char *data)
 	data[0] = (char)n.h;
 }
 
-
 void		rev_8byte(char *data, size_t len)
 {
 	size_t	i;
@@ -49,13 +45,13 @@ void		rev_8byte(char *data, size_t len)
 		exit(0);
 	}
 	while (i < len)
-	{	
+	{
 		rev8(&data[i]);
 		i += 8;
 	}
 }
 
-char		*_add_byte(char *data, size_t bytes)
+char		*a_add_byte(char *data, size_t bytes)
 {
 	char	*snew;
 	char	*tmp;
@@ -67,7 +63,7 @@ char		*_add_byte(char *data, size_t bytes)
 	return (snew);
 }
 
-char	*des_pad(char *encrypt, size_t len)
+char		*des_pad(char *encrypt, size_t len)
 {
 	size_t	dif;
 	char	set[1];
@@ -80,7 +76,7 @@ char	*des_pad(char *encrypt, size_t len)
 	while (dif)
 	{
 		len++;
-		encrypt = _add_byte(encrypt, len);
+		encrypt = a_add_byte(encrypt, len);
 		ft_memset(&encrypt[len - 1], ((char)set[0] & 15), 1);
 		dif--;
 	}

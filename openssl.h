@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 21:42:41 by efriedma          #+#    #+#             */
-/*   Updated: 2018/10/08 23:39:29 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/15 20:22:52 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,11 +149,7 @@ void					err(void);
 void					swap(t_hash *h);
 void					ffstruct(t_opt *opt, t_hash *h);
 
-/*
- *	DES
- */
-
-unsigned long long		*des_encrypt(unsigned long long key, char *encrypt, size_t len);
+unsigned long long		*des_encrypt(unsigned long long a, char *b, size_t c);
 char					*des_pad(char *encrypt, size_t len);
 void					rev_8byte(char *data, size_t len);
 unsigned long long		init_subkey(unsigned long long key);
@@ -163,9 +159,43 @@ unsigned long long		pow2(size_t amt);
 unsigned long long		initial_perm(unsigned long long textblock);
 unsigned long long		pperm(unsigned long long txtblock);
 unsigned char			*base64_encode(unsigned char *str, int len);
-char					*_add_byte(char *data, size_t bytes);
 void					init_a_des(t_hash **h, t_opt **s, int *file);
 void					err0r(char *msg);
 void					printcommands(char *str);
+unsigned long long		init_subkey(unsigned long long key);
+unsigned long long		sub_block(unsigned long long key);
+unsigned long long		pow2(size_t amt);
+void					create_salt(t_hash *h, char *salt);
+void					handle_salt_add(t_hash *h);
+t_hash					*get_pass_salt(void);
+char					*getsalt(t_hash *h, char *salt);
+void					removepadbytes(char *str);
+void					checksalt(t_hash *h);
+void					handle_b64decrypt(t_hash *h);
+void					inputsanitycheck(t_hash *h);
+void					checkbase64encode(char *str, size_t bytes);
+void					iverror(void);
+void					freetmp(unsigned long long *tmp);
+void					handle_salt(char **argv);
+void					handle_k(char **argv);
+void					handle_iv(char **argv);
+void					checkbase16(char *str, char *err);
+unsigned char			*base64_encode(unsigned char *s, int len);
+void					choice00(unsigned char *h, t_hash *stor);
+void					choice01(unsigned char *h, t_hash *stor);
+void					err0rr(char error);
+unsigned long long		permuterightside(unsigned long long rside);
+unsigned long long		initialperm(unsigned long long txt);
+unsigned long long		permute_concatsubkeys(size_t x);
+void					concat_subkeys(void);
+unsigned long long		comp_perm(unsigned long long i56bit);
+size_t					c_num(size_t num);
+void					create_subkeys(unsigned long long key);
+void					init_txtblock(unsigned long long *a, unsigned char *b);
+unsigned long long		sboxes(unsigned long long expandrside);
+unsigned long long		final_permutate(unsigned long long rside);
+char					*encrypted_des(char *data, unsigned long long key);
+unsigned long long		char2long(unsigned long long *b, unsigned char *chr);
+int						get_hash_opt(int argc, char **argv, t_opt *n, int i);
 
 #endif

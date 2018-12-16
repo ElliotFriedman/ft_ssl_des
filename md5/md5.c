@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 16:21:59 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/26 22:07:17 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/15 20:54:52 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int		shash(char *hash1, t_hash *h, t_opt *new)
 	h->arr = (unsigned int *)h->data;
 	hash(h, new);
 	ft_memdel((void**)&h->data);
+	new->on = 0;
+	new->s = 0;
 	h->pipe = 0;
 	return (1);
 }
@@ -42,6 +44,8 @@ int		fhash(char *hash1, t_hash *h, t_opt *new, int *file)
 	h->arr = (unsigned int *)h->data;
 	hash(h, new);
 	ft_memdel((void**)&h->data);
+	new->on = 0;
+	new->s = 0;
 	return (1);
 }
 
@@ -49,6 +53,8 @@ int		zeroh(t_opt *h, t_hash *hash)
 {
 	hash->pipe = 0;
 	h->s = 0;
+	h->on = 0;
+	hash->bytes = 0;
 	return (1);
 }
 
@@ -66,9 +72,9 @@ void	md5start(char **av, int a)
 		shash(h->data, h, s);
 	else if (a == (int)h->i && rstdin(h) && seta(h, s))
 		shash(h->data, h, s);
-	while ((int)h->i < a)
+	while ((int)h->i < a && !(h->bytes = 0))
 	{
-		while (!file && get_opt(a, av, s, h->i) && (int)h->i < a)
+		while (!file && get_hash_opt(a, av, s, h->i) && (int)h->i < a)
 			h->i++;
 		if (!file && s->on && s->s)
 			shash(av[h->i], h, s);

@@ -6,7 +6,7 @@
 /*   By: efriedma <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/27 23:41:46 by efriedma          #+#    #+#             */
-/*   Updated: 2018/09/26 22:05:47 by efriedma         ###   ########.fr       */
+/*   Updated: 2018/10/15 20:21:44 by efriedma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,7 @@ void	init_a(t_hash **h, t_opt **s, int *file)
 
 size_t	get_opt_loopb(size_t i, int a, char **av, t_opt *s)
 {
-	while (get_opt(a, av, s, i))
+	while (get_hash_opt(a, av, s, i))
 		i++;
 	return (i);
-}
-
-int		seta(t_hash *h, t_opt *s)
-{
-	h->pipe = 1;
-	s->p = 1;
-	return (1);
 }
